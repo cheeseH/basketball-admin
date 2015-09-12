@@ -9,6 +9,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var games = require('./routes/games');
 var competitions = require('./routes/competitions');
+var teams = require('./routes/team');
 var flash  = require('connect-flash');
 var app = express();
 
@@ -36,7 +37,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/games',games);
 app.use('/competitions',competitions);
-
+app.use('/teams',teams);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
