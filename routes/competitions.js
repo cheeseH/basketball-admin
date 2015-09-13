@@ -1,9 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var CompetitionController=require('../controller/CompetitionController');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+/* 显示赛事列表*/
+router.get('/competitionList', CompetitionController.competitionList);
 
 module.exports = router;
