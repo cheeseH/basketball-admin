@@ -1,0 +1,19 @@
+doctype html
+html
+	head
+		include ./head.jade
+	body
+		div.container(align='center')
+			h1 登录
+			form.form-horizontal(role='form',method='POST',action='#')
+				div.row.form-group
+					label.control-label.col-sm-4(for='username') 账号
+					div.col-sm-4
+						input.form-control(type='text',name='username')
+				div.row.form-group
+					label.control-label.col-sm-4(for='password') 密码
+					div.col-sm-4
+						input.form-control(type='password',name='password')
+				div.form-group
+					div
+						button.btn.btn-primary(type='submit') 登录
