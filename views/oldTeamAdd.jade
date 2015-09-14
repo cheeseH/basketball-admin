@@ -1,0 +1,73 @@
+doctype html
+html
+	head
+		include ./head.jade
+		script(type="text/javascript").
+			function chooseAll(){
+				var checkAll = $("input:first").attr("checked");
+				if(checkAll){
+					for(var i=0;i<$("input").length;i++){
+						$("input:eq("+i+")").prop("checked",false);
+						$("input:eq("+i+")").attr("checked",false);
+					}
+				}else{
+					for(var i=0;i<$("input").length;i++){
+						$("input:eq("+i+")").attr("checked",true);
+						$("input:eq("+i+")").prop("checked",true);
+					}
+				}
+			}
+	body
+		include ./navbar.jade
+		div.container.text-center
+			div.row
+				div.col-xs-2
+					ul.nav.nav-pills.nav-stacked.text-center
+						li
+							a.row(href="/team")
+								p.navbar-font 球队列表
+						div.line
+						li
+							a.row(href="/newTeamAdd")
+								p.navbar-font 添加新球队
+						div.line
+						li.active
+							a.row(href="/oldTeamAdd")
+								p.navbar-font 添加已有球队
+				div.col-xs-10
+					div.panel.panel-primary.panel-block
+						div.panel-heading
+							div.panel-title.title
+								p 添加已有球队
+						div.panel-body
+							table.table.table-hover.table-bordered.horizontal-center
+								thead
+									tr
+										th.text-center
+											input(type="checkbox",onchange="chooseAll()")
+										th.text-center 队名
+										th.text-center 队标
+										th.text-center 简介
+								tbody
+									tr
+										td.text-center
+											p
+												input(type="checkbox")
+										td.text-center
+											p 计科二班
+										td.text-center
+											img.team-img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/LosAngeles_Lakers_logo.svg/200px-LosAngeles_Lakers_logo.svg.png")
+										td.text-center.col-xs-3
+											p 华南理工大学计算机学院计科二班
+									tr
+										td.text-center
+											p
+												input(type="checkbox")
+										td.text-center
+											p 计科二班
+										td.text-center
+											img.team-img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/LosAngeles_Lakers_logo.svg/200px-LosAngeles_Lakers_logo.svg.png")
+										td.text-center
+											p 华南理工大学计算机学院计科二班
+					div.text-center
+						button.btn.btn-primary 确定
