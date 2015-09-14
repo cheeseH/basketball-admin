@@ -16,6 +16,7 @@
     "express-session": "^1.11.3",
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
+    "qiniu": "^6.1.8",
     "serve-favicon": "~2.3.0"
   }
 }
