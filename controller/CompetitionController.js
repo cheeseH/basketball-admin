@@ -22,6 +22,17 @@ CompetitionController.competitionList=function(req,res,next){
 	var gameId='55cd4e0240ac645613921817';
 	var query=new AV.Query('Competition');
 	var game=new Game();
+
+
+	var returnData={
+				0:{type:"小组赛",number:0,competitions:{}},
+				1:{type:"1/16决赛",number:0,competitions:{}},
+				2:{type:"1/8 决赛",number:0,competitions:{}},
+				3:{type:"1/4 决赛",number:0,competitions:{}},
+				4:{type:"半决赛" ,number:0,competitions:{}},
+				5:{type:"总决赛",number:0,competitions:{}}
+			};
+
 	game.id=gameId;
 	query.equalTo('gameId',game);
 	query.include('teamBId');
@@ -29,9 +40,24 @@ CompetitionController.competitionList=function(req,res,next){
 	query.include('scoreId');
 	query.find({
 		success:function(result){
-			console.log(result[0]);
-
-			res.render('',{result:result,code:'200'});
+			console.log('success to get competitionList');
+			var i=0;var j=0;
+			console.log(result.length);
+			for(i=0;i<result.length;i++)
+			{
+				for(j=0;j<6;j++)
+				{
+					if(returnData[j].type==result[i].get('type'))
+					{
+						console.log(result[i].get('type'));
+						returnData[j].number++;
+						returnData[j].competitions[i]=result[i];
+					}
+				}
+			}
+			
+			//res.render('',{result:result,code:'200'});
+			res.send(returnData);
 		},
 		error:function(error){
 			console.log(error);
