@@ -50,12 +50,14 @@ CompetitionController.competitionList=function(req,res,next){
 			};*/
 
 			var returnData={};
-
+			var maxLevel=0;
 			var allLevel=new Array();
 			var kindsOfLevel=0;
 			var ifHaveLevel=0;
 			for(i=0;i<result.length;i++)						//获得所有比赛的类型,获得所有比赛的level
 			{
+				if(maxLevel<result[i].get('level'))
+					maxLevel=result[i].get('level');
 				if(i==0&&j==0)
 				{
 					typeArray[j]=result[i].get('type');
@@ -114,10 +116,10 @@ CompetitionController.competitionList=function(req,res,next){
 				returnData[levLen]={};
 				for(i=0;i<competitions.length;i++)
 				{
-					if(allLevel[levLen]==competitions[i][0].get('level'))
+					if(allLevel[allLevel[levLen]]==competitions[i][0].get('level'))
 					{
 						returnData[levLen][i]={
-							type:typeArray[i],
+							type:competitions[i][0].get('type'),
 							competitions:competitions[i],
 							number:competitions[i].length
 							//levelKinds:allLevel.length
@@ -125,6 +127,7 @@ CompetitionController.competitionList=function(req,res,next){
 					}
 				}	
 			}
+			returnData.maxLevel=maxLevel;
 			//res.render('',{result:result,code:'200'});
 			console.log(typeArray);
 			console.log(allLevel);
