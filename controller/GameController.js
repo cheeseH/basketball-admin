@@ -2,7 +2,7 @@ var AV = require('avoscloud-sdk');
 
 var Game=AV.Object.extend("Game");
 var Campus=AV.Object.extend("Campus");
-
+var imageUtil = require('../util/image');
 function GameController(){
 
 }
@@ -64,13 +64,56 @@ GameController.gameUpdate=function(req,res,next){
 	var gameId=req.query.gameId;
 	var query=new AV.Query('Game');
 	query.get(gameId,{
-		success:function(results){
-			results.set('name',req.body.gameName);
-			results.set('college',req.body,college);
-			results.set('');
+		success:function(game){
+			imageUtil.upLoad(req,res,'imageFile',function(err,url){
+				var name = req.body.name;
+				var coverUrl = url;
+				var college = req.body.college;
+				game.set('college',college);
+				game.set('name',name);
+				game.set('coverUrl',coverUrl);
+				game.save(null,{
+					success:function(game){
+						//
+						res.send("success");
+					},
+					error:function(game,error){
+
+					}
+				})
+			})
 		},
 		error:function(error){
 			console.log('fail to get gameUpdate');
 		}
 	});
+}
+
+GameController.gameAdd = function(req,res,next){
+	var college = req.body.college;
+	var name = req.body.name;
+	var coverUrl ;
+	imageUtil.upLoad(req,res,'imageFile',function(err,url){
+		if(err){
+
+		}
+		else{
+			coverUrl = url;
+			var game = new 	Game();
+			game.set('college',college);
+			game.set('name',name);
+			game.set('coverUrl',coverUrl);
+			game.save(null,{
+				success:function(game){
+					//
+					res.send("success");
+				},
+				error:function(game,error){
+
+				}
+			})
+		}
+	})
+
+
 }
