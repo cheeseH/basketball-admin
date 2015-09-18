@@ -213,6 +213,47 @@ TeamController.Update = function(req,res,next){
 
 }
 
+function InArray(object,array){
+	var id = object.id;
+	var result = false;
+	var i = 0;
+	for(;i<array.length;i++){
+		var compareId = array[i].id;
+		if(compareId == id){
+			result = true;
+			return true;
+		}
 
+	}
+	return false;
+}
+TeamController.Select = function(req,res,next){
+	var gameId = req.query.gameId;
+	searchByGame(gameId,function(err,teams){
+		if(err){
 
+		}
+		else{
+			//var campusId = req.session.campusId;
+			var campusId = req.query.campusId;
+			searchByCampus(campusId,function(err,campusTeams){
+				if(err){
+
+				}
+				else{
+					var restTeams = new Array();
+					var i = 0;
+					for(;i<campusTeams.length;i++){
+						var obj = campusTeams[i];
+						if(!InArray(obj,teams)){
+							restTeams[restTeams.length] = obj;
+						}
+					}
+					//比赛有的球队是teams，剩下的球队是restTeams
+				res.send(restTeams);
+				}
+			})
+		}
+	})
+}
 
