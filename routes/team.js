@@ -15,7 +15,7 @@ router.get('/',function(req,res,next){
     if(pos == 'game'){
         TeamController.GameIndex(req,res,next);
     }else if(pos == 'campus'){
-        
+
         TeamController.CampusIndex(req,res,next);
     }
 })
@@ -33,7 +33,7 @@ router.get('/info',TeamController.TeamInfo);
 
 router.post('/update',multipartMiddleware,TeamController.Update);
 
-
+router.get('/select',TeamController.Select);
 
 
 
