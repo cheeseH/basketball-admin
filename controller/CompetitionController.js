@@ -97,7 +97,8 @@ CompetitionController.competitionList=function(req,res,next){
 				returnData[i]={
 					type:typeArray[i],
 					competitions:competitions[i],
-					number:competitions[i].length
+					number:competitions[i].length,
+					level:competitions[i].level
 				};
 
 			}
