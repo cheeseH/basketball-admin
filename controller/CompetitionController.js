@@ -50,27 +50,44 @@ CompetitionController.competitionList=function(req,res,next){
 
 			var returnData={};
 
-			for(i=0;i<result.length;i++)						//获得所有比赛的类型
+			var allLevel=new Array();
+			var kindsOfLevel=0;
+			var ifHaveLevel=0;
+			for(i=0;i<result.length;i++)						//获得所有比赛的类型,获得所有比赛的level
 			{
 				if(i==0&&j==0)
 				{
 					typeArray[j]=result[i].get('type');
+					allLevel[kindsOfLevel]=result[i].get('level');
 					competitions[j]=new Array();
 					j++;
+					kindsOfLevel++;
+
 				}
 				else
 				{
 					ifHave=0;
+					ifHaveLevel=0;
 					for(var k=0;k<typeArray.length;k++)
 					{
 						if(typeArray[k]==result[i].get('type'))
 							ifHave=1;
+					}
+					for(var k=0;k<allLevel.length;k++)
+					{
+						if(allLevel[k]==result[i].get('level'))
+							ifHaveLevel=1;
 					}
 					if(ifHave!=1)
 					{
 						typeArray[j]=result[i].get('type');
 						competitions[j]=new Array();
 						j++;
+					}
+					if(ifHaveLevel!=1)
+					{
+						allLevel[kindsOfLevel]=result[i].get('level');
+						kindsOfLevel++;
 					}
 				}
 			}
@@ -99,9 +116,11 @@ CompetitionController.competitionList=function(req,res,next){
 					competitions:competitions[i],
 					number:competitions[i].length,
 					level:competitions[i].level
+					//levelKinds:allLevel.length
 				};
 
 			}
+			returnData.levelKinds=allLevel.length;
 			//res.render('',{result:result,code:'200'});
 			res.send(returnData);
 
@@ -233,8 +252,11 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 			return callback(error);
 		}
 	});
+<<<<<<< HEAD
+=======
 
 }
+>>>>>>> 1608229ba90436b9892870882f44120c392095d4
 
 /*删除单场赛事，需以POST传入competitionId
 删除顺序：先删除Score,再删除competition
@@ -282,6 +304,55 @@ CompetitionController.CompetitionDelete=function(req,res,next){
 	});
 }
 
+<<<<<<< HEAD
+/*删除单场赛事，需以POST传入competitionId
+删除顺序：先删除Score,再删除competition
+
+*/
+CompetitionController.CompetitionDelete=function(req,res,next){
+	//var competitionId=req.body.competitionId;
+	var competitionId='55f53582ddb202577ccabde8';
+	var queryCompetition=new AV.Query('Competition');
+	//queryCompetition.include('scoreId');										//为什么不include反而能取出数据
+	queryCompetition.get(competitionId,{
+		success:function(result){
+			console.log('success to get Competition');
+			var theScore=new Score();
+			theScore.id=result.get('scoreId').id;
+			theScore.destroy({
+				success:function(result){
+					console.log('success to delete score');
+					var competition=new Competition();
+					competition.id=competitionId;
+					competition.destroy({
+						success:function(competitionResult)
+						{
+							console.log('success to delete competition');
+							res.send(competitionResult);
+						},
+						error:function(competitionError)
+						{
+							console.log('fail to delete competition');
+							res.send(competitionError);
+						}
+					});
+				},
+				error:function(error)
+				{
+					console.log('fail to delete the score');
+					res.send(error);
+				}
+			});
+		},
+		error:function(error){
+			console.log('fail to get Competition');
+			res.send(error);
+		}
+	});
+}
+
+=======
+>>>>>>> 1608229ba90436b9892870882f44120c392095d4
 /*
 需以POST方式，传入,比分需要为int型
 gameId，

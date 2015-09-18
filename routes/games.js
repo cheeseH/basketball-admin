@@ -21,4 +21,5 @@ router.get('/gameAdd',function(req,res,next){
 
 router.post('/add',multipartMiddleware,GameController.gameAdd);
 router.post('update',multipartMiddleware,GameController.gameUpdate);
+
 module.exports = router;
