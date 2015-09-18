@@ -88,4 +88,5 @@ router.post("/editReport",function(req,res,next){
 		}
 	})
 });
+router.get('/competitionDetail',CompetitionController.CompetitionDetail);
 module.exports = router;

@@ -4,6 +4,7 @@ var Competition=AV.Object.extend("Competition");
 var Game=AV.Object.extend("Game");
 var Team=AV.Object.extend("Team");
 var Score=AV.Object.extend("Score");
+var GameFollow=AV.Object.extend("GameFollow");
 
 
 function CompetitionController()
@@ -508,5 +509,23 @@ CompetitionController.CompetitionUpdate=function(req,res,next){
 /*单场比赛的详情，以POST方式传入改比赛的ID*/
 CompetitionController.CompetitionDetail=function(req,res,next){
 	//var competitionId=req.body.competitionId;
-	var competitionId='';
+	var competitionId='55cd830060b22ed7cb93986c';
+	var query=new AV.Query(Competition);
+	query.include('teamBId');
+	query.include('teamAId');
+	query.include('reportId');
+	query.include('scoreId');
+	query.include('gameId');
+	query.get(competitionId,{
+		success:function(data)
+		{
+			console.log('success to get competition detail');
+			res.send(data);
+		},
+		error:function(error)
+		{
+			console.log('fail to get competitionDetail');
+			res.send(error);
+		}
+	});
 }
