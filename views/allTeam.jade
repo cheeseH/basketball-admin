@@ -52,15 +52,16 @@ html
 										th.text-center 简介
 										th.text-center 操作
 								tbody
+									-each val,key in teamList
 									tr
 										td.text-center
-											p 1
+											p #{key+1}
 										td.text-center
-											p 计科二班
+											p #{val.get("name")}
 										td.text-center
-											img.team-img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/LosAngeles_Lakers_logo.svg/200px-LosAngeles_Lakers_logo.svg.png")
+											img.team-img(src=val.get("logoUrl"))
 										td.text-center.col-xs-3
-											p 华南理工大学计算机学院计科二班
+											p #{val.get("info")}
 										td.text-center
 											div.dropdown
 												button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
@@ -71,77 +72,3 @@ html
 													div.line
 													li.alert-danger(role="presentation")
 														a(role="menuitem",tabindex="-1",href="#") 删除
-									tr
-										td.text-center
-											p 2
-										td.text-center
-											p 计科二班
-										td.text-center
-											img.team-img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/LosAngeles_Lakers_logo.svg/200px-LosAngeles_Lakers_logo.svg.png")
-										td.text-center
-											p 华南理工大学计算机学院计科二班
-										td.text-center
-											div.dropdown
-												button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
-													span.caret
-												ul.dropdown-menu(role="menu",aria-labelledby="operation")
-													li.alert-info(role="presentation")
-														a(role="menuitem",tabindex="-1",href="#") 编辑
-													div.line
-													li.alert-danger(role="presentation")
-														a(role="menuitem",tabindex="-1",href="#") 删除
-									tr
-										td.text-center
-											p 3
-										td.text-center
-											p 计科二班
-										td.text-center
-											img.team-img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/LosAngeles_Lakers_logo.svg/200px-LosAngeles_Lakers_logo.svg.png")
-										td.text-center
-											p 华南理工大学计算机学院计科二班
-										td.text-center
-											div.dropdown
-												button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
-													span.caret
-												ul.dropdown-menu(role="menu",aria-labelledby="operation")
-													li.alert-info(role="presentation")
-														a(role="menuitem",tabindex="-1",onclick="modal()",href="#") 编辑
-													div.line
-													li.alert-danger(role="presentation")
-														a(role="menuitem",tabindex="-1",href="#") 删除
-					//- div.row
-						div.col-xs-5
-							div.team
-								img.team-img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/LosAngeles_Lakers_logo.svg/200px-LosAngeles_Lakers_logo.svg.png")
-								hr
-								div.row
-									h3.col-xs-4 队名
-									h3.col-xs-7 计科二班
-								hr
-								div.row
-									h3.col-xs-4 简介
-									h4.col-xs-7 华南理工大学计算机学院计科二班
-								hr
-								div.row
-									button.btn.btn-primary.col-xs-2.col-xs-offset-2.input-lg(onclick='modal()') 编辑
-									button.btn.btn-danger.col-xs-2.col-xs-offset-4.input-lg 删除
-								hr
-						div.col-xs-5
-							div.team.text-center
-								img.team-img(src="https://upload.wikimedia.org/wikipedia/zh/thumb/0/04/Boston_Celtics_logo.png/200px-Boston_Celtics_logo.png")
-								hr
-								div.row
-									h3.col-xs-4 队名
-									h3.col-xs-7 计科二班
-								hr
-								div.row
-									h3.col-xs-4 简介
-									h4.col-xs-7 华南理工大学计算机学院计科二班
-								hr
-								div.row
-									button.btn.btn-primary.col-xs-2.col-xs-offset-2.input-lg 编辑
-									button.btn.btn-danger.col-xs-2.col-xs-offset-4.input-lg 删除
-								hr
-						div.col-xs-2
-							div.team-add.text-center(onclick='modal()')
-								h3.col-xs-8.col-xs-offset-2.input-lg 添加队伍

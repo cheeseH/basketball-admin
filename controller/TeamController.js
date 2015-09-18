@@ -56,8 +56,7 @@ TeamController.GameIndex = function(req,res,next){
 		}
 		else{
 			//res.render('gameAdd');
-			console.log(teams.length);
-			res.send("success");
+			res.render("team",{teamList:teams,gameId:gameId});
 		}
 	})
 }
@@ -69,9 +68,7 @@ TeamController.CampusIndex = function(req,res,next){
 
 		}
 		else{
-			//res.render('gameAdd');
-			console.log(teams.length);
-			res.send("success");
+			res.render("allTeam",{teamList:teams});
 		}
 
 	})

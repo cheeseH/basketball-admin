@@ -66,6 +66,7 @@ html
 							div.panel-title.title
 								p 比赛进程
 						div.panel-body
+							-console.log(competitionList)
 							-each val,key in competitionList
 								div.panel.panel-success.col-xs-10.col-xs-offset-1
 									-each val1,key1 in val
@@ -78,7 +79,7 @@ html
 														th.text-center 队伍A
 														th.text-center 队伍B
 														th.text-center 操作
-													-each val2,key2 in val1.competitions
+													-each val2,key2 in val1
 														tr
 															td.text-center #{val2.get("teamA")}
 															td.text-center #{val2.get("teamB")}

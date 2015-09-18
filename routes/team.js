@@ -28,14 +28,17 @@ router.post('/add',multipartMiddleware,function(req,res,next){
     }
 })
 
+router.get("/oldTeamAdd",function(req,res,next){
+    var gameId = req.query.gameId;
+    res.render("oldTeamAdd",{gameId:gameId})
+});
+router.get("/newTeamAdd",function(req,res,next){
+    var gameId = req.query.gameId;
+    res.render("newTeamAdd",{gameId:gameId})
+})
+
 router.get('/info',TeamController.TeamInfo);
 
 router.post('/update',multipartMiddleware,TeamController.Update);
-
-
-})
-
-
-
 
 module.exports = router;
