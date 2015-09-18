@@ -61,7 +61,7 @@ GameController.finishGame=function(req,res,next){
 }
 /*编辑赛事。润狗，留着给你了*/
 GameController.gameUpdate=function(req,res,next){
-	var gameId=req.query.gameId;
+	var gameId=req.body.gameId;
 	var query=new AV.Query('Game');
 	query.get(gameId,{
 		success:function(game){
@@ -72,6 +72,7 @@ GameController.gameUpdate=function(req,res,next){
 				game.set('college',college);
 				game.set('name',name);
 				game.set('coverUrl',coverUrl);
+				
 				game.save(null,{
 					success:function(game){
 						//

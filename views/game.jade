@@ -6,7 +6,9 @@ html
 			function gameInfo(){
 				location.href='/gameInfo';
 			}
-			function updateGame(id){
+			function modal(gameId){
+				$("#gameId").val(gameId);
+				$("")
 				$("#myModal").modal();
 			}
 	body
@@ -16,23 +18,25 @@ html
 					div.modal-header
 						button.close(type="button",data-dismiss="modal",aria-hidden="true") &times;
 						h4.modal-title#myModalLabel 修改
-					div.modal-body
-						form.form-horizontal(role='form',method="POST",action="",enctype="multipart/form-data")
+					form.form-horizontal(role='form',method="POST",action="/games/update",enctype="multipart/form-data")
+						div.modal-body
 							div.form-group
-								label.col-xs-3.control-label(for='game-name') 名称
+								label.col-xs-3.control-label(for='name') 名称
 								div.col-xs-5
-									input.form-control#game-name(type='text')
+									input.form-control#name(type='text')
 							div.form-group
-								label.col-xs-3.control-label(for="award-limit") 奖金上限
+								label.col-xs-3.control-label(for='college') 学院
 								div.col-xs-5
-									input.form-control#award-limit(type='text')
+									input.form-control#college(type='text')
 							div.form-group
-								label.col-xs-3.control-label(for="award-minimum") 奖金下限
+								label.col-xs-3.control-label(for="awardLimit") 奖金上限
 								div.col-xs-5
-									input.form-control#award-minimum(type='text')
-					div.modal-footer
-						button.btn.btn-defautl(type="button",data-dismiss="modal") 关闭
-						button.btn.btn-default(type="button") 完成
+									input.form-control#awardLimit(type='text')
+							div.form-group
+								input.hidden#gameId(type="text")
+						div.modal-footer
+							button.btn.btn-defautl(type="button",data-dismiss="modal") 关闭
+							input.btn.btn-default(type="submit" value="完成")
 		include ./navbar.jade
 		script(type="text/javascript").
 			$("#allTeam").removeClass("active");
@@ -62,7 +66,7 @@ html
 										th.text-center 是否结束
 										th.text-center 学院
 										th.text-center 奖金上限
-										th.text-center 奖金下限
+										th.text-center 奖金
 										th.text-center 操作
 								tbody
 									-each val,key in gameList
@@ -75,7 +79,7 @@ html
 												td.text-center 否
 											td.text-center #{val.get("college")}
 											td.text-center #{val.get("awardLimit")}
-											td.text-center #{val.get("awardMinimum")}
+											td.text-center #{val.get("award")}
 											td.text-center
 												div.dropdown
 													button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
@@ -85,7 +89,10 @@ html
 															a(role="menuitem",tabindex="-1",href="/games/gameDetail?gameId=#{val.id}") 管理赛事
 														div.line
 														li.alert-success(role="presentation")
-															a(role="menuitem",tabindex="-1",href="#",onclick="updateGame('#{val.id}')") 修改
+															a(role="menuitem",tabindex="-1",href="#",onclick="modal('#{val.id}')") 修改
+														div.line
+														li.alert-success(role="presentation")
+															a(role="menuitem",tabindex="-1",href="/games/gameFinished?gameId=#{val.id}") 结束赛事
 														div.line
 														li.alert-danger(role="presentation")
 															a(role="menuitem",tabindex="-1",href="#") 删除

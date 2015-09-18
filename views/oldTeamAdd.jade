@@ -17,6 +17,18 @@ html
 					}
 				}
 			}
+			function pitchUp(t){
+				if($(t).attr("checked")){
+					$(t).prop("checked",false);
+					$(t).attr("checked",false);
+				}else{
+					$(t).prop("checked",true);
+					$(t).attr("checked",true);
+				}
+			}
+			function send(){
+
+			}
 	body
 		include ./navbar.jade
 		div.container.text-center
@@ -24,15 +36,15 @@ html
 				div.col-xs-2
 					ul.nav.nav-pills.nav-stacked.text-center
 						li
-							a.row(href="/team")
+							a.row(href="/teams?pos=game&gameId=#{gameId}")
 								p.navbar-font 球队列表
 						div.line
 						li
-							a.row(href="/newTeamAdd")
+							a.row(href="/teams/newTeamAdd?gameId=#{gameId}")
 								p.navbar-font 添加新球队
 						div.line
 						li.active
-							a.row(href="/oldTeamAdd")
+							a.row(href="/teams/oldTeamAdd?gameId=#{gameId}")
 								p.navbar-font 添加已有球队
 				div.col-xs-10
 					div.panel.panel-primary.panel-block
@@ -49,25 +61,16 @@ html
 										th.text-center 队标
 										th.text-center 简介
 								tbody
-									tr
-										td.text-center
-											p
-												input(type="checkbox")
-										td.text-center
-											p 计科二班
-										td.text-center
-											img.team-img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/LosAngeles_Lakers_logo.svg/200px-LosAngeles_Lakers_logo.svg.png")
-										td.text-center.col-xs-3
-											p 华南理工大学计算机学院计科二班
-									tr
-										td.text-center
-											p
-												input(type="checkbox")
-										td.text-center
-											p 计科二班
-										td.text-center
-											img.team-img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/LosAngeles_Lakers_logo.svg/200px-LosAngeles_Lakers_logo.svg.png")
-										td.text-center
-											p 华南理工大学计算机学院计科二班
+									-each val,key in teamList
+										tr
+											td.text-center
+												p
+													input(type="checkbox",onclick="pitchUp(this)")
+											td.text-center
+												p #{val.get("name")}
+											td.text-center
+												img.team-img(src=val.get("logoUrl"))
+											td.text-center.col-xs-3
+												p #{val.get('info')}
 					div.text-center
-						button.btn.btn-primary 确定
+						button.btn.btn-primary(onclick="send()") 确定

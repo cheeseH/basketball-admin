@@ -2,6 +2,10 @@ doctype html
 html
 	head
 		include ./head.jade
+		script(type="text/javascript").
+			function modal(){
+				$("#myModal").modal("show");
+			}
 	body
 		div.modal.fade#myModal(tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
 			div.modal-dialog
@@ -17,7 +21,7 @@ html
 									input.form-control#team-name(type='text')
 							div.form-group
 								label.col-xs-3.control-label(for='team-description') 简介
-								div.col-xs-7
+								div.col-xs-5
 									textarea.form-control#team-description(rows="5")
 							div.form-group
 								div.col-xs-5.col-xs-offset-3
@@ -53,22 +57,19 @@ html
 										th.text-center 操作
 								tbody
 									-each val,key in teamList
-									tr
-										td.text-center
-											p #{key+1}
-										td.text-center
-											p #{val.get("name")}
-										td.text-center
-											img.team-img(src=val.get("logoUrl"))
-										td.text-center.col-xs-3
-											p #{val.get("info")}
-										td.text-center
-											div.dropdown
-												button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
-													span.caret
-												ul.dropdown-menu(role="menu",aria-labelledby="operation")
-													li.alert-info(role="presentation")
-														a(role="menuitem",tabindex="-1",href="#") 编辑
-													div.line
-													li.alert-danger(role="presentation")
-														a(role="menuitem",tabindex="-1",href="#") 删除
+										tr
+											td.text-center
+												p #{key+1}
+											td.text-center
+												p #{val.get("name")}
+											td.text-center
+												img.team-img(src=val.get("logoUrl"))
+											td.text-center.col-xs-3
+												p #{val.get("info")}
+											td.text-center
+												div.dropdown
+													button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
+														span.caret
+													ul.dropdown-menu(role="menu",aria-labelledby="operation")
+														li.alert-info(role="presentation")
+															a(role="menuitem",tabindex="-1",href="#",onclick="modal()") 编辑

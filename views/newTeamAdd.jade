@@ -9,15 +9,15 @@ html
 				div.col-xs-2
 					ul.nav.nav-pills.nav-stacked
 						li
-							a.row(href="/team")
+							a.row(href="/teams?pos=game&gameId=#{gameId}")
 								p.navbar-font 球队列表
 						div.line
 						li.active
-							a.row(href="/newTeamAdd")
+							a.row(href="/teams/newTeamAdd?gameId=#{gameId}")
 								p.navbar-font 添加新球队
 						div.line
 						li
-							a.row(href="/oldTeamAdd")
+							a.row(href="/teams/oldTeamAdd?gameId=#{gameId}")
 								p.navbar-font 添加已有球队
 				div.col-xs-10
 					div.panel.panel-primary.panel-block

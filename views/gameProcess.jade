@@ -3,11 +3,68 @@ html
 	head
 		include ./head.jade
 		script(type="text/javascript").
-			function addCompetition(){
+			var year = 0;
+			var month = 0;
+			function addCompetition(t,way){
+				$("#level").val($(t).attr("data-level"));
+				if(way=="old"){
+					$("#type").parent().parent().addClass("hidden");
+					$("#type").val($(t).attr("data-type"));
+				}else{
+					$("#type").parent().parent().removeClass("hidden");
+					$("#type").val("");
+				}
 				$("#myModal").modal();
+			
+				getDay();
 			}
 			function intoLevelAdd(){
 				location.href="/levelAdd";
+			}
+			function getDay(){
+				year = parseInt($("#year").val());
+				month = parseInt($("#month").val());
+				if(year!=0&&month!=0){
+					$("#day").empty();
+					if(month==2&&(year%4==0&&year%100!=0||year%400==0)){
+						for(var i=1;i<=29;i++){
+							if(i<10){
+								$("#month").append("<option>0"+i+"</option>");
+							}else{
+								$("#month").append("<option>"+i+"</option>");
+							}
+							
+						}
+					}else if(month==2){
+						$("#day").empty();
+						for(var i=1;i<=28;i++){
+							if(i<10){
+								$("#day").append("<option>0"+i+"</option>");
+							}else{
+								$("#day").append("<option>"+i+"</option>");
+							}
+							
+						}
+					}else if(month==1||month==3||month==5||month==7||month==8||month==10||month==12){
+						$("#day").empty();
+						for(var i=1;i<=31;i++){
+							if(i<10){
+								$("#day").append("<option>0"+i+"</option>");
+							}else{
+								$("#day").append("<option>"+i+"</option>");
+							}
+						}
+					}else{
+						$("#day").empty();
+						for(var i=1;i<=30;i++){
+							if(i<10){
+								$("#day").append("<option>0"+i+"</option>");
+							}else{
+								$("#day").append("<option>"+i+"</option>");
+							}
+						}
+					}
+				}
 			}
 
 	body
@@ -16,38 +73,64 @@ html
 				div.modal-content
 					div.modal-header
 						button.close(type="button",data-dismiss="modal",aria-hidden="true") &times;
-						h4.modal-title#myModalLabel
-					div.modal-body
-						form.form-horizontal(role='form',method="POST",action="",enctype="multipart/form-data")
+						h4.modal-title#myModalLabel 添加比赛
+					form.form-horizontal(role='form',method="POST",action="/competitions/competitionAdd")
+						div.modal-body
 							div.form-group
-								label.col-xs-3.control-label(for='teamA') 球队A
-								div.col-xs-5
-									input.form-control#teamA(type='text')
+								label.col-xs-2.control-label(for='teamAName') 球队A
+								div.col-xs-6
+									input.form-control#teamAName(type='text',name="teamAName")
 							div.form-group
-								label.col-xs-3.control-label(for='teamB') 球队B
-								div.col-xs-5
-									input.form-control#teamB(type='text')
-							div.col-xs-8.col-xs-offset-2
-								label.checkbox-inline
-									input(type='radio',value='0',name='type')
-									未开始
-								label.checkbox-inline
-									input(type='radio',value='1',name='type')
-									进行中
-								label.checkbox-inline
-									input(type='radio',value='2',name='type')
-									已结束
+								label.col-xs-2.control-label(for='teamBName') 球队B
+								div.col-xs-6
+									input.form-control#teamBName(type='text',name="teamBName")
+							div.form-group.form-inline
+								label.col-xs-2.control-label 开始时间
+								div.col-xs-10
+									select.form-control#year(onchange="getDay()",name="year")
+										-for(var i=0;i<3;i++)
+											option #{new Date().getFullYear()+i}
+									label.control-label(for="year") 年
+									select.form-control#month(onchange="getDay()",name="month")
+										-for(var i=1;i<=12;i++)
+											-if(i<10)
+												option #{"0"+i}
+											-else
+												option #{i}
+									label.control-label(for="month") 月
+									select.form-control#day(name="day")
+									label.control-label(for="day") 日
+									select.form-control#hour(name="hour")
+										-for(var i=0;i<24;i++)
+											-if(i<10)
+												option #{"0"+i}
+											-else
+												option #{i}
+									label.control-label(for="hour") 时
+									select.form-control#minute(name="minute")
+										-for(var i=0;i<60;i++)
+											-if(i<10)
+												option #{"0"+i}
+											-else
+												option #{i}
+									label.control-label(for="minute") 分
 							div.form-group
-								label.col-xs-3.control-label(for='awardLimit') 奖金池上限
-								div.col-xs-5
-									input.form-control#awardLimit(type='text')
+								label.col-xs-2.control-label(for='awardLimit') 奖金上限
+								div.col-xs-6
+									input.form-control#awardLimit(type='text',name="awardLimit")
 							div.form-group
-								label.col-xs-3.control-label(for='awardMinimum') 奖金池下限
-								div.col-xs-5
-									input.form-control#awardMinimum(type='text')
-					div.modal-footer
-						button.btn.btn-defautl(type="button",data-dismiss="modal") 关闭
-						button.btn.btn-default(type="button") 完成
+								label.col-xs-2.control-label(for='awardMinimum') 奖金下限
+								div.col-xs-6
+									input.form-control#awardMinimum(type='text',name="awardMinimum")
+							input.form-control.hidden#level(type='text',name="level")
+							div.form-group.hidden
+								label.col-xs-2.control-label(for="type") 类型
+								div.col-xs-6
+									input.form-control#type(type='text',name="type")
+							input.form-control.hidden#gameId(type='text',value="#{gameId}",name="gameId")
+						div.modal-footer
+							button.btn.btn-defautl(type="button",data-dismiss="modal") 关闭
+							input.btn.btn-default(type="submit",value="完成")
 		include ./navbar.jade
 		div.container.text-center
 			div.row
@@ -66,7 +149,6 @@ html
 							div.panel-title.title
 								p 比赛进程
 						div.panel-body
-							-console.log(competitionList)
 							-each val,key in competitionList
 								div.panel.panel-success.col-xs-10.col-xs-offset-1
 									-each val1,key1 in val
@@ -79,10 +161,10 @@ html
 														th.text-center 队伍A
 														th.text-center 队伍B
 														th.text-center 操作
-													-each val2,key2 in val1
+													-each val2,key2 in val1.competitions
 														tr
-															td.text-center #{val2.get("teamA")}
-															td.text-center #{val2.get("teamB")}
+															td.text-center #{val2.get("teamAId").get("name")}
+															td.text-center #{val2.get("teamBId").get("name")}
 															td.text-center
 																div.dropdown
 																	button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
@@ -95,8 +177,8 @@ html
 																			a(role="menuitem",tabindex="-1",href="#") 删除
 													tr
 														td.text-center(colspan='3')
-															a(href="#") 添加比赛
+															a(href="#",onclick="addCompetition(this,'old')",data-level=key,data-type=val1.type) 添加比赛
 									div.col-sm-6
-										div.block.empty
+										div.block.empty(onclick="addCompetition(this,'new')",data-level=key)
 											p +
 								hr

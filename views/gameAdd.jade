@@ -21,31 +21,26 @@ html
 							div.panel-title.title
 								p 添加赛事
 						div.panel-body
-							form.form-horizontal(role='form',method="POST",action="",enctype="multipart/form-data")
+							form.form-horizontal(role='form',method="POST",action="/games/add",enctype="multipart/form-data")
 								div.form-group
-									label.col-xs-3.control-label(for='game-name') 赛事名称
+									label.col-xs-3.control-label(for='name') 赛事名称
 									div.col-xs-5
-										input.form-control#game-name(type='text')
+										input.form-control#name(type='text')
 								hr
 								div.form-group
-									label.col-xs-3.control-label(for='game-time') 时间
+									label.col-xs-3.control-label(for='college') 学院
 									div.col-xs-5
-										input.form-control#game-time(type='text')
+										input.form-control#coolege(type='text')
 								hr
 								div.form-group
-									label.col-xs-3.control-label(for='award-limit') 奖金上限
+									label.col-xs-3.control-label(for='awardLimit') 奖金上限
 									div.col-xs-5
-										input.form-control#award-limit(type='text')
+										input.form-control#awardLimit(type='text')
 								hr
 								div.form-group
-									label.col-xs-3.control-label(for='award-minimum') 奖金下限
+									label.col-xs-3.control-label(for='coverUrl') 赛事logo
 									div.col-xs-5
-										input.form-control#award-minimum(type='text')
-								hr
-								div.form-group
-									label.col-xs-3.control-label(for='game-logo') 赛事logo
-									div.col-xs-5
-										input.form-control#game-logo(type='file',accept='image/png,image/jpeg,image/jpg')
+										input.form-control#coverUrl(type='file',accept='image/png,image/jpeg,image/jpg')
 								hr
 								div.form-group
 									div.text-center

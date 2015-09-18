@@ -7,7 +7,7 @@ router.get('/competitionList', CompetitionController.competitionList);
 
 /*添加新的单场赛事,
 这里应该是router.post，为了后台测试方便，暂时用了router.get*/ 
-router.get('/competitionAdd',CompetitionController.CompetitionAdd);
+router.post('/competitionAdd',CompetitionController.CompetitionAdd);
 
 /*删除某场比赛
 这里应该是router.post，为了后台测试方便，暂时用了router.get

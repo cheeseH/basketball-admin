@@ -2,7 +2,26 @@ doctype html
 html
 	head
 		include ./head.jade
+		script(type="text/javascript").
+			function modal(){
+				$("#myModal").modal("show");
+			}
 	body
+		div.modal.fade#myModal(tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
+			div.modal-dialog
+				div.modal-content
+					div.modal-header
+						button.close(type="button",data-dismiss="modal",aria-hidden="true") &times;
+						h4.modal-title#myModalLabel 修改
+					form.form-horizontal(role='form',method="POST",action="/games/update",enctype="multipart/form-data")
+						div.modal-body
+							div.form-group
+								label.col-xs-3.control-label(for='coverUrl') 赛事logo
+								div.col-xs-5
+									input.form-control#coverUrl(type='file',accept='image/png,image/jpeg,image/jpg')
+						div.modal-footer
+							button.btn.btn-defautl(type="button",data-dismiss="modal") 关闭
+							input.btn.btn-default(type="submit" value="完成")
 		include ./navbar.jade
 		div.container.text-center
 			div.row
@@ -25,7 +44,11 @@ html
 							div.title
 								p 赛事信息
 						div.panel-body
-							img.coverUrl(src="#{gameInfo.get('coverUrl')}")
+							div.row
+								img.coverUrl(src="#{gameInfo.get('coverUrl')}")
+							hr
+							div.row
+								button.btn.btn-danger(onclick="modal()") 修改图片
 							hr
 							table.table.table-hover.table-responsive.table-bordered
 								thead

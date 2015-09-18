@@ -39,15 +39,6 @@ CompetitionController.competitionList=function(req,res,next){
 			var i=0;var j=0;
 			console.log(result.length);
 
-			/*var returnData={
-				0:{type:"小组赛",number:0,competitions:{}},
-				1:{type:"1/16决赛",number:0,competitions:{}},
-				2:{type:"1/8 决赛",number:0,competitions:{}},
-				3:{type:"1/4 决赛",number:0,competitions:{}},
-				4:{type:"半决赛" ,number:0,competitions:{}},
-				5:{type:"总决赛",number:0,competitions:{}}
-			};*/
-
 			var returnData={};
 
 			var allLevel=new Array();
@@ -108,23 +99,26 @@ CompetitionController.competitionList=function(req,res,next){
 					}
 				}
 			}
-			for(i=0;i<competitions.length;i++)
+			for(var levLen=0;levLen<allLevel.length;levLen++)				//返回数据
 			{
-				returnData[i]={
-					type:typeArray[i],
-					competitions:competitions[i],
-					number:competitions[i].length
-					//levelKinds:allLevel.length
-				};
-
-			}
-			returnData.levelKinds=allLevel.length;
+				returnData[levLen]={};
+				for(i=0;i<competitions.length;i++)
+				{
+					if(allLevel[levLen]==competitions[i][0].get('level'))
+					{
+						returnData[levLen][i]={
+							type:typeArray[i],
+							competitions:competitions[i],
+							number:competitions[i].length
+							//levelKinds:allLevel.length
+						};
+					}
+				}	
 			//res.render('',{result:result,code:'200'});
+			}
 			res.render('gameProcess',{gameId:gameId,competitionList:returnData});
-
 		},
 		error:function(error){
-			console.log(error);
 			res.render('error',{result:'',code:'701'});
 		
 		}
@@ -153,15 +147,21 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 	var awardMinimum=req.body.awardMinimum;
 
 	*/
-	var teamAName='凯尔特人';
-	var teamBName='底特律活塞';
-	var gameId='55cd4e0240ac645613921817';
+	var teamAName= req.body.teamAName;
+	var teamBName= req.body.teamBName;
+	var gameId= req.body.gameId;
 	var gameStatus='未开始';
-	var level=1;
-	var gameType='半决赛 ';
-	var beginTime=new Date('2015-08-16 14:59:00');
-	var awardLimit=200;
-	var awardMinimum=500;
+	var level= parseInt(req.body.level);
+	var gameType= req.body.type;
+	var year = req.body.year;
+	var month = req.body.month;
+	var day = req.body.day;
+	var hour = req.body.hour;
+	var minute = req.body.minute;
+	var time = year+"-"+month+"-"+day+" "+hour+":"+minute+":"+"00";
+	var beginTime=new Date(time);
+	var awardLimit= parseInt(req.body.awardLimit);
+	var awardMinimum= parseInt(req.body.awardMinimum);
 
 	
 	var gameQuery=new AV.Query(Game);
@@ -183,8 +183,6 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 							teamBId=teams[i].id;
 						}
 					};
-					console.log(teamAId);
-					console.log(teamBId);
 					if(teamAId!=110&&teamBId!=110)							//若两支队伍都存在于这场赛事
 					{
 						var score=new Score();
@@ -211,16 +209,16 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 								newCompetition.set('beginTime',beginTime);
 								newCompetition.set('awardMinimum',awardMinimum);
 								newCompetition.set('awardLimit',awardLimit);
-								newCompetition.set('award',awardLimit);					//默认奖金池的值是奖金池的下限
+								newCompetition.set('award',awardMinimum);					//默认奖金池的值是奖金池的上限
 								newCompetition.save(null,{
 									success:function(result)
 									{
 										console.log(result);
 										res.send('success');
 									},
-									error:function(error)
+									error:function(object,error)
 									{
-										console.log('fail');
+										console.log(error);
 										res.send(error);
 									}
 						});
@@ -250,7 +248,13 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 			return callback(error);
 		}
 	});
+
+
+
 }
+
+
+
 /*删除单场赛事，需以POST传入competitionId
 删除顺序：先删除Score,再删除competition
 
@@ -446,4 +450,9 @@ CompetitionController.CompetitionUpdate=function(req,res,next){
 			return callback(error);
 		}
 	});
+}
+/*单场比赛的详情，以POST方式传入改比赛的ID*/
+CompetitionController.CompetitionDetail=function(req,res,next){
+	//var competitionId=req.body.competitionId;
+	var competitionId='';
 }
