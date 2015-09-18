@@ -92,7 +92,6 @@ CompetitionController.competitionList=function(req,res,next){
 				}
 			}
 			
-			console.log(typeArray);
 			var lenOfcompetition=new Array();
 			for(i=0;i<result.length;i++)
 			{
@@ -109,19 +108,25 @@ CompetitionController.competitionList=function(req,res,next){
 					}
 				}
 			}
-			for(i=0;i<competitions.length;i++)
+			for(var levLen=0;levLen<allLevel.length;levLen++)				//返回数据
 			{
-				returnData[i]={
-					type:typeArray[i],
-					competitions:competitions[i],
-					number:competitions[i].length,
-					level:competitions[i].level
-					//levelKinds:allLevel.length
-				};
-
+				returnData[levLen]={};
+				for(i=0;i<competitions.length;i++)
+				{
+					if(allLevel[levLen]==competitions[i][0].get('level'))
+					{
+						returnData[levLen][i]={
+							type:typeArray[i],
+							competitions:competitions[i],
+							number:competitions[i].length
+							//levelKinds:allLevel.length
+						};
+					}
+				}	
 			}
-			returnData.levelKinds=allLevel.length;
 			//res.render('',{result:result,code:'200'});
+			console.log(typeArray);
+			console.log(allLevel);
 			res.send(returnData);
 
 		},
@@ -499,4 +504,9 @@ CompetitionController.CompetitionUpdate=function(req,res,next){
 			return callback(error);
 		}
 	});
+}
+/*单场比赛的详情，以POST方式传入改比赛的ID*/
+CompetitionController.CompetitionDetail=function(req,res,next){
+	//var competitionId=req.body.competitionId;
+	var competitionId='';
 }
