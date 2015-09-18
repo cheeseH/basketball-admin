@@ -20,7 +20,8 @@ router.get('/gameAdd',function(req,res,next){
 })
 
 router.post('/add',multipartMiddleware,GameController.gameAdd);
-router.post('update',multipartMiddleware,GameController.gameUpdate);
+router.post('/baseUpdate',GameController.gameBaseUpdate);
+router.post('/imageUpdate',multipartMiddleware,GameController.gameImageUpdate);
 
 /*传入gameId删除整个赛事*/
 router.get('/gameDelete',GameController.gameDelete);
