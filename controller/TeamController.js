@@ -257,3 +257,29 @@ TeamController.Select = function(req,res,next){
 	})
 }
 
+TeamController.Pick = function(req,res,next){
+	var gameId = req.query.gameId;
+	var teamId = req.query.teamId;
+	var gameQuery = new AV.Query('Game');
+	var team = new Team();
+	team.id = teamId;
+	gameQuery.get(gameId,{
+		success:function(game){
+			var teams  = game.relation('teams');
+			teams.add(team);
+			game.save(null,{
+				success:function(game){
+					//res.redirect('GameIndex');
+					res.send("success");
+
+				},
+				error:function(game,err){
+
+				}
+			})
+		},
+		error:function(error){
+
+		}
+	})
+}

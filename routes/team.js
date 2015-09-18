@@ -35,6 +35,8 @@ router.post('/update',multipartMiddleware,TeamController.Update);
 
 router.get('/select',TeamController.Select);
 
+router.get('/pick',TeamController.Pick);
+
 
 
 module.exports = router;
