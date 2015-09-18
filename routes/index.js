@@ -8,7 +8,6 @@ var Admin=AV.Object.extend("Admin");
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
-
 router.get('/testRelation',function(req,res,next){
 	var  query = new AV.Query('Game');
 	query.get('55cd4e0240ac645613921817',{

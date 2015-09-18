@@ -17,32 +17,29 @@ GameController.gameList=function(req, res, next) {
 	
 	query.find({
 	  	success: function(results) {
-	    console.log(results.length);
 	    //res.send(results);
-	    res.render('',{results:results,code:'200'});
+	    res.render('game',{gameList:results,code:'200'});
 	  },
 	  error: function(error) {
-	    res.render('',{results:'',code:'701'});
+	    res.render('error',{results:'',code:'701'});
 	  }
 	});
 }
 /*根据传过来的gameId来查询获得该场赛事的信息*/
 GameController.gamrDetail=function(req,res,next){
-	if(req.query.gameId==''||req.query.gameId==undifined||req.query.gameId==null)
+	if(req.query.gameId==''||req.query.gameId==null)
 	{	}
 	else
 		req.session.gameId=req.query.gameId;
 	var gameId=req.session.gameId;
-	//var gameId='55cd4e0240ac645613921817';
+	// var gameId='55cd4e0240ac645613921817';
 	var query=new AV.Query(Game);
 	query.get(gameId,{
 		success:function(results){
-			console.log(results);
-			res.render('',{data:results,code:'200'});
+			res.render('gameInfo',{gameInfo:results,gameId:gameId,code:'200'});
 		},
 		error:function(error){
-			console.log('fail to find gameDetail');
-			res.render('',{data:'',code:'701'});
+			res.render('error',{data:'',code:'701'});
 		}	
 	});
 }
@@ -78,6 +75,7 @@ GameController.gameUpdate=function(req,res,next){
 				game.save(null,{
 					success:function(game){
 						//
+						res.send("success");
 					},
 					error:function(game,error){
 
@@ -108,6 +106,7 @@ GameController.gameAdd = function(req,res,next){
 			game.save(null,{
 				success:function(game){
 					//
+					res.send("success");
 				},
 				error:function(game,error){
 

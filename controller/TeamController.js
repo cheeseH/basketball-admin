@@ -55,7 +55,9 @@ TeamController.GameIndex = function(req,res,next){
 
 		}
 		else{
-			res.render('gameAdd');
+			//res.render('gameAdd');
+			console.log(teams.length);
+			res.send("success");
 		}
 	})
 }
@@ -67,7 +69,9 @@ TeamController.CampusIndex = function(req,res,next){
 
 		}
 		else{
-			res.render('gameAdd');
+			//res.render('gameAdd');
+			console.log(teams.length);
+			res.send("success");
 		}
 
 	})
@@ -95,7 +99,8 @@ TeamController.AddInSchool = function(req,res,next){
 			team.set('campusId',campus);
 			team.save(null,{
 				success:function(team){
-					return res.redirect('CampusIndex');
+					//return res.redirect('CampusIndex');
+					res.send("success");
 				},
 				error:function(team,err){
 
@@ -135,6 +140,8 @@ TeamController.AddInGame = function(req,res,next){
 							game.save(null,{
 								success:function(game){
 									res.redirect('GameIndex');
+									res.send("success");
+
 								},
 								error:function(game,err){
 
@@ -155,10 +162,11 @@ TeamController.AddInGame = function(req,res,next){
 }
 
 TeamController.TeamInfo = function(req,res,next){
-	var teamId = req.body.teamId;
+	var teamId = req.query.teamId;
 	var query = new AV.Query('Team');
 	query.get(teamId,{
 		success:function(team){
+			res.send("success");
 
 		},
 		error:function(error){
@@ -187,6 +195,7 @@ TeamController.Update = function(req,res,next){
 					team.set('logoUrl',logoUrl);
 					team.save(null,{
 						success:function(team){
+							res.send("success");
 
 						},
 						error:function(team,error){

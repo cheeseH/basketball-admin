@@ -1,0 +1,46 @@
+doctype html
+html
+	head
+		include ./head.jade
+	body
+		include ./navbar.jade
+		div.container.text-center
+			div.row
+				div.col-xs-2
+					ul.nav.nav-pills.nav-stacked
+						li
+							a.row(href="/team")
+								p.navbar-font 球队列表
+						div.line
+						li.active
+							a.row(href="/newTeamAdd")
+								p.navbar-font 添加新球队
+						div.line
+						li
+							a.row(href="/oldTeamAdd")
+								p.navbar-font 添加已有球队
+				div.col-xs-10
+					div.panel.panel-primary.panel-block
+						div.panel-heading
+							div.panel-title.title
+								p 添加新球队
+						div.panel-body
+							form.form-horizontal(role='form',method="POST",action="",enctype="multipart/form-data")
+								div.form-group
+									label.col-xs-3.control-label(for='team-name') 队名
+									div.col-xs-5
+										input.form-control#team-name(type='text')
+								hr
+								div.form-group
+									label.col-xs-3.control-label(for='team-description') 简介
+									div.col-xs-5
+										textarea.form-control#team-description(rows="5")
+								hr
+								div.form-group
+									label.col-xs-3.control-label(for="team-img") 球队logo
+									div.col-xs-4
+										input.form-control#team-img(type='file',accept='image/png,image/jpeg,image/jpg')
+								hr
+								div.form-group
+									div.text-center
+										button.btn.btn-primary(type='submit') 确定

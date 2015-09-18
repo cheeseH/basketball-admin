@@ -6,10 +6,16 @@ nav.navbar.navbar-inverse
 				span.icon-bar
 				span.icon-bar
 				span.icon-bar
-			a.navbar-brand(href='#') Hola体育后台管理
-		div.navbar-collapsed.collapsed(id='navbar')
+			a.navbar-brand(href='/game') Hola体育后台管理
+		div.navbar-collapse.collapse
 			ul.nav.navbar-nav
-				li(id='game-active')
-					a(href='#') 当前赛事
-				li(id='game-add')
-					a(href='#') 添加赛事
+				li#allGame
+					a(href="/games/gameList")
+						p.navbar-font 所有赛事
+				li#allTeam
+					a(href="/teams/team")
+						p.navbar-font 所有球队
+			ul.nav.navbar-nav.navbar-right
+				li
+					a(href="#")
+						p.navbar-font 退出
