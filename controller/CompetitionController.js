@@ -49,28 +49,43 @@ CompetitionController.competitionList=function(req,res,next){
 			};*/
 
 			var returnData={};
-
-			for(i=0;i<result.length;i++)						//获得所有比赛的类型
+			var allLevel=new Array();
+			var kindsOfLevel=0;
+			var ifHaveLevel=0;
+			for(i=0;i<result.length;i++)						//获得所有比赛的类型,获得所有比赛的level
 			{
 				if(i==0&&j==0)
 				{
 					typeArray[j]=result[i].get('type');
+					allLevel[kindsOfLevel]=result[i].get('level');
 					competitions[j]=new Array();
 					j++;
+					kindsOfLevel++;
 				}
 				else
 				{
 					ifHave=0;
+					ifHaveLevel=0;
 					for(var k=0;k<typeArray.length;k++)
 					{
 						if(typeArray[k]==result[i].get('type'))
 							ifHave=1;
+					}
+					for(var k=0;k<allLevel.length;k++)
+					{
+						if(allLevel[k]==result[i].get('level'))
+							ifHaveLevel=1;
 					}
 					if(ifHave!=1)
 					{
 						typeArray[j]=result[i].get('type');
 						competitions[j]=new Array();
 						j++;
+					}
+					if(ifHaveLevel!=1)
+					{
+						allLevel[kindsOfLevel]=result[i].get('level');
+						kindsOfLevel++;
 					}
 				}
 			}
@@ -99,9 +114,11 @@ CompetitionController.competitionList=function(req,res,next){
 					competitions:competitions[i],
 					number:competitions[i].length,
 					level:competitions[i].level
+					//levelKinds:allLevel.length
 				};
 
 			}
+			returnData.levelKinds=allLevel.length;
 			//res.render('',{result:result,code:'200'});
 			res.send(returnData);
 
