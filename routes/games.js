@@ -20,6 +20,7 @@ router.get('/gameAdd',function(req,res,next){
 })
 
 router.post('/add',multipartMiddleware,GameController.gameAdd);
-router.post('update',multipartMiddleware,GameController.gameUpdate);
+router.post('/baseUpdate',GameController.gameBaseUpdate);
+router.post('/imageUpdate',multipartMiddleware,GameController.gameImageUpdate);
 
 module.exports = router;

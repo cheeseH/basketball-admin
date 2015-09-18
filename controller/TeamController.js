@@ -189,10 +189,11 @@ TeamController.Update = function(req,res,next){
 
 				}
 				else{
-					logoUrl = url;
+					
 					team.set('name',name);
 					team.set('info',info);
-					team.set('logoUrl',logoUrl);
+					if(url != null)
+						team.set('logoUrl',url);
 					team.save(null,{
 						success:function(team){
 							res.send("success");

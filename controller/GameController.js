@@ -60,33 +60,55 @@ GameController.finishGame=function(req,res,next){
 	});
 }
 /*编辑赛事。润狗，留着给你了*/
-GameController.gameUpdate=function(req,res,next){
+GameController.gameBaseUpdate=function(req,res,next){
 	var gameId=req.query.gameId;
 	var query=new AV.Query('Game');
 	query.get(gameId,{
 		success:function(game){
-			imageUtil.upLoad(req,res,'imageFile',function(err,url){
-				var name = req.body.name;
-				var coverUrl = url;
-				var college = req.body.college;
-				game.set('college',college);
-				game.set('name',name);
-				game.set('coverUrl',coverUrl);
-				game.save(null,{
-					success:function(game){
-						//
-						res.send("success");
-					},
-					error:function(game,error){
+		
+			var name = req.body.name;
+			var college = req.body.college;
+			game.set('college',college);
+			game.set('name',name);
+			game.save(null,{
+				success:function(game){
+					//
+					res.send("success");
+				},
+				error:function(game,error){
 
-					}
-				})
+				}
 			})
+
 		},
 		error:function(error){
 			console.log('fail to get gameUpdate');
 		}
 	});
+}
+
+GameController.gameImageUpdate=function(req,res,next){
+	var gameId = req.query.gameId;
+	var query = new AV.Query('Game');
+	query.get(gameId,{
+		success:function(game){
+			imageUtil.upLoad(req,res,'imageFile',function(err,url){
+				var logoUrl = url;
+				game.set('logoUrl',logoUrl);
+				game.save(null,{
+					success:function(game){
+						res.send('success');
+					},
+					error:function(game,error){
+						next(error);
+					}
+				})
+			})
+		},
+		error:function(err){
+			next(err);
+		}
+	})
 }
 
 GameController.gameAdd = function(req,res,next){
