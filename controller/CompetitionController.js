@@ -22,16 +22,89 @@ CompetitionController.competitionList=function(req,res,next){
 	var gameId='55cd4e0240ac645613921817';
 	var query=new AV.Query('Competition');
 	var game=new Game();
+
 	game.id=gameId;
 	query.equalTo('gameId',game);
+	query.descending('level');
 	query.include('teamBId');
 	query.include('teamAId');
 	query.include('scoreId');
 	query.find({
 		success:function(result){
-			console.log(result[0]);
+			console.log('success to get competitionList');
 
-			res.render('',{result:result,code:'200'});
+			var typeArray=new Array();
+			var competitions=new Array();
+			var ifHave=0;
+			var i=0;var j=0;
+			console.log(result.length);
+
+			/*var returnData={
+				0:{type:"小组赛",number:0,competitions:{}},
+				1:{type:"1/16决赛",number:0,competitions:{}},
+				2:{type:"1/8 决赛",number:0,competitions:{}},
+				3:{type:"1/4 决赛",number:0,competitions:{}},
+				4:{type:"半决赛" ,number:0,competitions:{}},
+				5:{type:"总决赛",number:0,competitions:{}}
+			};*/
+
+			var returnData={};
+
+			for(i=0;i<result.length;i++)						//获得所有比赛的类型
+			{
+				if(i==0&&j==0)
+				{
+					typeArray[j]=result[i].get('type');
+					competitions[j]=new Array();
+					j++;
+				}
+				else
+				{
+					ifHave=0;
+					for(var k=0;k<typeArray.length;k++)
+					{
+						if(typeArray[k]==result[i].get('type'))
+							ifHave=1;
+					}
+					if(ifHave!=1)
+					{
+						typeArray[j]=result[i].get('type');
+						competitions[j]=new Array();
+						j++;
+					}
+				}
+			}
+			
+			console.log(typeArray);
+			var lenOfcompetition=new Array();
+			for(i=0;i<result.length;i++)
+			{
+				lenOfcompetition[i]=0;
+			}
+			for(i=0;i<result.length;i++)
+			{
+				for(j=0;j<typeArray.length;j++)
+				{
+					if(result[i].get('type')==typeArray[j])
+					{
+						competitions[j][lenOfcompetition[j]]=result[i];
+						lenOfcompetition[j]++;
+					}
+				}
+			}
+			for(i=0;i<competitions.length;i++)
+			{
+				returnData[i]={
+					type:typeArray[i],
+					competitions:competitions[i],
+					number:competitions[i].length,
+					level:competitions[i].level
+				};
+
+			}
+			//res.render('',{result:result,code:'200'});
+			res.send(returnData);
+
 		},
 		error:function(error){
 			console.log(error);
