@@ -9,34 +9,32 @@ var qiniu = require('qiniu');
 var TeamController = require('../controller/TeamController');
 var teamController = TeamController();
 var imageUtil = require('../util/image');
-router.post('/testImg',multipartMiddleware,function(req,res,next){
-	
-	imageUtil.upLoad(req,res,'imgFile',function(err, ret) {
-                if(!err) {
-                    // 上传成功， 处理返回值
-//                    console.log(ret.key, ret.hash);
-                    res.write(JSON.stringify({
-                        "error" : 0,
-                        "url" : '7xlqng.com1.z0.glb.clouddn.com' + ret.key
-                    }));
-                    console.log("上传成功！");
-                } else {
-                    // 上传失败， 处理返回代码
-//                    console.log(err);
-                    // http://developer.qiniu.com/docs/v6/api/reference/codes.html
-                    res.write(JSON.stringify({
-                        "error" : 1,
-                        "message" : "上传失败"
-                    }));
-                    console.log("上传失败！");
-                }
-                res.end();
-            })
 
-
-});
-
-router.get('/test',function(req,res,next){
-	res.render('gameAdd.jade');
+router.get('/',function(req,res,next){
+    var pos = req.query.pos;
+    if(pos == 'game'){
+        TeamController.GameIndex(req,res,next);
+    }else if(pos == 'campus'){
+        
+        TeamController.CampusIndex(req,res,next);
+    }
 })
+
+router.post('/add',multipartMiddleware,function(req,res,next){
+    var pos = req.query.pos;
+    if(pos == 'game'){
+        TeamController.AddInGame(req,res,next);
+    }else if(pos == 'campus'){
+        TeamController.AddInCampus(req,res,next);
+    }
+})
+
+router.get('/info',TeamController.TeamInfo);
+
+router.post('/update',multipartMiddleware,TeamController.Update);
+
+
+
+
+
 module.exports = router;

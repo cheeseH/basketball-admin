@@ -4,7 +4,8 @@ var router = express.Router();
 var AV = require('avoscloud-sdk');
 var Game=AV.Object.extend("Game");
 var Campus=AV.Object.extend("Campus");
-
+var multipart = require('connect-multiparty');
+var multipartMiddleware = multipart();
 var GameController=require('../controller/GameController');
 
 /* 返回赛事列表,根据campusId返回不同校区的赛事 */
@@ -17,5 +18,8 @@ router.get('/gameFinshed',GameController.finishGame);
 router.get('/gameAdd',function(req,res,next){
 	res.render("gameAdd");
 })
+
+router.post('/add',multipartMiddleware,GameController.gameAdd);
+router.post('update',multipartMiddleware,GameController.gameUpdate);
 
 module.exports = router;
