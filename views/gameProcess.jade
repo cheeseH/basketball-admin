@@ -9,6 +9,7 @@ html
 			function intoLevelAdd(){
 				location.href="/levelAdd";
 			}
+
 	body
 		div.modal.fade#myModal(tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
 			div.modal-dialog
@@ -65,159 +66,36 @@ html
 							div.panel-title.title
 								p 比赛进程
 						div.panel-body
-							div.panel.panel-success.col-xs-10.col-xs-offset-1
-								div.col-sm-6
-									div.panel.panel-primary.block
-										div.panel-heading
-											p.panel-title.title 小组赛A
-										table.table.table-hover
-											th.text-center 队伍A
-											th.text-center 队伍B
-											th.text-center 操作
-											tr
-												td.text-center 计科一班
-												td.text-center 计科二班
-												td.text-center
-													div.dropdown
-														button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
-															span.caret
-														ul.dropdown-menu(role="menu",aria-labelledby="operation")
-															li.alert-info(role="presentation")
-																a(role="menuitem",tabindex="-1",href="/competitionInfo") 管理比赛
-															div.line
-															li.alert-danger(role="presentation")
-																a(role="menuitem",tabindex="-1",href="#") 删除
-											tr
-												td.text-center 计科一班
-												td.text-center 计科二班
-												td.text-center
-													div.dropdown
-														button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
-															span.caret
-														ul.dropdown-menu(role="menu",aria-labelledby="operation")
-															li.alert-info(role="presentation")
-																a(role="menuitem",tabindex="-1",href="/competitionInfo") 管理比赛
-															div.line
-															li.alert-danger(role="presentation")
-																a(role="menuitem",tabindex="-1",href="#") 删除
-											tr
-												td.text-center 计科一班
-												td.text-center 计科二班
-												td.text-center
-													div.dropdown
-														button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
-															span.caret
-														ul.dropdown-menu(role="menu",aria-labelledby="operation")
-															li.alert-info(role="presentation")
-																a(role="menuitem",tabindex="-1",href="/competitionInfo") 管理比赛
-															div.line
-															li.alert-danger(role="presentation")
-																a(role="menuitem",tabindex="-1",href="#") 删除
-											tr
-												td.text-center(colspan='3')
-													a(href="#") 添加比赛
-								div.col-sm-6
-									div.block.empty
-										p +
-							hr
-							div.panel.panel-success.col-xs-10.col-xs-offset-1
-								div.col-sm-6
-									div.panel.panel-primary.block
-										div.panel-heading
-											p.panel-title.title 1/4决赛A
-										table.table.table-hover
-											th.text-center 队伍A
-											th.text-center 队伍B
-											th.text-center 查看
-											tr
-												td.text-center 计科一班
-												td.text-center 计科二班
-												td.text-center
-													a(href="#") 查看
-											tr
-												td.text-center 计科一班
-												td.text-center 计科二班
-												td.text-center
-													a(href="#") 查看
-											tr
-												td.text-center 计科一班
-												td.text-center 计科二班
-												td.text-center
-													a(href="#") 查看
-											tr
-												td.text-center(colspan='2')
-													a(href="#") 添加比赛
-								div.col-sm-6
+							-each val,key in competitionList
+								div.panel.panel-success.col-xs-10.col-xs-offset-1
+									-each val1,key1 in val
+										div.col-sm-6
+											div.panel.panel-primary.block
+												div.panel-heading
+													p.panel-title.title #{val1.type}
+												table.table.table-hover
+													tr
+														th.text-center 队伍A
+														th.text-center 队伍B
+														th.text-center 操作
+													-each val2,key2 in val1.competitions
+														tr
+															td.text-center #{val2.get("teamA")}
+															td.text-center #{val2.get("teamB")}
+															td.text-center
+																div.dropdown
+																	button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
+																		span.caret
+																	ul.dropdown-menu(role="menu",aria-labelledby="operation")
+																		li.alert-info(role="presentation")
+																			a(role="menuitem",tabindex="-1",href="/competitionInfo") 管理比赛
+																		div.line
+																		li.alert-danger(role="presentation")
+																			a(role="menuitem",tabindex="-1",href="#") 删除
+													tr
+														td.text-center(colspan='3')
+															a(href="#") 添加比赛
+									div.col-sm-6
 										div.block.empty
 											p +
-							//- div.col-sm-6
-								div.panel.panel-primary.block
-									div.panel-heading
-										p.panel-title.title 小组赛B
-									table.table.table-responsive
-										th.text-center 队伍A
-										th.text-center 队伍B
-										tr
-											td.text-center 计科一班
-											td.text-center 计科二班
-										tr
-											td.text-center 计科一班
-											td.text-center 计科二班
-										tr
-											td.text-center 计科一班
-											td.text-center 计科二班
-										tr
-											td.text-center(colspan='2')
-												a(href="#") 添加比赛
-							
-
-				//- div.row
-					div.col-xs-5
-						div.level
-							div.row
-								h2 小组赛
-								p 已结束
-							hr
-							div.row.competition
-								h3.col-xs-5 计科一班
-								h3.col-xs-2 VS
-								h3.col-xs-5 计科二班
-							hr
-							div.row.competition
-								h3.col-xs-5 计科一班
-								h3.col-xs-2 VS
-								h3.col-xs-5 计科二班
-							hr
-							div.row.competition
-								h3.col-xs-5 计科一班
-								h3.col-xs-2 VS
-								h3.col-xs-5 计科二班
-							hr
-							div.competition-add
-								p 添加比赛
-					div.col-xs-5
-						div.level
-							div.row
-								h2 1/4决赛
-								p 进行中
-							hr
-							div.row.competition
-								h3.col-xs-5 计科一班
-								h3.col-xs-2 VS
-								h3.col-xs-5 计科二班
-							hr
-							div.row.competition
-								h3.col-xs-5 计科一班
-								h3.col-xs-2 VS
-								h3.col-xs-5 计科二班
-							hr
-							div.row.competition
-								h3.col-xs-5 计科一班
-								h3.col-xs-2 VS
-								h3.col-xs-5 计科二班
-							hr
-							div.competition-add(onclick="addCompetition()")
-								p 添加比赛
-					div.col-xs-2
-						div.process-add.text-center
-							h3.col-xs-8.col-xs-offset-2.input-lg 添加进度
+								hr

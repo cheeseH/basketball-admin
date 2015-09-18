@@ -19,7 +19,7 @@ include 了teamAId与teamBId，需要告诉酱
 */
 CompetitionController.competitionList=function(req,res,next){
 	//var gameId=req.query.gameId;
-	var gameId='55cd4e0240ac645613921817';
+	var gameId= req.query.gameId;
 	var query=new AV.Query('Competition');
 	var game=new Game();
 
@@ -75,7 +75,6 @@ CompetitionController.competitionList=function(req,res,next){
 				}
 			}
 			
-			console.log(typeArray);
 			var lenOfcompetition=new Array();
 			for(i=0;i<result.length;i++)
 			{
@@ -103,12 +102,12 @@ CompetitionController.competitionList=function(req,res,next){
 
 			}
 			//res.render('',{result:result,code:'200'});
-			res.send(returnData);
+			res.render('gameProcess',{gameId:gameId,competitionList:returnData});
 
 		},
 		error:function(error){
 			console.log(error);
-			res.render('',{result:'',code:'701'});
+			res.render('error',{result:'',code:'701'});
 		
 		}
 	});
