@@ -252,11 +252,10 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 			return callback(error);
 		}
 	});
-<<<<<<< HEAD
-=======
+
 
 }
->>>>>>> 1608229ba90436b9892870882f44120c392095d4
+
 
 /*删除单场赛事，需以POST传入competitionId
 删除顺序：先删除Score,再删除competition
@@ -304,7 +303,7 @@ CompetitionController.CompetitionDelete=function(req,res,next){
 	});
 }
 
-<<<<<<< HEAD
+
 /*删除单场赛事，需以POST传入competitionId
 删除顺序：先删除Score,再删除competition
 
@@ -351,8 +350,6 @@ CompetitionController.CompetitionDelete=function(req,res,next){
 	});
 }
 
-=======
->>>>>>> 1608229ba90436b9892870882f44120c392095d4
 /*
 需以POST方式，传入,比分需要为int型
 gameId，
