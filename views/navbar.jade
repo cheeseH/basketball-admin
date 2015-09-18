@@ -8,13 +8,14 @@ nav.navbar.navbar-inverse
 				span.icon-bar
 			a.navbar-brand(href='/game') Hola体育后台管理
 		div.navbar-collapse.collapse
+			ul.nav.navbar-nav
+				li#allGame
+					a(href="/games/gameList")
+						p.navbar-font 所有赛事
+				li#allTeam
+					a(href="/teams/team")
+						p.navbar-font 所有球队
 			ul.nav.navbar-nav.navbar-right
 				li
-					a(href="/game")
-						p.navbar-font 赛事
-				li
-					a(href="/Allteam")
-						p.navbar-font 球队
-				li
-					a(href="/allCompetition")
-						p.navbar-font 比赛
+					a(href="#")
+						p.navbar-font 退出

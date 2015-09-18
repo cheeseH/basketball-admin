@@ -14,6 +14,8 @@ router.get('/gameDetail',GameController.gamrDetail);
 /*以get传入gameId， 结束某场赛事*/
 router.get('/gameFinshed',GameController.finishGame);
 /*以get传入gameId，修改某场赛事的信息*/
-
+router.get('/gameAdd',function(req,res,next){
+	res.render("gameAdd");
+})
 
 module.exports = router;

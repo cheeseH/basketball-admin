@@ -6,7 +6,7 @@ html
 			function gameInfo(){
 				location.href='/gameInfo';
 			}
-			function updateGame(){
+			function updateGame(id){
 				$("#myModal").modal();
 			}
 	body
@@ -23,10 +23,6 @@ html
 								div.col-xs-5
 									input.form-control#game-name(type='text')
 							div.form-group
-								label.col-xs-3.control-label(for='game-time') 时间
-								div.col-xs-5
-									input.form-control#game-time(rows="5")
-							div.form-group
 								label.col-xs-3.control-label(for="award-limit") 奖金上限
 								div.col-xs-5
 									input.form-control#award-limit(type='text')
@@ -38,16 +34,19 @@ html
 						button.btn.btn-defautl(type="button",data-dismiss="modal") 关闭
 						button.btn.btn-default(type="button") 完成
 		include ./navbar.jade
+		script(type="text/javascript").
+			$("#allTeam").removeClass("active");
+			$("#allGame").addClass("active");
 		div.container.text-center
 			div.row
 				div.col-xs-2
 					ul.nav.nav-pills.nav-stacked.text-center
 						li.active
-							a.row(href="/game")
+							a.row(href="/games/gameList")
 								p.navbar-font 赛事列表
 						div.line
 						li
-							a.row(href="/gameAdd")
+							a.row(href="/games/gameAdd")
 								p.navbar-font 添加赛事
 				div.col-xs-10.text-center
 					div.panel.panel-primary.panel-block
@@ -60,114 +59,33 @@ html
 									tr
 										th.text-center 序号
 										th.text-center 名称
-										th.text-center 时间
+										th.text-center 是否结束
+										th.text-center 学院
 										th.text-center 奖金上限
 										th.text-center 奖金下限
 										th.text-center 操作
 								tbody
-									tr
-										td.text-center 1
-										td.text-center 金秋杯
-										td.text-center 2015-09-10
-										td.text-center 100
-										td.text-center 50
-										td.text-center
-											div.dropdown
-												button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
-													span.caret
-												ul.dropdown-menu(role="menu",aria-labelledby="operation")
-													li.alert-info(role="presentation")
-														a(role="menuitem",tabindex="-1",href="/gameInfo") 管理赛事
-													div.line
-													li.alert-success(role="presentation")
-														a(role="menuitem",tabindex="-1",href="#",onclick="updateGame()") 修改
-													div.line
-													li.alert-danger(role="presentation")
-														a(role="menuitem",tabindex="-1",href="#") 删除
-									tr
-										td.text-center 2
-										td.text-center 金秋杯
-										td.text-center 2015-09-10
-										td.text-center 100
-										td.text-center 50
-										td.text-center
-											div.dropdown
-												button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
-													span.caret
-												ul.dropdown-menu(role="menu",aria-labelledby="operation")
-													li.alert-info(role="presentation")
-														a(role="menuitem",tabindex="-1",href="/gameInfo") 管理赛事
-													div.line
-													li.alert-success(role="presentation")
-														a(role="menuitem",tabindex="-1",href="#",onclick="updateGame()") 修改
-													div.line
-													li.alert-danger(role="presentation")
-														a(role="menuitem",tabindex="-1",href="#") 删除
-									tr
-										td.text-center 3
-										td.text-center 金秋杯
-										td.text-center 2015-09-10
-										td.text-center 100
-										td.text-center 50
-										td.text-center
-											div.dropdown
-												button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
-													span.caret
-												ul.dropdown-menu(role="menu",aria-labelledby="operation")
-													li.alert-info(role="presentation")
-														a(role="menuitem",tabindex="-1",href="/gameInfo") 管理赛事
-													div.line
-													li.alert-success(role="presentation")
-														a(role="menuitem",tabindex="-1",href="#",onclick="updateGame()") 修改
-													div.line
-													li.alert-danger(role="presentation")
-														a(role="menuitem",tabindex="-1",href="#") 删除
-			//- div.row
-				div.col-xs-4
-					div.game(onclick='gameInfo()')
-						h1 金秋杯
-						hr
-						div.row
-							h3.col-xs-4 时间
-							h3.col-xs-8 2015-09-10
-						hr
-						div.row
-							h3.col-xs-4 奖金池
-							h3.col-xs-8 ￥ 1000
-						hr
-						div.row
-							h3.col-xs-4 学校
-							h3.col-xs-8 华南理工大学
-						hr
-				div.col-xs-4
-					div.game(onclick="gameInfo()")
-						h1 金秋杯
-						hr
-						div.row
-							h3.col-xs-4 时间
-							h3.col-xs-8 2015-09-10
-						hr
-						div.row
-							h3.col-xs-4 奖金池
-							h3.col-xs-8 ￥ 1000
-						hr
-						div.row
-							h3.col-xs-4 学校
-							h3.col-xs-8 华南理工大学
-						hr
-				div.col-xs-4
-					div.game(onclick="gameInfo()")
-						h1 金秋杯
-						hr
-						div.row
-							h3.col-xs-4 时间
-							h3.col-xs-8 2015-09-10
-						hr
-						div.row
-							h3.col-xs-4 奖金池
-							h3.col-xs-8 ￥ 1000
-						hr
-						div.row
-							h3.col-xs-4 学校
-							h3.col-xs-8 华南理工大学
-						hr
+									-each val,key in gameList
+										tr
+											td.text-center #{key+1}
+											td.text-center #{val.get("name")}
+											-if(val.get("isFinish"))
+												td.text-center 是
+											-else
+												td.text-center 否
+											td.text-center #{val.get("college")}
+											td.text-center #{val.get("awardLimit")}
+											td.text-center #{val.get("awardMinimum")}
+											td.text-center
+												div.dropdown
+													button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
+														span.caret
+													ul.dropdown-menu(role="menu",aria-labelledby="operation")
+														li.alert-info(role="presentation")
+															a(role="menuitem",tabindex="-1",href="/games/gameDetail?gameId=#{val.id}") 管理赛事
+														div.line
+														li.alert-success(role="presentation")
+															a(role="menuitem",tabindex="-1",href="#",onclick="updateGame('#{val.id}')") 修改
+														div.line
+														li.alert-danger(role="presentation")
+															a(role="menuitem",tabindex="-1",href="#") 删除

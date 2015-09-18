@@ -9,37 +9,89 @@ html
 			var playerARow = 1;
 			var playerBCol = 1;
 			var playerBRow = 1;
-			function addStatistics(){
-				for(var i = 1 ; i <= statisticsRow ; i++){
-					if(i==1){
-						$(document.getElementById("statistics"+i+""+statisticsCol)).after("<th id=statistics"+i+(statisticsCol+1)+"><input class='form-control' type='text'/></th>");
-					}else{
-						$(document.getElementById("statistics"+i+""+statisticsCol)).after("<td id=statistics"+i+(statisticsCol+1)+"><input class='form-control' type='text'/></td>");
-					}
-					
+			var team;
+			function pitchon(t){
+				if($(t).attr("checked")){
+					$(t).prop("checked",false);
+					$(t).attr("checked",false);
+				}else{
+					$(t).prop("checked",true);
+					$(t).attr("checked",true);
 				}
-				statisticsCol++;
+				
+			}
+			function modal(type){
+				if(type=="addStatistics"){
+					for(var i=0;i<$("#addStatistics input").length;i++){
+						$("#addStatistics input:eq("+i+")").prop("checked",false);
+						$("#addStatistics input:eq("+i+")").attr("checked",false);
+					}
+					$("#addStatistics").modal("show");
+				}else{
+					for(var i=0;i<$("#addPlay input").length;i++){
+						$("#addPlay input:eq("+i+")").prop("checked",false);
+						$("#addPlay input:eq("+i+")").attr("checked",false);
+					}
+					if(type=="addPlayA"){
+						team = "A";
+					}else{
+						team = "B";
+					}
+					$("#addPlay").modal("show");
+				}
+			}
+			function addStatistics(){
+				var data = new Array();
+				var number = 0;
+				for(var i=0;i<$("#addStatistics input").length;i++){
+					if($("#addStatistics input:eq("+i+")").attr("checked")){
+						data[number++] = $("#addStatistics input:eq("+i+")").val();
+					}
+				}
+				for(var j =  1; j <= data.length; j++){
+					for(var i=1;i<=statisticsRow;i++){
+						if(i==1){
+							$(document.getElementById("statistics"+i+""+statisticsCol)).after("<th class='text-center' id=statistics"+i+(statisticsCol+1)+">"+data[j-1]+"</th>");
+						}else{
+							$(document.getElementById("statistics"+i+""+statisticsCol)).after("<td id=statistics"+i+(statisticsCol+1)+"><input class='text-center form-control' type='text'/></td>");
+						}	
+					}
+					statisticsCol++;
+				}
+				$("#addStatistics").modal("hide");
+				return true;
 			};
-			function addPlayerCol(team){
+			function addPlayerCol(){
+				var data = new Array();
+				var number = 0;
+				for(var i=0;i<$("#addPlay input").length;i++){
+					if($("#addPlay input:eq("+i+")").attr("checked")){
+						data[number++] = $("#addPlay input:eq("+i+")").val();
+					}
+				}
 				var playerRow = playerBRow;
 				var playerCol = playerBCol;
 				if(team=="A"){
 					playerRow = playerARow;
 					playerCol = playerACol;
 				}
-				for(var i = 1 ; i <= playerRow ; i++){
-					if(i==1){
-						$(document.getElementById("player"+team+i+""+playerCol)).after("<th id=player"+team+i+(playerCol+1)+"><input class='form-control' type='text'/></th>");
-					}else{
-						$(document.getElementById("player"+team+i+""+playerCol)).after("<td id=player"+team+i+(playerCol+1)+"><input class='form-control' type='text'/></td>");
+				for(var j=1;j<=data.length;j++){
+					for(var i = 1 ; i <= playerRow ; i++){
+						if(i==1){
+							$(document.getElementById("player"+team+i+""+playerCol)).after("<th class='text-center' id=player"+team+i+(playerCol+1)+">"+data[j-1]+"</th>");
+						}else{
+							$(document.getElementById("player"+team+i+""+playerCol)).after("<td id=player"+team+i+(playerCol+1)+"><input class='text-center form-control' type='text'/></td>");
+						}
+						
 					}
-					
+					playerCol++;
+					if(team=="A"){
+						playerACol++;
+					}else{
+						playerBCol++;
+					}
 				}
-				if(team=="A"){
-					playerACol++;
-				}else{
-					playerBCol++;
-				}
+				$("#addPlay").modal("hide");
 			};
 			function addPlayerRow(team){
 				var playerCol = playerBCol;
@@ -50,7 +102,7 @@ html
 				}
 				var HTML = "<tr>";
 				for(var i = 1 ; i <= playerCol ; i++){
-					HTML = HTML + "<td id=player"+team+(playerRow+1)+""+i+"><input class='form-control' type='text'/></td>";
+					HTML = HTML + "<td id=player"+team+(playerRow+1)+""+i+"><input class='text-center form-control' class='form-control' type='text'/></td>";
 				}
 				HTML += "</tr>";
 				$(document.getElementById(team)).append(HTML);
@@ -100,7 +152,7 @@ html
 					}
 				}
 				json.playerB = playerBArr;
-				var url = "/statistics";
+				var url = "/editStatistics";
 				$.ajax({
 						type:"POST",
 						url:url,
@@ -115,12 +167,92 @@ html
 						}
 					});
 			}
-	body
+	body.text-center
+		div.modal.fade#addStatistics(tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
+			div.modal-dialog
+				div.modal-content
+					div.modal-header
+						button.close(type="button",data-dismiss="modal",aria-hidden="true") &times;
+						h4.modal-title#addStatistics 得分统计
+					div.modal-body
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="上半场",onchange="pitchon(this)")
+								上半场
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="下半场",onchange="pitchon(this)")
+								下半场
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="第一节",onchange="pitchon(this)")
+								第一节
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="第二节",onchange="pitchon(this)")
+								第二节
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="第三节",onchange="pitchon(this)")
+								第三节
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="第四节",onchange="pitchon(this)")
+								第四节
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="总比分",onchange="pitchon(this)")
+								总比分
+					div.modal-footer
+						button.btn.btn-defautl(type="button",data-dismiss="modal") 关闭
+						button.btn.btn-default(type="button",onclick="addStatistics()") 确定
+		div.modal.fade#addPlay(tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
+			div.modal-dialog
+				div.modal-content
+					div.modal-header
+						button.close(type="button",data-dismiss="modal",aria-hidden="true") &times;
+						h4.modal-title#addPaly 球员数据
+					div.modal-body
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="号数",onchange="pitchon(this)")
+								号数
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="得分",onchange="pitchon(this)")
+								得分
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="篮板",onchange="pitchon(this)")
+								篮板
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="助攻",onchange="pitchon(this)")
+								助攻
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="抢断",onchange="pitchon(this)")
+								抢断
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="罚球",onchange="pitchon(this)")
+								罚球
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="命中率",onchange="pitchon(this)")
+								命中率
+						div.checkbox-inline
+							label
+								input(type="checkbox",value="失误",onchange="pitchon(this)")
+								失误
+					div.modal-footer
+						button.btn.btn-defautl(type="button",data-dismiss="modal") 关闭
+						button.btn.btn-default(type="button",onclick="addPlayerCol()") 确定
 		include ./navbar.jade
 		div.container
 			div.row
 				div.col-xs-2
-					ul.nav.nav-pills.nav-stacked.text-center
+					ul.nav.nav-pills.nav-stacked
 						li
 							a.row(href="/competitionInfo")
 								p.navbar-font 比赛信息
@@ -135,41 +267,53 @@ html
 				div.col-xs-10
 					div.panel.panel-primary.panel-block
 						div.panel-heading
-							div.panel-title.title.text-center
+							div.panel-title.title
 								p 添加统计
 						div.panel-body
-							table.talbe.table-bordered.table-hover
-								caption 得分统计
-								thead
-									tr
-										th#statistics11 队伍
-								tbody
-									tr
-										td#statistics21 计科一班
-									tr
-										td#statistics31 计科二班
-							div
-								button.btn.btn-primary(onclick="addStatistics()") 添加列
+							div.panel.panel-success
+								div.panel-heading
+									div.panel-title
+										p 得分统计
+								div.panel-body
+									table.table.table-hover
+										thead
+											tr
+												th.text-center#statistics11 队伍
+										tbody
+											tr
+												td.text-center#statistics21 计科一班
+											tr
+												td.text-center#statistics31 计科二班
+									div
+										button.btn.btn-info(onclick="modal('addStatistics')") 添加数据项
 							hr
-							table.table
-								caption 球员数据
-								thead
-									tr
-										th#playerA11 球员
-								tbody#A
-							div
-								button.btn.btn-primary(onclick="addPlayerCol('A')") 添加列
-								button.btn.btn-primary(onclick="addPlayerRow('A')") 添加行
+							div.panel.panel-success
+								div.panel-heading
+									div.panel-title
+										p 计科一班 球员数据
+								div.panel-body
+									table.table
+										thead
+											tr
+												th.text-center#playerA11 球员
+										tbody#A
+									div
+										button.btn.btn-info(onclick="modal('addPlayA')") 添加数据项
+										button.col-xs-offset-8.btn.btn-info(onclick="addPlayerRow('A')") 添加球员
 							hr
-							table.table
-								caption 球员数据
-								thead
-									tr
-										th#playerB11 球员
-								tbody#B
-							div
-								button.btn.btn-primary(onclick="addPlayerCol('B')") 添加列
-								button.btn.btn-primary(onclick="addPlayerRow('B')") 添加行
+							div.panel.panel-success
+								div.panel-heading
+									div.panel-title
+										p 计科二班 球员数据
+								div.panel-body
+									table.table
+										thead
+											tr
+												th.text-center#playerB11 球员
+										tbody#B
+									div
+										button.btn.btn-info(onclick="modal('addPlayB')") 添加数据项
+										button.col-xs-offset-8.btn.btn-info(onclick="addPlayerRow('B')") 添加球员
 							hr
-							div.text-center
+							div
 								button.btn.btn-primary(onclick="send()") 确定
