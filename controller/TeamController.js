@@ -63,7 +63,7 @@ TeamController.GameIndex = function(req,res,next){
 }
 
 TeamController.CampusIndex = function(req,res,next){
-	var campusId = req.query.campusId;
+	var campusId = req.session.campusId;
 	searchByCampus(campusId,function(error,teams){
 		if(error){
 

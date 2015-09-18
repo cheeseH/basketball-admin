@@ -15,6 +15,7 @@ router.get('/',function(req,res,next){
     if(pos == 'game'){
         TeamController.GameIndex(req,res,next);
     }else if(pos == 'campus'){
+        
         TeamController.CampusIndex(req,res,next);
     }
 })
