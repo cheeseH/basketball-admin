@@ -15,7 +15,7 @@ router.get('/',function(req,res,next){
     if(pos == 'game'){
         TeamController.GameIndex(req,res,next);
     }else if(pos == 'campus'){
-        
+
         TeamController.CampusIndex(req,res,next);
     }
 })
@@ -29,17 +29,21 @@ router.post('/add',multipartMiddleware,function(req,res,next){
     }
 })
 
-router.get("/oldTeamAdd",function(req,res,next){
-    var gameId = req.query.gameId;
-    res.render("oldTeamAdd",{gameId:gameId})
-});
 router.get("/newTeamAdd",function(req,res,next){
     var gameId = req.query.gameId;
     res.render("newTeamAdd",{gameId:gameId})
+})
+router.get("/teamAdd",function(req,res,next){
+    res.render("teamAdd");
 })
 
 router.get('/info',TeamController.TeamInfo);
 
 router.post('/update',multipartMiddleware,TeamController.Update);
+
+router.get('/select',TeamController.Select);
+
+router.post('/pick',TeamController.Pick);
+
 
 module.exports = router;

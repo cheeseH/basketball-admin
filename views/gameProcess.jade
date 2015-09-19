@@ -137,11 +137,11 @@ html
 				div.col-xs-2
 					ul.nav.nav-pills.nav-stacked.text-center
 						li.active
-							a.row(href="/gameProcess")
+							a.row(href="/competitions/competitionList?gameId=#{gameId}")
 								p.navbar-font 赛事进程
 						div.line
 						li
-							a.row(href="/levelAdd")
+							a.row(href="/competitions/nextLevel?gameId=#{gameId}&level=#{competitionList.maxLevel}")
 								p.navbar-font 添加下一阶段
 				div.col-xs-10
 					div.panel.panel-primary.panel-block
@@ -150,35 +150,36 @@ html
 								p 比赛进程
 						div.panel-body
 							-each val,key in competitionList
-								div.panel.panel-success.col-xs-10.col-xs-offset-1
-									-each val1,key1 in val
-										div.col-sm-6
-											div.panel.panel-primary.block
-												div.panel-heading
-													p.panel-title.title #{val1.type}
-												table.table.table-hover
-													tr
-														th.text-center 队伍A
-														th.text-center 队伍B
-														th.text-center 操作
-													-each val2,key2 in val1.competitions
+								-if(key!="maxLevel")
+									div.panel.panel-success.col-xs-10.col-xs-offset-1
+										-each val1,key1 in val
+											div.col-sm-6
+												div.panel.panel-primary.block
+													div.panel-heading
+														p.panel-title.title #{val1.type}
+													table.table.table-hover
 														tr
-															td.text-center #{val2.get("teamAId").get("name")}
-															td.text-center #{val2.get("teamBId").get("name")}
-															td.text-center
-																div.dropdown
-																	button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
-																		span.caret
-																	ul.dropdown-menu(role="menu",aria-labelledby="operation")
-																		li.alert-info(role="presentation")
-																			a(role="menuitem",tabindex="-1",href="/competitionInfo") 管理比赛
-																		div.line
-																		li.alert-danger(role="presentation")
-																			a(role="menuitem",tabindex="-1",href="#") 删除
-													tr
-														td.text-center(colspan='3')
-															a(href="#",onclick="addCompetition(this,'old')",data-level=key,data-type=val1.type) 添加比赛
-									div.col-sm-6
-										div.block.empty(onclick="addCompetition(this,'new')",data-level=key)
-											p +
-								hr
+															th.text-center 队伍A
+															th.text-center 队伍B
+															th.text-center 操作
+														-each val2,key2 in val1.competitions
+															tr
+																td.text-center #{val2.get("teamAId").get("name")}
+																td.text-center #{val2.get("teamBId").get("name")}
+																td.text-center
+																	div.dropdown
+																		button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
+																			span.caret
+																		ul.dropdown-menu(role="menu",aria-labelledby="operation")
+																			li.alert-info(role="presentation")
+																				a(role="menuitem",tabindex="-1",href="/competitions/competitionDetail?competitionId=#{val2.id}") 管理比赛
+																			div.line
+																			li.alert-danger(role="presentation")
+																				a(role="menuitem",tabindex="-1",href="#") 删除
+														tr
+															td.text-center(colspan='3')
+																a(href="#",onclick="addCompetition(this,'old')",data-level=key,data-type=val1.type) 添加比赛
+										div.col-sm-6
+											div.block.empty(onclick="addCompetition(this,'new')",data-level=key)
+												p +
+									hr

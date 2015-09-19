@@ -3,22 +3,52 @@ html
 	head
 		include ./head.jade
 		script(type="text/javascript").
-			function modal(){
+			function modal(gameId){
+				$("#gameId").val(gameId);
+				$("#name").val($("tbody tr").children().eq(0).html());
+				$("#college").val($("tbody tr").children().eq(2).html());
+				$("#awardLimit").val($("tbody tr").children().eq(4).html());
+				$("#updateInfo").modal();
+			}
+			function modalImg(){
 				$("#myModal").modal("show");
 			}
 	body
+		div.modal.fade#updateInfo(tabindex="-1",role="dialog",aria-labelledby="ModalLabel",aria-hidden="true")
+			div.modal-dialog
+				div.modal-content
+					div.modal-header
+						button.close(type="button",data-dismiss="modal",aria-hidden="true") &times;
+						h4.modal-title#ModalLabel 修改信息
+					form.form-horizontal(role='form',method="POST",action="/games/baseUpdate?gameId=#{gameId}")
+						div.modal-body
+							div.form-group
+								label.col-xs-3.control-label(for='name') 名称
+								div.col-xs-5
+									input.form-control#name(type='text',name='name')
+							div.form-group
+								label.col-xs-3.control-label(for='college') 学院
+								div.col-xs-5
+									input.form-control#college(type='text',name='college')
+							div.form-group
+								label.col-xs-3.control-label(for="awardLimit") 奖金上限
+								div.col-xs-5
+									input.form-control#awardLimit(type='text',name='awardLimit')
+						div.modal-footer
+							button.btn.btn-defautl(type="button",data-dismiss="modal") 关闭
+							input.btn.btn-default(type="submit" value="完成")
 		div.modal.fade#myModal(tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
 			div.modal-dialog
 				div.modal-content
 					div.modal-header
 						button.close(type="button",data-dismiss="modal",aria-hidden="true") &times;
-						h4.modal-title#myModalLabel 修改
-					form.form-horizontal(role='form',method="POST",action="/games/update",enctype="multipart/form-data")
+						h4.modal-title#myModalLabel 修改图片
+					form.form-horizontal(role='form',method="POST",action="/games/imageUpdate?gameId=#{gameId}",enctype="multipart/form-data")
 						div.modal-body
 							div.form-group
 								label.col-xs-3.control-label(for='coverUrl') 赛事logo
 								div.col-xs-5
-									input.form-control#coverUrl(type='file',accept='image/png,image/jpeg,image/jpg')
+									input.form-control#coverUrl(type='file',accept='image/png,image/jpeg,image/jpg',name='coverUrl')
 						div.modal-footer
 							button.btn.btn-defautl(type="button",data-dismiss="modal") 关闭
 							input.btn.btn-default(type="submit" value="完成")
@@ -48,7 +78,7 @@ html
 								img.coverUrl(src="#{gameInfo.get('coverUrl')}")
 							hr
 							div.row
-								button.btn.btn-danger(onclick="modal()") 修改图片
+								button.btn.btn-danger(onclick="modalImg()") 修改图片
 							hr
 							table.table.table-hover.table-responsive.table-bordered
 								thead
@@ -60,6 +90,7 @@ html
 										th.text-center 奖金上限
 										th.text-center 关注人数
 										th.text-center 浏览量
+										th.text-center 修改
 								tbody
 									tr
 										td.text-center #{gameInfo.get("name")}
@@ -72,3 +103,5 @@ html
 										td.text-center #{gameInfo.get("awardLimit")}
 										td.text-center #{gameInfo.get("follows")}
 										td.text-center #{gameInfo.get("views")}
+										td.text-center
+											a(href="#",onclick="modal('#{gameId}')") 修改

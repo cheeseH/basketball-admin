@@ -2,7 +2,7 @@ doctype html
 html
 	head
 		include ./head.jade
-		link(rel="stylesheet",type="text/css",href='stylesheets/simditor.css')
+		link(rel="stylesheet",type="text/css",href='/stylesheets/simditor.css')
 		script(type="text/javascript").
 			function send(){
 				var time = new Date();
@@ -60,15 +60,15 @@ html
 				div.col-xs-2
 					ul.nav.nav-pills.nav-stacked.text-center
 						li
-							a.row(href="/competitionInfo")
+							a.row(href="/competitions/competitionDetail?competitionId=#{competitionId}")
 								p.navbar-font 比赛信息
 						div.line
 						li.active
-							a.row(href="/competitions/report")
+							a.row(href="/competitions/report?competitionId=#{competitionId}&teamAName=#{teamAName}&teamBName=#{teamBName}")
 								p.navbar-font 添加战报
 						div.line
 						li
-							a.row(href="/competitions/statistics")
+							a.row(href="/competitions/statistics?competitionId=#{competitionId}&teamAName=#{teamAName}&teamBName=#{teamBName}")
 								p.navbar-font 添加统计
 				div.col-xs-10
 					div.panel.panel-primary.panel-block
@@ -88,10 +88,10 @@ html
 								div.col-xs-1
 								div.col-xs-10
 									textarea.form-control#content
-									script(type="text/javascript",src='javascripts/module.js')
-									script(type="text/javascript",src='javascripts/hotkeys.js')
-									script(type="text/javascript",src="javascripts/uploader.js")
-									script(type="text/javascript",src='javascripts/simditor.js')
+									script(type="text/javascript",src='/javascripts/module.js')
+									script(type="text/javascript",src='/javascripts/hotkeys.js')
+									script(type="text/javascript",src="/javascripts/uploader.js")
+									script(type="text/javascript",src='/javascripts/simditor.js')
 									script(type="text/javascript").
 										var editor = new Simditor({
 												textarea:$("#content"),

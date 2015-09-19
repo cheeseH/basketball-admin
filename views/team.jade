@@ -3,8 +3,11 @@ html
 	head
 		include ./head.jade
 		script(type="text/javascript").
-			function edit(){
-				$("#myModal").modal();
+			function edit(teamId){
+				$("#teamId").val(teamId);
+				$("#name").val($("#"+teamId).children().eq(1).text());
+				$("#info").val($("#"+teamId).children().eq(3).text());
+				$("#myModal").modal("show");
 			}
 	body
 		div.modal.fade#myModal(tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
@@ -13,23 +16,24 @@ html
 					div.modal-header
 						button.close(type="button",data-dismiss="modal",aria-hidden="true") &times;
 						h4.modal-title#myModalLabel 编辑
-					div.modal-body
-						form.form-horizontal(role='form',method="POST",action="",enctype="multipart/form-data")
-							div.form-group
-								label.col-xs-3.control-label(for='team-name') 队名
-								div.col-xs-5
-									input.form-control#team-name(type='text')
-							div.form-group
-								label.col-xs-3.control-label(for='team-description') 简介
-								div.col-xs-5
-									textarea.form-control#team-description(rows="5")
-							div.form-group
-								label.col-xs-3.control-label(for="team-img") 队标
-								div.col-xs-5
-									input.form-control#team-img(type='file',accept='image/png,image/jpeg,image/jpg')
-					div.modal-footer
-						button.btn.btn-defautl(type="button",data-dismiss="modal") 关闭
-						button.btn.btn-default(type="button") 完成
+					form.form-horizontal(role='form',method="POST",action="/teams/update",enctype="multipart/form-data")
+						div.modal-body
+								div.form-group
+									label.col-xs-3.control-label(for='name') 队名
+									div.col-xs-5
+										input.form-control#name(type='text',name='name')
+								div.form-group
+									label.col-xs-3.control-label(for='info') 简介
+									div.col-xs-5
+										textarea.form-control#info(rows="5",name='info')
+								div.form-group
+									label.col-xs-3.control-label(for="logoUrl") 队标
+									div.col-xs-5
+										input.form-control#logoUrl(type='file',accept='image/png,image/jpeg,image/jpg',name='logoUrl')
+								input.form-control.hidden#teamId(type="text",name='teamId')
+						div.modal-footer
+							button.btn.btn-defautl(type="button",data-dismiss="modal") 关闭
+							button.btn.btn-default(type="submit") 完成
 		include ./navbar.jade
 		div.container.text-center
 			div.row
@@ -44,7 +48,7 @@ html
 								p.navbar-font 添加新球队
 						div.line
 						li
-							a.row(href="/teams/oldTeamAdd?gameId=#{gameId}")
+							a.row(href="/teams/select?gameId=#{gameId}")
 								p.navbar-font 添加已有球队
 				div.col-xs-10.text-center
 					div.panel.panel-primary.panel-block
@@ -62,7 +66,7 @@ html
 										th.text-center 操作
 								tbody
 									-each val,key in teamList
-										tr
+										tr(id="#{val.id}")
 											td.text-center
 												p #{key+1}
 											td.text-center
@@ -77,4 +81,4 @@ html
 														span.caret
 													ul.dropdown-menu(role="menu",aria-labelledby="operation")
 														li.alert-info(role="presentation")
-															a(role="menuitem",tabindex="-1",href="#",onclick="edit()") 编辑
+															a(role="menuitem",tabindex="-1",href="#",onclick="edit('#{val.id}')") 编辑

@@ -4,6 +4,9 @@ html
 		include ./head.jade
 	body
 		include ./navbar.jade
+		script(type="text/javascript").
+			$("#allTeam").removeClass("active");
+			$("#allGame").addClass("active");
 		div.container.text-center
 			div.row
 				div.col-xs-2
@@ -25,22 +28,22 @@ html
 								div.form-group
 									label.col-xs-3.control-label(for='name') 赛事名称
 									div.col-xs-5
-										input.form-control#name(type='text')
+										input.form-control#name(type='text',name='name')
 								hr
 								div.form-group
 									label.col-xs-3.control-label(for='college') 学院
 									div.col-xs-5
-										input.form-control#coolege(type='text')
+										input.form-control#coolege(type='text',name='college')
 								hr
 								div.form-group
 									label.col-xs-3.control-label(for='awardLimit') 奖金上限
 									div.col-xs-5
-										input.form-control#awardLimit(type='text')
+										input.form-control#awardLimit(type='text',name='awardLimit')
 								hr
 								div.form-group
 									label.col-xs-3.control-label(for='coverUrl') 赛事logo
 									div.col-xs-5
-										input.form-control#coverUrl(type='file',accept='image/png,image/jpeg,image/jpg')
+										input.form-control#coverUrl(type='file',accept='image/png,image/jpeg,image/jpg',name='coverUrl')
 								hr
 								div.form-group
 									div.text-center

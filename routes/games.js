@@ -13,13 +13,18 @@ router.get('/gameList', GameController.gameList);
 /*以get传入gameId，返回某场赛事的详情*/
 router.get('/gameDetail',GameController.gamrDetail);
 /*以get传入gameId， 结束某场赛事*/
-router.get('/gameFinshed',GameController.finishGame);
+router.get('/gameFinished',GameController.finishGame);
 /*以get传入gameId，修改某场赛事的信息*/
 router.get('/gameAdd',function(req,res,next){
 	res.render("gameAdd");
 })
 
 router.post('/add',multipartMiddleware,GameController.gameAdd);
-router.post('/update',multipartMiddleware,GameController.gameUpdate);
+
+router.post('/baseUpdate',GameController.gameBaseUpdate);
+router.post('/imageUpdate',multipartMiddleware,GameController.gameImageUpdate);
+
+/*传入gameId删除整个赛事*/
+router.get('/gameDelete',GameController.gameDelete);
 
 module.exports = router;

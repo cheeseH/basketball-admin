@@ -4,28 +4,27 @@ html
 		include ./head.jade
 	body
 		include ./navbar.jade
+		script(type="text/javascript").
+			$("#allGame").removeClass("active");
+			$("#allTeam").addClass("active");
 		div.container.text-center
 			div.row
 				div.col-xs-2
-					ul.nav.nav-pills.nav-stacked
+					ul.nav.nav-pills.nav-stacked.text-center
 						li
-							a.row(href="/teams?pos=game&gameId=#{gameId}")
+							a.row(href="/teams?pos=campus")
 								p.navbar-font 球队列表
 						div.line
 						li.active
-							a.row(href="/teams/newTeamAdd?gameId=#{gameId}")
-								p.navbar-font 添加新球队
-						div.line
-						li
-							a.row(href="/teams/select?gameId=#{gameId}")
-								p.navbar-font 添加已有球队
+							a.row(href="/teams/teamAdd")
+								p.navbar-font 添加球队
 				div.col-xs-10
 					div.panel.panel-primary.panel-block
 						div.panel-heading
 							div.panel-title.title
-								p 添加新球队
+								p 添加球队
 						div.panel-body
-							form.form-horizontal(role='form',method="POST",action="/teams/add?pos=game",enctype="multipart/form-data")
+							form.form-horizontal(role='form',method="POST",action="/teams/add?pos=campus",enctype="multipart/form-data")
 								div.form-group
 									label.col-xs-3.control-label(for='name') 队名
 									div.col-xs-5
@@ -35,7 +34,6 @@ html
 									label.col-xs-3.control-label(for='info') 简介
 									div.col-xs-5
 										textarea.form-control#info(rows="5",name='info')
-								input.form-control.hidden#gameId(type="text",name='gameId',value="#{gameId}")
 								hr
 								div.form-group
 									label.col-xs-3.control-label(for="logoUrl") 球队logo

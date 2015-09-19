@@ -254,15 +254,15 @@ html
 				div.col-xs-2
 					ul.nav.nav-pills.nav-stacked
 						li
-							a.row(href="/competitionInfo")
+							a.row(href="/competitions/competitionDetail?competitionId=#{competitionId}")
 								p.navbar-font 比赛信息
 						div.line
 						li
-							a.row(href="/competitions/report")
+							a.row(href="/competitions/report?competitionId=#{competitionId}&teamAName=#{teamAName}&teamBName=#{teamBName}")
 								p.navbar-font 添加战报
 						div.line
 						li.active
-							a.row(href="/competitions/statistics")
+							a.row(href="/competitions/statistics?competitionId=#{competitionId}&teamAName=#{teamAName}&teamBName=#{teamBName}")
 								p.navbar-font 添加统计
 				div.col-xs-10
 					div.panel.panel-primary.panel-block
@@ -281,16 +281,16 @@ html
 												th.text-center#statistics11 队伍
 										tbody
 											tr
-												td.text-center#statistics21 计科一班
+												td.text-center#statistics21 #{teamAName}
 											tr
-												td.text-center#statistics31 计科二班
+												td.text-center#statistics31 #{teamBName}
 									div
 										button.btn.btn-info(onclick="modal('addStatistics')") 添加数据项
 							hr
 							div.panel.panel-success
 								div.panel-heading
 									div.panel-title
-										p 计科一班 球员数据
+										p #{teamAName} 球员数据
 								div.panel-body
 									table.table
 										thead
@@ -304,7 +304,7 @@ html
 							div.panel.panel-success
 								div.panel-heading
 									div.panel-title
-										p 计科二班 球员数据
+										p #{teamBName} 球员数据
 								div.panel-body
 									table.table
 										thead

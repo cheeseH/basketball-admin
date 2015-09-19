@@ -27,7 +27,21 @@ html
 				}
 			}
 			function send(){
-
+				var teams = new Array();
+				var n=0;
+				for(var i=1;i<$("input").length;i++){
+					if($("input").eq(i).attr("checked")){
+						teams[n++] = $("input").eq(i).attr("data-value");
+					}
+				}
+				$.ajax({
+					type:"POST",
+					url:"/teams/pick",
+					data:{gameId:"#{gameId}",teams:JSON.stringify(teams)},
+					success:function(data){
+						location.href="/teams?pos=game&gameId="+"#{gameId}"
+					}
+				})
 			}
 	body
 		include ./navbar.jade
@@ -44,7 +58,7 @@ html
 								p.navbar-font 添加新球队
 						div.line
 						li.active
-							a.row(href="/teams/oldTeamAdd?gameId=#{gameId}")
+							a.row(href="/teams/select?gameId=#{gameId}")
 								p.navbar-font 添加已有球队
 				div.col-xs-10
 					div.panel.panel-primary.panel-block
@@ -65,7 +79,7 @@ html
 										tr
 											td.text-center
 												p
-													input(type="checkbox",onclick="pitchUp(this)")
+													input(type="checkbox",onclick="pitchUp(this)",data-value='#{val.id}')
 											td.text-center
 												p #{val.get("name")}
 											td.text-center

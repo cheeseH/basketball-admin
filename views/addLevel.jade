@@ -1,0 +1,131 @@
+doctype html
+html
+	head
+		include ./head.jade
+		script(type="text/javascript").
+			var year = 0;
+			var month = 0;
+			$(document).ready(function(){
+				getDay();
+			});
+			function getDay(){
+				year = parseInt($("#year").val());
+				month = parseInt($("#month").val());
+				if(year!=0&&month!=0){
+					$("#day").empty();
+					if(month==2&&(year%4==0&&year%100!=0||year%400==0)){
+						for(var i=1;i<=29;i++){
+							if(i<10){
+								$("#month").append("<option>0"+i+"</option>");
+							}else{
+								$("#month").append("<option>"+i+"</option>");
+							}
+							
+						}
+					}else if(month==2){
+						$("#day").empty();
+						for(var i=1;i<=28;i++){
+							if(i<10){
+								$("#day").append("<option>0"+i+"</option>");
+							}else{
+								$("#day").append("<option>"+i+"</option>");
+							}
+							
+						}
+					}else if(month==1||month==3||month==5||month==7||month==8||month==10||month==12){
+						$("#day").empty();
+						for(var i=1;i<=31;i++){
+							if(i<10){
+								$("#day").append("<option>0"+i+"</option>");
+							}else{
+								$("#day").append("<option>"+i+"</option>");
+							}
+						}
+					}else{
+						$("#day").empty();
+						for(var i=1;i<=30;i++){
+							if(i<10){
+								$("#day").append("<option>0"+i+"</option>");
+							}else{
+								$("#day").append("<option>"+i+"</option>");
+							}
+						}
+					}
+				}
+			};
+	body
+		include ./navbar.jade
+		div.container.text-center
+			div.row
+				div.col-xs-2
+					ul.nav.nav-pills.nav-stacked.text-center
+						li
+							a.row(href="/competitions/competitionList?gameId=#{gameId}")
+								p.navbar-font 赛事进程
+						div.line
+						li.active
+							a.row(href="/competitions/nextLevel?gameId=#{gameId}&level=#{level}")
+								p.navbar-font 添加下一阶段
+				div.col-xs-10
+					div.panel.panel-primary.panel-block
+						div.panel-heading
+							div.panel-title.title
+								p 比赛进程
+						div.panel-body
+							form.form-horizontal(role='form',method="POST",action="/competitions/competitionAdd")
+								div.form-group
+									label.col-xs-3.control-label(for='teamAName') 球队A
+									div.col-xs-6
+										input.form-control#teamAName(type='text',name="teamAName")
+								div.form-group
+									label.col-xs-3.control-label(for='teamBName') 球队B
+									div.col-xs-6
+										input.form-control#teamBName(type='text',name="teamBName")
+								div.form-group.form-inline
+									label.col-xs-3.control-label 开始时间
+									div.col-xs-6
+										select.form-control#year(onchange="getDay()",name="year")
+											-for(var i=0;i<3;i++)
+												option #{new Date().getFullYear()+i}
+										label.control-label(for="year") 年
+										select.form-control#month(onchange="getDay()",name="month")
+											-for(var i=1;i<=12;i++)
+												-if(i<10)
+													option #{"0"+i}
+												-else
+													option #{i}
+										label.control-label(for="month") 月
+										select.form-control#day(name="day")
+										label.control-label(for="day") 日
+										select.form-control#hour(name="hour")
+											-for(var i=0;i<24;i++)
+												-if(i<10)
+													option #{"0"+i}
+												-else
+													option #{i}
+										label.control-label(for="hour") 时
+										select.form-control#minute(name="minute")
+											-for(var i=0;i<60;i++)
+												-if(i<10)
+													option #{"0"+i}
+												-else
+													option #{i}
+										label.control-label(for="minute") 分
+								div.form-group
+									label.col-xs-3.control-label(for='awardLimit') 奖金上限
+									div.col-xs-6
+										input.form-control#awardLimit(type='text',name="awardLimit")
+								div.form-group
+									label.col-xs-3.control-label(for='awardMinimum') 奖金下限
+									div.col-xs-6
+										input.form-control#awardMinimum(type='text',name="awardMinimum")
+								input.form-control.hidden#level(type='text',name="level")
+								div.form-group
+									label.col-xs-3.control-label(for="type") 类型
+									div.col-xs-6
+										input.form-control#type(type='text',name="type")
+								input.form-control.hidden#gameId(type='text',value="#{gameId}",name="gameId")
+								div.form-group
+									div.text-center
+										button.btn.btn-primary(type="submit") 确定
+								

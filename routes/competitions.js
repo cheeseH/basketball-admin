@@ -14,9 +14,12 @@ router.post('/competitionAdd',CompetitionController.CompetitionAdd);
 */
 router.get('/competitionDelete',CompetitionController.CompetitionDelete);
 /*修改某场比赛的信息*/
-router.get('/competitionUpdate',CompetitionController.CompetitionUpdate);
+router.post('/competitionUpdate',CompetitionController.CompetitionUpdate);
 router.get("/statistics",function(req,res,next){
-	res.render("statistics");
+	var competitionId = req.query.competitionId;
+	var teamAName = req.query.teamAName;
+	var teamBName = req.query.teamBName;
+	res.render("statistics",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName});
 });
 router.post("/editStatistics",function(req,res,next){
 	var competitionId = req.body.competitionId;
@@ -45,7 +48,10 @@ router.post("/editStatistics",function(req,res,next){
 	});
 });
 router.get("/report",function(req,res,next){
-	res.render("report");
+	var competitionId = req.query.competitionId;
+	var teamAName = req.query.teamAName;
+	var teamBName = req.query.teamBName;
+	res.render("report",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName});
 })
 router.post("/editReport",function(req,res,next){
 	var competitionId = req.body.competitionId;
@@ -88,4 +94,10 @@ router.post("/editReport",function(req,res,next){
 		}
 	})
 });
+router.get('/competitionDetail',CompetitionController.CompetitionDetail);
+router.get('/nextLevel',function(req,res,next){
+	var gameId = req.query.gameId;
+	var level = parseInt(req.query.level)+1;
+	res.render('addLevel',{gameId:gameId,level:level})
+})
 module.exports = router;

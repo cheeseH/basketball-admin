@@ -84,7 +84,7 @@ TeamController.AddInSchool = function(req,res,next){
 	campus.id = campusId;
 
 	var logoUrl;
-	imageUtil.upLoad(req,res,'imgFile',function(err,url){
+	imageUtil.upLoad(req,res,'logoUrl',function(err,url){
 		if(err){
 
 		}
@@ -112,12 +112,13 @@ TeamController.AddInSchool = function(req,res,next){
 TeamController.AddInGame = function(req,res,next){
 	var name = req.body.name;
 	var info = req.body.info;
+	console.log(req.body);
 	var campusId = req.session.campusId;
 	var gameId = req.body.gameId;
 	var campus = new Campus();
 	campus.id = campusId;
 	var logoUrl;
-	imageUtil.upLoad(req,res,'imgFile',function(err,url){
+	imageUtil.upLoad(req,res,'logoUrl',function(err,url){
 		if(err){
 
 		}else{
@@ -137,8 +138,7 @@ TeamController.AddInGame = function(req,res,next){
 							teams.add(team);
 							game.save(null,{
 								success:function(game){
-									res.redirect('GameIndex');
-									res.send("success");
+									res.redirect('/teams?pos=game&gameId='+gameId);
 
 								},
 								error:function(game,err){
@@ -182,22 +182,21 @@ TeamController.Update = function(req,res,next){
 			var name = req.body.name;
 			var info = req.body.info;
 			var logoUrl;
-			imageUtil.upLoad(req,res,'imageFile',function(err,url){
+			imageUtil.upLoad(req,res,'logoUrl',function(err,url){
 				if(err){
 
 				}
 				else{
-					logoUrl = url;
 					team.set('name',name);
 					team.set('info',info);
-					team.set('logoUrl',logoUrl);
+					if(url != null)
+						team.set('logoUrl',url);
 					team.save(null,{
 						success:function(team){
-							res.send("success");
-
+							res.redirect("back");
 						},
 						error:function(team,error){
-
+							console.log(error);
 						}
 					})
 				}
@@ -211,6 +210,80 @@ TeamController.Update = function(req,res,next){
 
 }
 
+function InArray(object,array){
+	var id = object.id;
+	var result = false;
+	var i = 0;
+	for(;i<array.length;i++){
+		var compareId = array[i].id;
+		if(compareId == id){
+			result = true;
+			return true;
+		}
 
+	}
+	return false;
+}
+TeamController.Select = function(req,res,next){
+	var gameId = req.query.gameId;
+	searchByGame(gameId,function(err,teams){
+		if(err){
 
+		}
+		else{
+			var campusId = req.session.user.campusId;
+			// var campusId = req.query.campusId;
+			searchByCampus(campusId,function(err,campusTeams){
+				if(err){
 
+				}
+				else{
+					var restTeams = new Array();
+					var i = 0;
+					for(;i<campusTeams.length;i++){
+						var obj = campusTeams[i];
+						if(!InArray(obj,teams)){
+							restTeams[restTeams.length] = obj;
+						}
+					}
+					//比赛有的球队是teams，剩下的球队是restTeams
+				res.render("oldTeamAdd",{teamList:restTeams,gameId:gameId});
+				}
+			})
+		}
+	})
+}
+
+TeamController.Pick = function(req,res,next){
+	var gameId = req.body.gameId;
+	console.log(gameId);
+	var teams = req.body.teams;
+	teams = JSON.parse(teams);
+	var gameQuery = new AV.Query('Game');
+	var teamObjs = new Array();
+	var i = 0;
+	for(;i<teams.length;i++){
+		var newTeam = new Team();
+		newTeam.id = teams[i];
+		teamObjs[i] = newTeam;
+	}
+	gameQuery.get(gameId,{
+		success:function(game){
+			var teams  = game.relation('teams');
+			teams.add(teamObjs);
+			game.save(null,{
+				success:function(game){
+					//res.redirect('GameIndex');
+					res.json({});
+
+				},
+				error:function(game,err){
+					console.log(err);
+				}
+			})
+		},
+		error:function(error){
+			console.log(error);
+		}
+	})
+}
