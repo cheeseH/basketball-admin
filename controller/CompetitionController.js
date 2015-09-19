@@ -40,15 +40,6 @@ CompetitionController.competitionList=function(req,res,next){
 			var i=0;var j=0;
 			console.log(result.length);
 
-			/*var returnData={
-				0:{type:"小组赛",number:0,competitions:{}},
-				1:{type:"1/16决赛",number:0,competitions:{}},
-				2:{type:"1/8 决赛",number:0,competitions:{}},
-				3:{type:"1/4 决赛",number:0,competitions:{}},
-				4:{type:"半决赛" ,number:0,competitions:{}},
-				5:{type:"总决赛",number:0,competitions:{}}
-			};*/
-
 			var returnData={};
 			var maxLevel=0;
 			var allLevel=new Array();
@@ -111,14 +102,15 @@ CompetitionController.competitionList=function(req,res,next){
 					}
 				}
 			}
+
 			for(var levLen=0;levLen<allLevel.length;levLen++)				//返回数据
 			{
-				returnData[levLen]={};
+				returnData[allLevel[levLen]]={};
 				for(i=0;i<competitions.length;i++)
 				{
-					if(allLevel[allLevel[levLen]]==competitions[i][0].get('level'))
+					if(allLevel[levLen]==competitions[i][0].get('level'))
 					{
-						returnData[levLen][i]={
+						returnData[allLevel[levLen]][i]={
 							type:competitions[i][0].get('type'),
 							competitions:competitions[i],
 							number:competitions[i].length

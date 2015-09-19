@@ -9,6 +9,7 @@ var qiniu = require('qiniu');
 var TeamController = require('../controller/TeamController');
 var teamController = TeamController();
 var imageUtil = require('../util/image');
+var util=require('../util/util.js');
 
 router.get('/',function(req,res,next){
     var pos = req.query.pos;
@@ -28,13 +29,15 @@ router.post('/add',multipartMiddleware,function(req,res,next){
         TeamController.AddInCampus(req,res,next);
     }
 })
-
+router.get('/info',util.checkLogin);
 router.get('/info',TeamController.TeamInfo);
 
 router.post('/update',multipartMiddleware,TeamController.Update);
 
+router.get('/select',util.checkLogin);
 router.get('/select',TeamController.Select);
 
+router.get('/pick',util.checkLogin);
 router.get('/pick',TeamController.Pick);
 
 
