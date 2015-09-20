@@ -167,6 +167,7 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 	var beginTime=new Date(time);
 	var awardLimit= parseInt(req.body.awardLimit);
 	var awardMinimum= parseInt(req.body.awardMinimum);
+	var isLive = req.body.isLive == "1"?true:false;
 
 	
 	var gameQuery=new AV.Query(Game);
@@ -215,6 +216,7 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 								newCompetition.set('awardMinimum',awardMinimum);
 								newCompetition.set('awardLimit',awardLimit);
 								newCompetition.set('award',awardMinimum);					//默认奖金池的值是奖金池的上限
+								newCompetition.set("isLive",isLive);
 								newCompetition.save(null,{
 									success:function(result)
 									{
@@ -333,7 +335,8 @@ CompetitionController.CompetitionUpdate=function(req,res,next){
 	var teamBName=req.body.teamBName;
 
 	var level= parseInt(req.body.level);
-	var beginTime=new Date(req.body.year+"-"+req.body.month+"-"+req.body.day+" "+req.body.hour+":"+req.body.minute+":"+"00");
+	var beginTime=req.body.year==""||req.body.month==""||req.body.day==""||req.body.hour==""||req.body.minute==""?null:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day+" "+req.body.hour+":"+req.body.minute+":"+"00");
+	console.log(beginTime);
 	var awardLimit= parseInt(req.body.awardLimit);
 	var awardMinimum= parseInt(req.body.awardMinimum);
 	var isLive=req.body.isLive =="1"?true:false;
@@ -382,7 +385,7 @@ CompetitionController.CompetitionUpdate=function(req,res,next){
 										competitionData.set('teamAId',teamA);
 										competitionData.set('teamBId',teamB);
 										competitionData.set('level',level);
-										competitionData.set('beginTime',beginTime);
+										competitionData.set('beginTime',null);
 										competitionData.set('awardMinimum',awardMinimum);
 										competitionData.set('awardLimit',awardLimit);
 										competitionData.set('isLive',isLive);

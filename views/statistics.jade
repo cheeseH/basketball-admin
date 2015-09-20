@@ -258,12 +258,16 @@ html
 								p.navbar-font 比赛信息
 						div.line
 						li
-							a.row(href="/competitions/report?competitionId=#{competitionId}&teamAName=#{teamAName}&teamBName=#{teamBName}")
+							a.row(href="/competitions/report?competitionId=#{competitionId}&teamAName=#{teamAName}&teamBName=#{teamBName}&gameId=#{'gameId'}")
 								p.navbar-font 添加战报
 						div.line
 						li.active
-							a.row(href="/competitions/statistics?competitionId=#{competitionId}&teamAName=#{teamAName}&teamBName=#{teamBName}")
+							a.row(href="/competitions/statistics?competitionId=#{competitionId}&teamAName=#{teamAName}&teamBName=#{teamBName}&gameId=#{'gameId'}")
 								p.navbar-font 添加统计
+						div.line
+						li
+							a.row(href="/competitions/competitionList?gameId=#{gameId}")
+								p.navbar-font 返回
 				div.col-xs-10
 					div.panel.panel-primary.panel-block
 						div.panel-heading

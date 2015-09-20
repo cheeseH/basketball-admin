@@ -24,7 +24,8 @@ router.get("/statistics",function(req,res,next){
 	var competitionId = req.query.competitionId;
 	var teamAName = req.query.teamAName;
 	var teamBName = req.query.teamBName;
-	res.render("statistics",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName});
+	var gameId = req.query.gameId;
+	res.render("statistics",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName,gameId:gameId});
 });
 router.post("/editStatistics",function(req,res,next){
 	var competitionId = req.body.competitionId;
@@ -58,7 +59,8 @@ router.get("/report",function(req,res,next){
 	var competitionId = req.query.competitionId;
 	var teamAName = req.query.teamAName;
 	var teamBName = req.query.teamBName;
-	res.render("report",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName});
+	var gameId = req.query.gameId;
+	res.render("report",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName,gameId:gameId});
 })
 router.post("/editReport",function(req,res,next){
 	var competitionId = req.body.competitionId;

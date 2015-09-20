@@ -9,6 +9,9 @@ html
 				$("#info").val($("#"+teamId).children().eq(3).text());
 				$("#myModal").modal("show");
 			}
+			function searchTeam(){
+				
+			}
 	body
 		div.modal.fade#myModal(tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
 			div.modal-dialog
@@ -38,6 +41,13 @@ html
 		script(type="text/javascript").
 			$("#allGame").removeClass("active");
 			$("#allTeam").addClass("active");
+			var HTML = "<form class='navbar-form navbar-right'>"+
+							"<div class='form-group'>"+
+								"<input class='form-control' id='content' type='text' placeholder='请输入球队名称'>"+
+							"</div>"+
+							"<button class='btn btn-success' type='submit' onclick='searchTeam()'>搜索</button>"+
+						"</form>";
+			$("#navbar-head").append(HTML)
 		div.container.text-center
 			div.row
 				div.col-xs-2
