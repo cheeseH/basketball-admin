@@ -356,21 +356,19 @@ TeamController.searchByName = function(req,res,next){
 				console.log(err);
 			}
 			else{
-				console.log('teams');
-				res.send('success');
+				res.json({teams:teams})
 			}
 		})
 	}
 	else if(pos == 'campus'){
 		//var campusId = req.session.user.campusId;
-		var campusId = req.query.campusId;
+		var campusId = req.session.user.campusId;
 		searchByNameInCampus(campusId,req.query.name,function(err,teams){
 			if(err){
 				console.log(err);
 			}
 			else{
-				console.log('teams');
-				res.send('success');
+				res.json({teams:teams})
 			}
 		})
 	}

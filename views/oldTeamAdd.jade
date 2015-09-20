@@ -49,15 +49,48 @@ html
 					location.href="/teams/select?gameId=#{gameId}";
 					return false;
 				}else{
-					var url = "//?pos=campus&name="+team;
+					var url = "/teams/searchByName?pos=game&name="+team+"&gameId=#{gameId}";
 					$.ajax({
-							type:"GET",
-							url:url,
-							dataType:"json",
-							success:function(data){
+						type:"GET",
+						url:url,
+						dataType:"json",
+						success:function(data){
+							$("tbody").empty();
+							if(data.teams.length!=0){
+								for(var i = 0 ; i<data.teams.length;i++){
+									var HTML = "<tr id="+data.teams[i].id+">"+
+													"<td class='text-center'>"+
+														"<p>"+(i+1)+"</p>"+
+													"</td>"+
+													"<td class='text-center'>"+
+														"<p>"+data.teams[i].name+"</p>"+
+													"</td>"+
+													"<td class='text-center'>"+
+														"<img class='team-img' src="+data.teams[i].logoUrl+">"+
+													"</td>"+
+													"<td class='text-center col-xs-3'>"+
+														"<p>"+(data.teams[i].info?data.teams[i].info:"")+"</p>"+
+													"</td>"+
+													"<td class='text-center'>"+
+														"<div class='dropdown'>"+
+															"<button class='btn btn-info dropdown-toggle' id='operation' data-toggle='dropdown'>操作</button>"+
+																"<span class='caret'></span>"+
+															"</button>"+
+															"<ul class='dropdown-menu' role='menu' aria-labelledby='operation'>"+
+																"<li class='alert-info' role='presentation'>"+
+																	"<a role='menuitem' tabindex='-1' href='#' onclick='modal(\""+data.teams[i].id+"\")>编辑</a>"+
+																"</li>"+
+															"</ul>"+
+														"</div>"+
+													"</td>"+
+												"</tr>";
+									$("tbody").append(HTML);
+								}
 								
 							}
-						})
+						}
+					})
+				return false;
 				}
 			}
 	body
@@ -67,7 +100,7 @@ html
 							"<div class='form-group'>"+
 								"<input class='form-control' id='content' type='text' placeholder='请输入球队名称'>"+
 							"</div>"+
-							"<button class='btn btn-success' type='submit' onclick='searchTeam()'>搜索</button>"+
+							"<button class='btn btn-success' type='submit' onclick='return searchTeam()'>搜索</button>"+
 						"</form>";
 			$("#navbar-head").append(HTML)
 		div.container.text-center
