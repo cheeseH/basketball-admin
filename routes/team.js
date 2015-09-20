@@ -37,7 +37,6 @@ router.get('/select',TeamController.Select);
 
 router.get('/pick',TeamController.Pick);
 
-
-
+router.get('/remove',TeamController.removeFromGame);
 
 module.exports = router;

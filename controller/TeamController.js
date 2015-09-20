@@ -259,15 +259,21 @@ TeamController.Select = function(req,res,next){
 }
 
 TeamController.Pick = function(req,res,next){
-	var gameId = req.query.gameId;
-	var teamId = req.query.teamId;
+	var gameId = req.body.gameId;
+	var teams = req.body.teams;
+	var teams = JSON.parse(teams);
 	var gameQuery = new AV.Query('Game');
-	var team = new Team();
-	team.id = teamId;
+	var teamObjs = new Array();
+	var i = 0;
+	for(;i<teams.length;i++){
+		var newTeam = new Team();
+		newTeam.id = teams[i];
+		teamObjs[i] = newTeam;
+	}
 	gameQuery.get(gameId,{
 		success:function(game){
 			var teams  = game.relation('teams');
-			teams.add(team);
+			teams.add(teamObjs);
 			game.save(null,{
 				success:function(game){
 					//res.redirect('GameIndex');
@@ -276,6 +282,31 @@ TeamController.Pick = function(req,res,next){
 				},
 				error:function(game,err){
 
+				}
+			})
+		},
+		error:function(error){
+
+		}
+	})
+}
+
+TeamController.removeFromGame = function(req,res,next){
+	var gameId = req.query.gameId;
+	var teamId = req.query.teamId;
+	var query = new AV.Query("Game");
+	query.get(gameId,{
+		success:function(game){
+			var teams = game.relation('teams');
+			var toRemove = new Team();
+			toRemove.id = teamId;
+			teams.remove(toRemove);
+			game.save(null,{
+				success:function(game){
+
+				},
+				error:function(game,error){
+					
 				}
 			})
 		},
