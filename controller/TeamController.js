@@ -373,3 +373,33 @@ TeamController.searchByName = function(req,res,next){
 		})
 	}
 }
+
+TeamController.searchByNameInRest = function(req,res,next){
+	var name = req.query.name;
+	var gameId = req.quey.gameId;
+	searchByGame(gameId,function(err,teams){
+		if(err){
+
+		}
+		else{
+			var campusId = req.session.user.campusId;
+			// var campusId = req.query.campusId;
+			searchByNameInCampus(campusId,name,function(err,campusTeams){
+				if(err){
+
+				}
+				else{
+					var restTeams = new Array();
+					var i = 0;
+					for(;i<campusTeams.length;i++){
+						var obj = campusTeams[i];
+						if(!InArray(obj,teams)){
+							restTeams[restTeams.length] = obj;
+						}
+					}
+				res.send('success');
+				}
+			})
+		}
+	})
+}

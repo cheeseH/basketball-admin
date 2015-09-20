@@ -57,4 +57,6 @@ router.get('/remove',TeamController.removeFromGame);
 router.get('/searchByName',util.checkLogin);
 router.get("/searchByName",TeamController.searchByName);
 
+router.get('/rest',TeamController.searchByNameInRest);
+
 module.exports = router;
