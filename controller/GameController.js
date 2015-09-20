@@ -115,12 +115,13 @@ GameController.gameImageUpdate=function(req,res,next){
 	query.get(gameId,{
 		success:function(game){
 			imageUtil.upLoad(req,res,'coverUrl',function(err,url){
-
-				var logoUrl = url;
+				if(url == null){
+					return res.redirect('/games/gameDetail?gameId='+gameId);
+				}
 				game.set('coverUrl',logoUrl);
 				game.save(null,{
 					success:function(game){
-						res.redirect('/games/gameDetail?gameId='+gameId)
+						res.redirect('/games/gameDetail?gameId='+gameId);
 					},
 					error:function(game,error){
 						console.log(error);

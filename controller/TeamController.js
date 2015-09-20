@@ -47,6 +47,39 @@ function searchByGame(gameId,callback){
 	})
 }
 
+function searchByNameInGame(gameId,name,callback){
+	var cql = "SELECT * FROM Team where related teams to pointer('Game','"+gameId+"') AND name like '%"+name+"%'";
+
+	console.log(cql);
+
+	AV.Query.doCloudQuery(cql,{
+		success:function(teams){
+			console.log(teams.results);
+			return callback(null,teams.results);
+		},
+		error:function(error){
+			console.log(error);
+			return callback(error,null);
+		}
+	})
+
+}
+
+function searchByNameInCampus(campusId,name,callback){
+	var cql = "SELECT * FROM Team where campusId in (select * from Campus where objectId= '"+campusId+"') AND name like '%"+name+"%'";
+	console.log(cql);
+	AV.Query.doCloudQuery(cql,{
+		success:function(teams){
+			console.log(teams.results);
+			return callback(null,teams.results);
+		},
+		error:function(error){
+			console.log(error);
+			return callback(error,null);
+		}
+	})
+}
+
 
 TeamController.GameIndex = function(req,res,next){
 	var gameId = req.query.gameId;
@@ -313,4 +346,32 @@ TeamController.removeFromGame = function(req,res,next){
 
 		}
 	})
+}
+
+TeamController.searchByName = function(req,res,next){
+	var pos = req.query.pos;
+	if(pos == 'game'){
+		searchByNameInGame(req.query.gameId,req.query.name,function(err,teams){
+			if(err){
+				console.log(err);
+			}
+			else{
+				console.log('teams');
+				res.send('success');
+			}
+		})
+	}
+	else if(pos == 'campus'){
+		//var campusId = req.session.user.campusId;
+		var campusId = req.query.campusId;
+		searchByNameInCampus(campusId,req.query.name,function(err,teams){
+			if(err){
+				console.log(err);
+			}
+			else{
+				console.log('teams');
+				res.send('success');
+			}
+		})
+	}
 }
