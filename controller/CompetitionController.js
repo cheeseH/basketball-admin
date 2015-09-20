@@ -4,6 +4,7 @@ var Competition=AV.Object.extend("Competition");
 var Game=AV.Object.extend("Game");
 var Team=AV.Object.extend("Team");
 var Score=AV.Object.extend("Score");
+var GameFollow=AV.Object.extend("GameFollow");
 
 
 function CompetitionController()
@@ -39,22 +40,15 @@ CompetitionController.competitionList=function(req,res,next){
 			var i=0;var j=0;
 			console.log(result.length);
 
-			/*var returnData={
-				0:{type:"小组赛",number:0,competitions:{}},
-				1:{type:"1/16决赛",number:0,competitions:{}},
-				2:{type:"1/8 决赛",number:0,competitions:{}},
-				3:{type:"1/4 决赛",number:0,competitions:{}},
-				4:{type:"半决赛" ,number:0,competitions:{}},
-				5:{type:"总决赛",number:0,competitions:{}}
-			};*/
-
 			var returnData={};
-
+			var maxLevel=0;
 			var allLevel=new Array();
 			var kindsOfLevel=0;
 			var ifHaveLevel=0;
 			for(i=0;i<result.length;i++)						//获得所有比赛的类型,获得所有比赛的level
 			{
+				if(maxLevel<result[i].get('level'))
+					maxLevel=result[i].get('level');
 				if(i==0&&j==0)
 				{
 					typeArray[j]=result[i].get('type');
@@ -108,15 +102,16 @@ CompetitionController.competitionList=function(req,res,next){
 					}
 				}
 			}
+
 			for(var levLen=0;levLen<allLevel.length;levLen++)				//返回数据
 			{
-				returnData[levLen]={};
+				returnData[allLevel[levLen]]={};
 				for(i=0;i<competitions.length;i++)
 				{
 					if(allLevel[levLen]==competitions[i][0].get('level'))
 					{
-						returnData[levLen][i]={
-							type:typeArray[i],
+						returnData[allLevel[levLen]][i]={
+							type:competitions[i][0].get('type'),
 							competitions:competitions[i],
 							number:competitions[i].length
 							//levelKinds:allLevel.length
@@ -124,6 +119,7 @@ CompetitionController.competitionList=function(req,res,next){
 					}
 				}	
 			}
+			returnData.maxLevel=maxLevel;
 			//res.render('',{result:result,code:'200'});
 			console.log(typeArray);
 			console.log(allLevel);
@@ -508,5 +504,23 @@ CompetitionController.CompetitionUpdate=function(req,res,next){
 /*单场比赛的详情，以POST方式传入改比赛的ID*/
 CompetitionController.CompetitionDetail=function(req,res,next){
 	//var competitionId=req.body.competitionId;
-	var competitionId='';
+	var competitionId='55cd830060b22ed7cb93986c';
+	var query=new AV.Query(Competition);
+	query.include('teamBId');
+	query.include('teamAId');
+	query.include('reportId');
+	query.include('scoreId');
+	query.include('gameId');
+	query.get(competitionId,{
+		success:function(data)
+		{
+			console.log('success to get competition detail');
+			res.send(data);
+		},
+		error:function(error)
+		{
+			console.log('fail to get competitionDetail');
+			res.send(error);
+		}
+	});
 }

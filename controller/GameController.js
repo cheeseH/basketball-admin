@@ -2,6 +2,16 @@ var AV = require('avoscloud-sdk');
 
 var Game=AV.Object.extend("Game");
 var Campus=AV.Object.extend("Campus");
+
+var Competition=AV.Object.extend("Competition");
+var CompetitionShare=AV.Object.extend("CompetitionShare");
+var Team=AV.Object.extend("Team");
+var Score=AV.Object.extend("Score");
+var GameFollow=AV.Object.extend("GameFollow");
+var Comment=AV.Object.extend("Comment");
+var CommentLike=AV.Object.extend("CommentLike");
+var Report=AV.Object.extend("Report");
+
 var imageUtil = require('../util/image');
 function GameController(){
 
@@ -137,5 +147,147 @@ GameController.gameAdd = function(req,res,next){
 		}
 	})
 
+
+}
+/*需以POST传入gameId*/
+GameController.gameDelete=function(req,res,next){
+	var gameId='55d2e48e00b09b5389914f08';
+	var game=new Game();
+	game.id=gameId;
+	var queryGameFollow=new AV.Query(GameFollow);
+	queryGameFollow.equalTo('gameId',game);
+	queryGameFollow.destroyAll({
+		success:function(){
+			console.log('success to delete all gameFollow');
+			var queryCompetition=new AV.Query(Competition);
+			queryCompetition.equalTo('gameId',game);
+			queryCompetition.find({
+				success:function(CompetitionData)
+				{
+					console.log('success to get the Competitions');
+					for(var i=0;i<CompetitionData.length;i++)
+					{
+						var competitionId=CompetitionData[i].id;
+						var competition=new Competition();
+						competition.id=competitionId;
+						var commentQuery=new AV.Query(Comment);
+						commentQuery.equalTo('competitionId',competition);			//删除所有评价与点赞
+						commentQuery.find({
+							success:function(commentData)
+							{
+								console.log('success to find the comment');
+								console.log(commentData.length);
+								for(var j=0;j<commentData.length;j++)
+								{
+									var comment=new Comment();
+									comment.id=commentData[j].id;
+									var commentLikeQuery=new AV.Query(CommentLike);
+									commentLikeQuery.equalTo('commentId',comment);
+									commentLikeQuery.destroyAll({
+										success:function(){
+											console.log('success to delete the commentLikes');
+											comment.destroy({
+												success:function(commentResult){
+													console.log('success to delete the comment');
+												},
+												error:function(error)
+												{
+													console.log(error);
+												}
+											});
+										},
+										error:function(error){
+											console.log('fail to delete the commentLikes');
+
+										}
+									});
+									
+								}
+							},
+							error:function(error)
+							{
+								console.log('fail to get comments');
+								res.send(error);
+							}
+						});
+
+						
+					competitionShareQuery=new AV.Query(CompetitionShare);				//删除所有分享
+					competitionShareQuery.equalTo('competitionId',competition);
+					competitionShareQuery.destroyAll({
+						success:function(){
+							console.log('success to delete comprtitionShare');
+						},
+						error:function(error){
+							console.log('fail to delete competitionShare');
+						}
+					});
+
+
+					/*删除所有比分与战报*/
+					if(CompetitionData[i].get('reportId')!=null)
+					{
+						console.log(CompetitionData[i].get('reportId').id);
+						var report=new Report();
+						report.id=CompetitionData[i].get('reportId').id;
+						report.destroy({
+							success:function(results){
+								console.log('success to delete the report');
+							},
+							error:function(error){
+								console.log('fail to delete the report');
+							}
+						});
+					}
+					if(CompetitionData[i].get('scoreId')!=null)
+					{
+						console.log(CompetitionData[i].get('scoreId'));
+						var score=new Score();
+						score.id=CompetitionData[i].get('scoreId').id;
+						score.destroy({
+							success:function(results){
+								console.log('success to delete the score');
+							},
+							error:function(error){
+								console.log('fail to delete the score');
+							}
+						});
+					}
+					
+					competition.destroy({
+						success:function(results){
+							console.log('success to delete the competition');
+						},
+						error:function(error){
+							console.log('fail to delete the competition');
+						}
+					});
+
+
+					}
+					game.destroy({
+						success:function(results){
+							console.log('success to delete the game');
+						},
+						error:function(error){
+							console.log('fail to delete the game');
+						}
+					});	
+
+					
+				},
+				error:function(error)
+				{
+					console.log('fail to get the Competition');
+					res.send(error);
+				}
+			});
+			res.send('done');
+		},
+		error:function(error){
+			console.log('fail to delete gameFollow');
+			res.send(error);
+		}
+	});
 
 }
