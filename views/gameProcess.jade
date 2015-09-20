@@ -19,50 +19,51 @@ html
 				getDay();
 			}
 			function getDay(){
-				year = parseInt($("#year").val());
-				month = parseInt($("#month").val());
-				if(year!=0&&month!=0){
-					$("#day").empty();
-					if(month==2&&(year%4==0&&year%100!=0||year%400==0)){
-						for(var i=1;i<=29;i++){
-							if(i<10){
-								$("#month").append("<option>0"+i+"</option>");
-							}else{
-								$("#month").append("<option>"+i+"</option>");
+				$("#day").empty();
+				if($("#year").val()==""||$("#month").val()==""){
+					$("#day").append("<option> </option>");
+				}else{
+					year = parseInt($("#year").val());
+					month = parseInt($("#month").val());
+					if(year!=0&&month!=0){
+						if(month==2&&(year%4==0&&year%100!=0||year%400==0)){
+							for(var i=1;i<=29;i++){
+								if(i<10){
+									$("#day").append("<option>0"+i+"</option>");
+								}else{
+									$("#day").append("<option>"+i+"</option>");
+								}
+								
 							}
-							
-						}
-					}else if(month==2){
-						$("#day").empty();
-						for(var i=1;i<=28;i++){
-							if(i<10){
-								$("#day").append("<option>0"+i+"</option>");
-							}else{
-								$("#day").append("<option>"+i+"</option>");
+						}else if(month==2){
+							for(var i=1;i<=28;i++){
+								if(i<10){
+									$("#day").append("<option>0"+i+"</option>");
+								}else{
+									$("#day").append("<option>"+i+"</option>");
+								}
+								
 							}
-							
-						}
-					}else if(month==1||month==3||month==5||month==7||month==8||month==10||month==12){
-						$("#day").empty();
-						for(var i=1;i<=31;i++){
-							if(i<10){
-								$("#day").append("<option>0"+i+"</option>");
-							}else{
-								$("#day").append("<option>"+i+"</option>");
+						}else if(month==1||month==3||month==5||month==7||month==8||month==10||month==12){
+							for(var i=1;i<=31;i++){
+								if(i<10){
+									$("#day").append("<option>0"+i+"</option>");
+								}else{
+									$("#day").append("<option>"+i+"</option>");
+								}
 							}
-						}
-					}else{
-						$("#day").empty();
-						for(var i=1;i<=30;i++){
-							if(i<10){
-								$("#day").append("<option>0"+i+"</option>");
-							}else{
-								$("#day").append("<option>"+i+"</option>");
+						}else{
+							for(var i=1;i<=30;i++){
+								if(i<10){
+									$("#day").append("<option>0"+i+"</option>");
+								}else{
+									$("#day").append("<option>"+i+"</option>");
+								}
 							}
 						}
 					}
 				}
-			}
+			};
 			function removeCompetition(competitionId){
 				var url = "/competitions/competitionDelete?competitionId="+competitionId;
 				$.ajax({
@@ -96,10 +97,12 @@ html
 								label.col-xs-2.control-label 开始时间
 								div.col-xs-10
 									select.form-control#year(onchange="getDay()",name="year")
+										option  
 										-for(var i=0;i<3;i++)
 											option #{new Date().getFullYear()+i}
 									label.control-label(for="year") 年
 									select.form-control#month(onchange="getDay()",name="month")
+										option  
 										-for(var i=1;i<=12;i++)
 											-if(i<10)
 												option #{"0"+i}
@@ -109,6 +112,7 @@ html
 									select.form-control#day(name="day")
 									label.control-label(for="day") 日
 									select.form-control#hour(name="hour")
+										option  
 										-for(var i=0;i<24;i++)
 											-if(i<10)
 												option #{"0"+i}
@@ -116,6 +120,7 @@ html
 												option #{i}
 									label.control-label(for="hour") 时
 									select.form-control#minute(name="minute")
+										option  
 										-for(var i=0;i<60;i++)
 											-if(i<10)
 												option #{"0"+i}
@@ -151,6 +156,10 @@ html
 						li
 							a.row(href="/competitions/nextLevel?gameId=#{gameId}&level=#{competitionList.maxLevel}")
 								p.navbar-font 添加下一阶段
+						div.line
+						li
+							a.row(href="/games/gameDetail?gameId=#{gameId}")
+								p.navbar-font 返回
 				div.col-xs-10
 					div.panel.panel-primary.panel-block
 						div.panel-heading

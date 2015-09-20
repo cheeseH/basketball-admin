@@ -43,8 +43,33 @@ html
 					}
 				})
 			}
+			function searchTeam(){
+				var team = $("#content").val();
+				if(team==""){
+					location.href="/teams/select?gameId=#{gameId}";
+					return false;
+				}else{
+					var url = "//?pos=campus&name="+team;
+					$.ajax({
+							type:"GET",
+							url:url,
+							dataType:"json",
+							success:function(data){
+								
+							}
+						})
+				}
+			}
 	body
 		include ./navbar.jade
+		script(type="text/javascript").
+			var HTML = "<form class='navbar-form navbar-right'>"+
+							"<div class='form-group'>"+
+								"<input class='form-control' id='content' type='text' placeholder='请输入球队名称'>"+
+							"</div>"+
+							"<button class='btn btn-success' type='submit' onclick='searchTeam()'>搜索</button>"+
+						"</form>";
+			$("#navbar-head").append(HTML)
 		div.container.text-center
 			div.row
 				div.col-xs-2
@@ -60,6 +85,10 @@ html
 						li.active
 							a.row(href="/teams/select?gameId=#{gameId}")
 								p.navbar-font 添加已有球队
+						div.line
+						li
+							a.row(href="/games/gameDetail?gameId=#{gameId}")
+								p.navbar-font 返回
 				div.col-xs-10
 					div.panel.panel-primary.panel-block
 						div.panel-heading
