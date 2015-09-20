@@ -51,6 +51,7 @@ router.get('/select',TeamController.Select);
 
 router.post('/pick',TeamController.Pick);
 
-
+router.get("/remove",util.checkLogin);
+router.get('/remove',TeamController.removeFromGame);
 
 module.exports = router;

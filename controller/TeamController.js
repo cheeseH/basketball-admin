@@ -289,3 +289,28 @@ TeamController.Pick = function(req,res,next){
 		}
 	})
 }
+
+TeamController.removeFromGame = function(req,res,next){
+	var gameId = req.query.gameId;
+	var teamId = req.query.teamId;
+	var query = new AV.Query("Game");
+	query.get(gameId,{
+		success:function(game){
+			var teams = game.relation('teams');
+			var toRemove = new Team();
+			toRemove.id = teamId;
+			teams.remove(toRemove);
+			game.save(null,{
+				success:function(game){
+					res.json({});
+				},
+				error:function(game,error){
+					
+				}
+			})
+		},
+		error:function(error){
+
+		}
+	})
+}
