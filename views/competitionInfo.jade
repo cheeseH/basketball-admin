@@ -16,11 +16,17 @@ html
 				$("#awardLimit").val($("tbody tr").children().eq(6).text());
 				$("#awardMinimum").val($("tbody tr").children().eq(8).text());
 				if($("tbody tr").children().eq(9).text()=="是"){
+					$("#isLive:eq(1)").attr("checked",false)
+					$("#isLive:eq(1)").prop("checked",false)
 					$("#isLive:eq(0)").attr("checked",true)
 					$("#isLive:eq(0)").prop("checked",true)
 				}else{
-					$("#isLive:eq(1)").attr("checked",false)
-					$("#isLive:eq(1)").prop("checked",false)
+					alert($("#isLive:eq(0)").attr("checked"))
+					$("#isLive:eq(0)").attr("checked",false)
+					$("#isLive:eq(0)").prop("checked",false)
+					$("#isLive:eq(1)").attr("checked",true)
+					$("#isLive:eq(1)").prop("checked",true)
+					alert($("#isLive:eq(1)").attr("checked"))
 				}
 				getDay();
 				$("#myModal").modal();
@@ -137,10 +143,10 @@ html
 								label.col-xs-2.control-label(for='isLive') 是否直播
 								div.col-xs-6
 									label.checkbox-inline
-										input#isLive(type='radio',value=true,name='isLive')
+										input#isLive(type='radio',value="1",name='isLive')
 										span 是
 									lbel.checkbox-inline
-										input#isLive(type='radio',name='isLive',value=false)
+										input#isLive(type='radio',name='isLive',value="0",checked)
 										span 否
 							input.form-control.hidden#scoreId(type='text',name="scoreId",value="#{competition.get('scoreId').id}")
 							input.form-control.hidden#gameId(type='text',value="#{competition.get('gameId').id}",name="gameId")

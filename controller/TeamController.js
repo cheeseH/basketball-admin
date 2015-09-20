@@ -76,10 +76,10 @@ TeamController.CampusIndex = function(req,res,next){
 }
 
 
-TeamController.AddInSchool = function(req,res,next){
+TeamController.AddInCampus = function(req,res,next){
 	var name = req.body.name;
 	var info = req.body.info;
-	var campusId = req.session.campusId;
+	var campusId = req.session.user.campusId;
 	var campus = new Campus();
 	campus.id = campusId;
 
@@ -98,7 +98,7 @@ TeamController.AddInSchool = function(req,res,next){
 			team.save(null,{
 				success:function(team){
 					//return res.redirect('CampusIndex');
-					res.send("success");
+					res.redirect("/teams?pos=campus")
 				},
 				error:function(team,err){
 
@@ -112,8 +112,7 @@ TeamController.AddInSchool = function(req,res,next){
 TeamController.AddInGame = function(req,res,next){
 	var name = req.body.name;
 	var info = req.body.info;
-	console.log(req.body);
-	var campusId = req.session.campusId;
+	var campusId = req.session.user.campusId;
 	var gameId = req.body.gameId;
 	var campus = new Campus();
 	campus.id = campusId;
@@ -142,17 +141,20 @@ TeamController.AddInGame = function(req,res,next){
 
 								},
 								error:function(game,err){
-
+									console.log('1111');
+									console.log(err);
 								}
 							})
 						},
 						error:function(error){
-
+							console.log("22222");
+							console.log(error);
 						}
 					})
 				},
 				error:function(team,err){
-
+					console.log("33333");
+					console.log(err);
 				}
 			});
 		}

@@ -4,6 +4,7 @@ var router = express.Router();
 var AV = require('avoscloud-sdk');
 var Admin=AV.Object.extend("Admin");
 
+var util=require('../util/util.js');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -32,6 +33,7 @@ router.get('/testRelation',function(req,res,next){
 })
 
 /*登录页面*/
+//router.get('/login',util.checkLogin);
 router.get('/login',function(req,res,next){
 	res.render('login',{code:'200'});
 });
@@ -71,5 +73,11 @@ router.post('/login',function(req,res,next){
 			res.render('login',{code:'401'});
 		}
 	});
+});
+/*登出*/
+router.get('/logout',function (req,res,next){
+	req.session.user=null;
+	console.log('delete the session');
+	res.redirect('/login');
 });
 module.exports = router;

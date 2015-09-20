@@ -63,7 +63,7 @@ GameController.finishGame=function(req,res,next){
 			results.set('isFinished',true);
 			results.save(null,{
 				success:function(data){
-					res.redirect('/games/gameList');
+					res.redirect("/games/gameList");
 				},
 				error:function(data,error){
 					console.log(error);
@@ -303,7 +303,7 @@ GameController.gameDelete=function(req,res,next){
 					res.send(error);
 				}
 			});
-			res.redirect('/games/gameList');
+			res.json({});
 		},
 		error:function(error){
 			console.log('fail to delete gameFollow');

@@ -6,6 +6,26 @@ html
 			function gameInfo(){
 				location.href='/gameInfo';
 			}
+			function alertConfirm(name,gameId){
+				var warning = confirm("确定删除 "+name+" 吗？")
+				if(warning){
+					removeGame(gameId)
+					return true;
+				}else{
+					return false;
+				}
+			}
+			function removeGame(gameId){
+				var url = "/games/gameDelete?gameId="+gameId;
+				$.ajax({
+						type:"GET",
+						url:url,
+						dataType:"json",
+						success:function(data){
+							$("#"+gameId).remove();
+						}
+					})
+			}
 	body
 		
 		include ./navbar.jade
@@ -64,4 +84,4 @@ html
 																a(role="menuitem",tabindex="-1",href="/games/gameFinished?gameId=#{val.id}") 结束赛事
 														div.line
 														li.alert-danger(role="presentation")
-															a(role="menuitem",tabindex="-1",href="/games/gameDelete?gameId=#{val.id}") 删除
+															a(role="menuitem",tabindex="-1",href="#",onclick="return alertConfirm(\"#{val.get('name')}\",'#{val.id}')") 删除

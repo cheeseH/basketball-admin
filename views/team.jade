@@ -9,6 +9,16 @@ html
 				$("#info").val($("#"+teamId).children().eq(3).text());
 				$("#myModal").modal("show");
 			}
+			function removeTeam(teamId){
+				$.ajax({
+						type:"GET",
+						url:"/",
+						dataType:"json",
+						success:function(data){
+							$("#"+teamId).remove();
+						}
+					})
+			}
 	body
 		div.modal.fade#myModal(tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
 			div.modal-dialog
@@ -82,3 +92,6 @@ html
 													ul.dropdown-menu(role="menu",aria-labelledby="operation")
 														li.alert-info(role="presentation")
 															a(role="menuitem",tabindex="-1",href="#",onclick="edit('#{val.id}')") 编辑
+														div.line
+														li.alert-danger(role="presentation")
+															a(role="menuitem",tabindex="-1",href="#",onclick="removeTeam('#{val.id}')") 移除

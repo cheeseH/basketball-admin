@@ -4,6 +4,7 @@ var multipartMiddleware = multipart();
 var fs = require('fs');
 var qiniu = require('qiniu');
 exports.upLoad = function(req,res,filename,callback){
+    console.log(req.files[filename]);
     if(typeof(req.files[filename]) == "undefined"){
         return callback(null,null);
     }
@@ -11,6 +12,7 @@ exports.upLoad = function(req,res,filename,callback){
         //使用同步方式删除一个文件
         fs.unlinkSync(req.files[filename].path);
         console.log(' Successsfully removed an empty file!');
+        return callback(null,null);
     } else {
         var target_path = '&lt; 我本地存图片的路径 &gt;' + req.files[filename].name;
         console.log(target_path);

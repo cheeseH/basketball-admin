@@ -102,14 +102,15 @@ CompetitionController.competitionList=function(req,res,next){
 					}
 				}
 			}
+
 			for(var levLen=0;levLen<allLevel.length;levLen++)				//返回数据
 			{
-				returnData[levLen]={};
+				returnData[allLevel[levLen]]={};
 				for(i=0;i<competitions.length;i++)
 				{
-					if(allLevel[allLevel[levLen]]==competitions[i][0].get('level'))
+					if(allLevel[levLen]==competitions[i][0].get('level'))
 					{
-						returnData[levLen][i]={
+						returnData[allLevel[levLen]][i]={
 							type:competitions[i][0].get('type'),
 							competitions:competitions[i],
 							number:competitions[i].length
@@ -217,8 +218,7 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 								newCompetition.save(null,{
 									success:function(result)
 									{
-										console.log(result);
-										res.send('success');
+										res.redirect('/competitions/competitionList?gameId='+gameId);
 									},
 									error:function(object,error)
 									{
@@ -265,7 +265,7 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 */
 CompetitionController.CompetitionDelete=function(req,res,next){
 	//var competitionId=req.body.competitionId;
-	var competitionId='55f53582ddb202577ccabde8';
+	var competitionId=req.query.competitionId;
 	var queryCompetition=new AV.Query('Competition');
 	//queryCompetition.include('scoreId');										//为什么不include反而能取出数据
 	queryCompetition.get(competitionId,{
@@ -281,7 +281,7 @@ CompetitionController.CompetitionDelete=function(req,res,next){
 						success:function(competitionResult)
 						{
 							console.log('success to delete competition');
-							res.send(competitionResult);
+							res.json({});
 						},
 						error:function(competitionError)
 						{
@@ -336,7 +336,7 @@ CompetitionController.CompetitionUpdate=function(req,res,next){
 	var beginTime=new Date(req.body.year+"-"+req.body.month+"-"+req.body.day+" "+req.body.hour+":"+req.body.minute+":"+"00");
 	var awardLimit= parseInt(req.body.awardLimit);
 	var awardMinimum= parseInt(req.body.awardMinimum);
-	var isLived=req.body.isLived;
+	var isLive=req.body.isLive =="1"?true:false;
 	var scoreA= parseInt(req.body.scoreA);
 	var scoreB= parseInt(req.body.scoreB);
 	
@@ -385,7 +385,7 @@ CompetitionController.CompetitionUpdate=function(req,res,next){
 										competitionData.set('beginTime',beginTime);
 										competitionData.set('awardMinimum',awardMinimum);
 										competitionData.set('awardLimit',awardLimit);
-										competitionData.set('isLived',isLived);
+										competitionData.set('isLive',isLive);
 										competitionData.save(null,{
 											success:function(data){
 												res.redirect("/competitions/competitionDetail?competitionId="+competitionId);		
