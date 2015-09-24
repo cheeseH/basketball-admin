@@ -49,7 +49,7 @@ html
 					location.href="/teams/select?gameId=#{gameId}";
 					return false;
 				}else{
-					var url = "/teams/searchByName?pos=game&name="+team+"&gameId=#{gameId}";
+					var url = "/teams/rest?name="+team+"&gameId=#{gameId}";
 					$.ajax({
 						type:"GET",
 						url:url,
@@ -58,9 +58,11 @@ html
 							$("tbody").empty();
 							if(data.teams.length!=0){
 								for(var i = 0 ; i<data.teams.length;i++){
-									var HTML = "<tr id="+data.teams[i].id+">"+
+									var HTML = "<tr>"+
 													"<td class='text-center'>"+
-														"<p>"+(i+1)+"</p>"+
+														"<p>"+
+															"<input type='checkbox' onclick='pitchUp(this)' data-value="+data.teams[i].objectId+">"+
+														"</p>"+
 													"</td>"+
 													"<td class='text-center'>"+
 														"<p>"+data.teams[i].name+"</p>"+
@@ -70,18 +72,6 @@ html
 													"</td>"+
 													"<td class='text-center col-xs-3'>"+
 														"<p>"+(data.teams[i].info?data.teams[i].info:"")+"</p>"+
-													"</td>"+
-													"<td class='text-center'>"+
-														"<div class='dropdown'>"+
-															"<button class='btn btn-info dropdown-toggle' id='operation' data-toggle='dropdown'>操作</button>"+
-																"<span class='caret'></span>"+
-															"</button>"+
-															"<ul class='dropdown-menu' role='menu' aria-labelledby='operation'>"+
-																"<li class='alert-info' role='presentation'>"+
-																	"<a role='menuitem' tabindex='-1' href='#' onclick='modal(\""+data.teams[i].id+"\")>编辑</a>"+
-																"</li>"+
-															"</ul>"+
-														"</div>"+
 													"</td>"+
 												"</tr>";
 									$("tbody").append(HTML);

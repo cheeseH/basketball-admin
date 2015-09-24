@@ -376,7 +376,8 @@ TeamController.searchByName = function(req,res,next){
 
 TeamController.searchByNameInRest = function(req,res,next){
 	var name = req.query.name;
-	var gameId = req.quey.gameId;
+	var gameId = req.query.gameId;
+	console.log(name);
 	searchByGame(gameId,function(err,teams){
 		if(err){
 
@@ -397,7 +398,7 @@ TeamController.searchByNameInRest = function(req,res,next){
 							restTeams[restTeams.length] = obj;
 						}
 					}
-				res.send('success');
+					res.json({teams:restTeams});
 				}
 			})
 		}
