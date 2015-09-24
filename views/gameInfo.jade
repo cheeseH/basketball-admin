@@ -7,7 +7,7 @@ html
 				$("#gameId").val(gameId);
 				$("#name").val($("tbody tr").children().eq(0).html());
 				$("#college").val($("tbody tr").children().eq(2).html());
-				$("#awardLimit").val($("tbody tr").children().eq(4).html());
+				$("#stage").val($("tbody tr").children().eq(3).html());
 				$("#updateInfo").modal();
 			}
 			function modalImg(){
@@ -31,9 +31,9 @@ html
 								div.col-xs-5
 									input.form-control#college(type='text',name='college')
 							div.form-group
-								label.col-xs-3.control-label(for="awardLimit") 奖金上限
+								label.col-xs-3.control-label(for="stage") 当前类型
 								div.col-xs-5
-									input.form-control#awardLimit(type='text',name='awardLimit')
+									input.form-control#stage(type='text',name='stage')
 						div.modal-footer
 							button.btn.btn-defautl(type="button",data-dismiss="modal") 关闭
 							input.btn.btn-default(type="submit" value="完成")
@@ -90,8 +90,7 @@ html
 										th.text-center 名称
 										th.text-center 是否结束
 										th.text-center 学院
-										th.text-center 奖金
-										th.text-center 奖金上限
+										th.text-center 当前类型
 										th.text-center 关注人数
 										th.text-center 浏览量
 										th.text-center 修改
@@ -103,8 +102,7 @@ html
 										-else
 											td.text-center 否
 										td.text-center #{gameInfo.get("college")}
-										td.text-center #{gameInfo.get("award")}
-										td.text-center #{gameInfo.get("awardLimit")}
+										td.text-center #{gameInfo.get("stage")}
 										td.text-center #{gameInfo.get("follows")}
 										td.text-center #{gameInfo.get("views")}
 										td.text-center

@@ -15,55 +15,7 @@ html
 					$("#type").val("");
 				}
 				$("#myModal").modal();
-			
-				getDay();
 			}
-			function getDay(){
-				$("#day").empty();
-				if($("#year").val()==""||$("#month").val()==""){
-					$("#day").append("<option> </option>");
-				}else{
-					year = parseInt($("#year").val());
-					month = parseInt($("#month").val());
-					if(year!=0&&month!=0){
-						if(month==2&&(year%4==0&&year%100!=0||year%400==0)){
-							for(var i=1;i<=29;i++){
-								if(i<10){
-									$("#day").append("<option>0"+i+"</option>");
-								}else{
-									$("#day").append("<option>"+i+"</option>");
-								}
-								
-							}
-						}else if(month==2){
-							for(var i=1;i<=28;i++){
-								if(i<10){
-									$("#day").append("<option>0"+i+"</option>");
-								}else{
-									$("#day").append("<option>"+i+"</option>");
-								}
-								
-							}
-						}else if(month==1||month==3||month==5||month==7||month==8||month==10||month==12){
-							for(var i=1;i<=31;i++){
-								if(i<10){
-									$("#day").append("<option>0"+i+"</option>");
-								}else{
-									$("#day").append("<option>"+i+"</option>");
-								}
-							}
-						}else{
-							for(var i=1;i<=30;i++){
-								if(i<10){
-									$("#day").append("<option>0"+i+"</option>");
-								}else{
-									$("#day").append("<option>"+i+"</option>");
-								}
-							}
-						}
-					}
-				}
-			};
 			function removeCompetition(competitionId){
 				var url = "/competitions/competitionDelete?competitionId="+competitionId;
 				$.ajax({
@@ -93,48 +45,6 @@ html
 								label.col-xs-2.control-label(for='teamBName') 球队B
 								div.col-xs-6
 									input.form-control#teamBName(type='text',name="teamBName")
-							div.form-group.form-inline
-								label.col-xs-2.control-label 开始时间
-								div.col-xs-10
-									select.form-control#year(onchange="getDay()",name="year")
-										option  
-										-for(var i=0;i<3;i++)
-											option #{new Date().getFullYear()+i}
-									label.control-label(for="year") 年
-									select.form-control#month(onchange="getDay()",name="month")
-										option  
-										-for(var i=1;i<=12;i++)
-											-if(i<10)
-												option #{"0"+i}
-											-else
-												option #{i}
-									label.control-label(for="month") 月
-									select.form-control#day(name="day")
-									label.control-label(for="day") 日
-									select.form-control#hour(name="hour")
-										option  
-										-for(var i=0;i<24;i++)
-											-if(i<10)
-												option #{"0"+i}
-											-else
-												option #{i}
-									label.control-label(for="hour") 时
-									select.form-control#minute(name="minute")
-										option  
-										-for(var i=0;i<60;i++)
-											-if(i<10)
-												option #{"0"+i}
-											-else
-												option #{i}
-									label.control-label(for="minute") 分
-							div.form-group
-								label.col-xs-2.control-label(for='awardLimit') 奖金上限
-								div.col-xs-6
-									input.form-control#awardLimit(type='text',name="awardLimit")
-							div.form-group
-								label.col-xs-2.control-label(for='awardMinimum') 奖金下限
-								div.col-xs-6
-									input.form-control#awardMinimum(type='text',name="awardMinimum")
 							input.form-control.hidden#level(type='text',name="level")
 							div.form-group.hidden
 								label.col-xs-2.control-label(for="type") 类型

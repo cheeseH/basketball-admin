@@ -56,32 +56,31 @@ html
 										th.text-center 名称
 										th.text-center 是否结束
 										th.text-center 学院
-										th.text-center 奖金上限
-										th.text-center 奖金
+										th.text.center 当前状态
 										th.text-center 操作
 								tbody
-									-each val,key in gameList
-										tr(id="#{val.id}")
-											td.text-center #{key+1}
-											td.text-center #{val.get("name")}
-											-if(val.get("isFinished"))
-												td.text-center 是
-											-else
-												td.text-center 否
-											td.text-center #{val.get("college")}
-											td.text-center #{val.get("awardLimit")}
-											td.text-center #{val.get("award")}
-											td.text-center
-												div.dropdown
-													button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
-														span.caret
-													ul.dropdown-menu(role="menu",aria-labelledby="operation")
-														li.alert-info(role="presentation")
-															a(role="menuitem",tabindex="-1",href="/games/gameDetail?gameId=#{val.id}") 管理赛事
-														-if(!val.get("isFinished"))
+									-if(gameList&&gameList.length>0)
+										-each val,key in gameList
+											tr(id="#{val.id}")
+												td.text-center #{key+1}
+												td.text-center #{val.get("name")}
+												-if(val.get("isFinished"))
+													td.text-center 是
+												-else
+													td.text-center 否
+												td.text-center #{val.get("college")}
+												td.text-center #{val.get("stage")}
+												td.text-center
+													div.dropdown
+														button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
+															span.caret
+														ul.dropdown-menu(role="menu",aria-labelledby="operation")
+															li.alert-info(role="presentation")
+																a(role="menuitem",tabindex="-1",href="/games/gameDetail?gameId=#{val.id}") 管理赛事
+															-if(!val.get("isFinished"))
+																div.line
+																li.alert-success(role="presentation")
+																	a(role="menuitem",tabindex="-1",href="/games/gameFinished?gameId=#{val.id}") 结束赛事
 															div.line
-															li.alert-success(role="presentation")
-																a(role="menuitem",tabindex="-1",href="/games/gameFinished?gameId=#{val.id}") 结束赛事
-														div.line
-														li.alert-danger(role="presentation")
-															a(role="menuitem",tabindex="-1",href="#",onclick="return alertConfirm(\"#{val.get('name')}\",'#{val.id}')") 删除
+															li.alert-danger(role="presentation")
+																a(role="menuitem",tabindex="-1",href="#",onclick="return alertConfirm(\"#{val.get('name')}\",'#{val.id}')") 删除

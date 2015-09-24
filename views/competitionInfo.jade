@@ -8,77 +8,8 @@ html
 				$("#teamBName").val($("tbody tr").children().eq(1).text());
 				$("#scoreA").val($("tbody tr").children().eq(2).text().split(" ")[0]);
 				$("#scoreB").val($("tbody tr").children().eq(2).text().split(" ")[2]);
-				if($("tbody tr").children().eq(5).text()!=" "){
-					$("#year").val($("tbody tr").children().eq(5).text().split("-")[0]);
-					$("#month").val($("tbody tr").children().eq(5).text().split("-")[1]);
-					$("#day").val($("tbody tr").children().eq(5).text().split("-")[2].split(" ")[0]);
-					$("#hour").val($("tbody tr").children().eq(5).text().split(" ")[1].split(":")[0]);
-					$("#minute").val($("tbody tr").children().eq(5).text().split(" ")[1].split(":")[1]);
-				}
-				$("#awardLimit").val($("tbody tr").children().eq(6).text());
-				$("#awardMinimum").val($("tbody tr").children().eq(8).text());
-				if($("tbody tr").children().eq(9).text()=="是"){
-					$("#isLive:eq(1)").attr("checked",false)
-					$("#isLive:eq(1)").prop("checked",false)
-					$("#isLive:eq(0)").attr("checked",true)
-					$("#isLive:eq(0)").prop("checked",true)
-				}else{
-					$("#isLive:eq(0)").attr("checked",false)
-					$("#isLive:eq(0)").prop("checked",false)
-					$("#isLive:eq(1)").attr("checked",true)
-					$("#isLive:eq(1)").prop("checked",true)
-				}
-				getDay();
 				$("#myModal").modal();
 			}
-			var year = 0;
-			var month = 0;
-			function getDay(){
-				$("#day").empty();
-				if($("#year").val()==""||$("#month").val()==""){
-					$("#day").append("<option> </option>");
-				}else{
-					year = parseInt($("#year").val());
-					month = parseInt($("#month").val());
-					if(year!=0&&month!=0){
-						if(month==2&&(year%4==0&&year%100!=0||year%400==0)){
-							for(var i=1;i<=29;i++){
-								if(i<10){
-									$("#day").append("<option>0"+i+"</option>");
-								}else{
-									$("#day").append("<option>"+i+"</option>");
-								}
-								
-							}
-						}else if(month==2){
-							for(var i=1;i<=28;i++){
-								if(i<10){
-									$("#day").append("<option>0"+i+"</option>");
-								}else{
-									$("#day").append("<option>"+i+"</option>");
-								}
-								
-							}
-						}else if(month==1||month==3||month==5||month==7||month==8||month==10||month==12){
-							for(var i=1;i<=31;i++){
-								if(i<10){
-									$("#day").append("<option>0"+i+"</option>");
-								}else{
-									$("#day").append("<option>"+i+"</option>");
-								}
-							}
-						}else{
-							for(var i=1;i<=30;i++){
-								if(i<10){
-									$("#day").append("<option>0"+i+"</option>");
-								}else{
-									$("#day").append("<option>"+i+"</option>");
-								}
-							}
-						}
-					}
-				}
-			};
 	body
 		div.modal.fade#myModal(tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
 			div.modal-dialog
@@ -104,58 +35,6 @@ html
 									span :
 								div.col-xs-2
 									input.col-xs-5.form-control#scoreB(type='text',name="scoreB")
-							div.form-group.form-inline
-								label.col-xs-2.control-label 开始时间
-								div.col-xs-10
-									select.form-control#year(onchange="getDay()",name="year")
-										option  
-										-for(var i=0;i<3;i++)
-											option #{new Date().getFullYear()+i}
-									label.control-label(for="year") 年
-									select.form-control#month(onchange="getDay()",name="month")
-										option  
-										-for(var i=1;i<=12;i++)
-											-if(i<10)
-												option #{"0"+i}
-											-else
-												option #{i}
-									label.control-label(for="month") 月
-									select.form-control#day(name="day")
-									label.control-label(for="day") 日
-									select.form-control#hour(name="hour")
-										option  
-										-for(var i=0;i<24;i++)
-											-if(i<10)
-												option #{"0"+i}
-											-else
-												option #{i}
-									label.control-label(for="hour") 时
-									select.form-control#minute(name="minute")
-										option  
-										-for(var i=0;i<60;i++)
-											-if(i<10)
-												option #{"0"+i}
-											-else
-												option #{i}
-									label.control-label(for="minute") 分
-							div.form-group
-								label.col-xs-2.control-label(for='awardLimit') 奖金上限
-								div.col-xs-6
-									input.form-control#awardLimit(type='text',name="awardLimit")
-							div.form-group
-								label.col-xs-2.control-label(for='awardMinimum') 奖金下限
-								div.col-xs-6
-									input.form-control#awardMinimum(type='text',name="awardMinimum")
-							div.form-group
-								label.col-xs-2.control-label(for='isLive') 是否直播
-								div.col-xs-6
-									label.checkbox-inline
-										input#isLive(type='radio',value="1",name='isLive')
-										span 是
-									lbel.checkbox-inline
-										input#isLive(type='radio',name='isLive',value="0",checked)
-										span 否
-							input.form-control.hidden#scoreId(type='text',name="scoreId",value="#{competition.get('scoreId').id}")
 							input.form-control.hidden#gameId(type='text',value="#{competition.get('gameId').id}",name="gameId")
 							input.form-control.hidden#competitionId(type="text",value="#{competition.id}",name="competitionId")
 							input.form-control.hidden#level(type="text",value="#{competition.get('level')}",name="level")
@@ -199,12 +78,6 @@ html
 										th.text-center 球队B
 										th.text-center 比分
 										th.text-center 类型
-										th.text-center 状态
-										th.text-center 开始时间
-										th.text-center 奖金上限
-										th.text-center 奖金
-										th.text-center 奖金下限
-										th.text-center 是否直播
 								tbody
 									tr
 										td.text-center
@@ -212,34 +85,9 @@ html
 										td.text-center
 											p #{competition.get("teamBId").get("name")}
 										td.text-center
-											p #{competition.get("scoreId").get("scoreA")} : #{competition.get("scoreId").get("scoreB")}
+											p #{competition.get("scoreA")} : #{competition.get("scoreB")}
 										td.text-center
 											p #{competition.get("type")}
-										td.text-center
-											p #{competition.get("status")}
-										td.text-center
-											-if(competition.get("beginTime")==null)
-												p  
-											-else
-												- var time = new Date(competition.get("beginTime"))
-												- var year = time.getFullYear()
-												- var month = (time.getMonth()+1)<10?"0"+(time.getMonth()+1):time.getMonth()+1
-												- var day = time.getDate()<10?"0"+time.getDate():time.getDate()
-												- var hour = time.getHours()<10?"0"+time.getHours():time.getHours()
-												- var minute = time.getMinutes()<10?"0"+time.getMinutes():time.getMinutes();
-												- beginTime = year+"-"+month+"-"+day+" "+hour+":"+minute
-												p #{beginTime}
-										td.text-center
-											p #{competition.get("awardLimit")}
-										td.text-center
-											p #{competition.get("award")}
-										td.text-center
-											p #{competition.get("awardMinimum")}
-										td.text-center
-											-if(competition.get("isLive"))
-												p 是
-											-else
-												p 否
 							hr
 							div.text-center
 								button.btn.btn-info(onclick="modal()") 修改

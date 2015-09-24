@@ -3,8 +3,6 @@ var AV = require('avoscloud-sdk');
 var Competition=AV.Object.extend("Competition");
 var Game=AV.Object.extend("Game");
 var Team=AV.Object.extend("Team");
-var Score=AV.Object.extend("Score");
-var GameFollow=AV.Object.extend("GameFollow");
 
 
 function CompetitionController()
@@ -29,7 +27,6 @@ CompetitionController.competitionList=function(req,res,next){
 	query.descending('level');
 	query.include('teamBId');
 	query.include('teamAId');
-	query.include('scoreId');
 	query.find({
 		success:function(result){
 			console.log('success to get competitionList');
@@ -155,19 +152,8 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 	var teamAName= req.body.teamAName;
 	var teamBName= req.body.teamBName;
 	var gameId= req.body.gameId;
-	var gameStatus='未开始';
 	var level= parseInt(req.body.level);
 	var gameType= req.body.type;
-	var year = req.body.year;
-	var month = req.body.month;
-	var day = req.body.day;
-	var hour = req.body.hour;
-	var minute = req.body.minute;
-	var time = year+"-"+month+"-"+day+" "+hour+":"+minute+":"+"00";
-	var beginTime=new Date(time);
-	var awardLimit= parseInt(req.body.awardLimit);
-	var awardMinimum= parseInt(req.body.awardMinimum);
-	var isLive = req.body.isLive == "1"?true:false;
 
 	
 	var gameQuery=new AV.Query(Game);
@@ -191,50 +177,33 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 					};
 					if(teamAId!=110&&teamBId!=110)							//若两支队伍都存在于这场赛事
 					{
-						var score=new Score();
-						score.set('scoreA',0);
-						score.set('scoreB',0);
-						score.save(null,{
-							success:function(scoreData){
-								var teamA=new Team();
-								var teamB=new Team();
-								teamA.id=teamAId;
-								teamB.id=teamBId;
+						var teamA=new Team();
+						var teamB=new Team();
+						teamA.id=teamAId;
+						teamB.id=teamBId;
 
-								var thisGame=new Game();
-								thisGame.id=gameId;
+						var thisGame=new Game();
+						thisGame.id=gameId;
 
-								var newCompetition=new Competition();
-								newCompetition.set('type',gameType);
-								newCompetition.set('teamAId',teamA);
-								newCompetition.set('teamBId',teamB);
-								newCompetition.set('level',level);
-								newCompetition.set('status',gameStatus);
-								newCompetition.set('gameId',thisGame);
-								newCompetition.set('scoreId',scoreData);
-								newCompetition.set('beginTime',beginTime);
-								newCompetition.set('awardMinimum',awardMinimum);
-								newCompetition.set('awardLimit',awardLimit);
-								newCompetition.set('award',awardMinimum);					//默认奖金池的值是奖金池的上限
-								newCompetition.set("isLive",isLive);
-								newCompetition.save(null,{
-									success:function(result)
-									{
-										res.redirect('/competitions/competitionList?gameId='+gameId);
-									},
-									error:function(object,error)
-									{
-										console.log(error);
-										res.send(error);
-									}
-						});
+						var newCompetition=new Competition();
+						newCompetition.set('type',gameType);
+						newCompetition.set('teamAId',teamA);
+						newCompetition.set('teamBId',teamB);
+						newCompetition.set('level',level);
+						newCompetition.set('gameId',thisGame);
+						newCompetition.set("scoreA",0);
+						newCompetition.set("scoreB",0);
+						newCompetition.save(null,{
+							success:function(result)
+							{
+								res.redirect('/competitions/competitionList?gameId='+gameId);
 							},
-							error:function(error){
-								console.log('score build fail');
+							error:function(object,error)
+							{
+								console.log(error);
 								res.send(error);
 							}
 						});
-
 						
 						//res.send(teams);
 					}
@@ -272,32 +241,37 @@ CompetitionController.CompetitionDelete=function(req,res,next){
 	//queryCompetition.include('scoreId');										//为什么不include反而能取出数据
 	queryCompetition.get(competitionId,{
 		success:function(result){
-			var theScore=new Score();
-			theScore.id=result.get('scoreId').id;
-			theScore.destroy({
-				success:function(result){
-					console.log('success to delete score');
-					var competition=new Competition();
-					competition.id=competitionId;
-					competition.destroy({
-						success:function(competitionResult)
-						{
-							console.log('success to delete competition');
-							res.json({});
-						},
-						error:function(competitionError)
-						{
-							console.log('fail to delete competition');
-							res.send(competitionError);
-						}
-					});
-				},
-				error:function(error)
+			var report = new Report();
+			report.id=result.get('reportId').id;
+			var competition=new Competition();
+			competition.id=competitionId;
+			competition.destroy({
+				success:function(competitionResult)
 				{
-					console.log('fail to delete the score');
-					res.send(error);
+					console.log('success to delete competition');
+					if(report!=null){
+						report.destroy({
+							success:function(result){
+								res.json({});
+							},
+							error:function(error)
+							{
+								res.send(error);
+							}
+						});
+					}else{
+						res.json({})
+					}
+					
+				},
+				error:function(competitionError)
+				{
+					console.log('fail to delete competition');
+					res.send(competitionError);
 				}
 			});
+			
+			
 		},
 		error:function(error){
 			console.log('fail to get Competition');
@@ -329,17 +303,11 @@ CompetitionController.CompetitionUpdate=function(req,res,next){
 	
 	var gameId=req.body.gameId;
 	var competitionId=req.body.competitionId;
-	var scoreId=req.body.scoreId;
 
 	var teamAName=req.body.teamAName;
 	var teamBName=req.body.teamBName;
 
 	var level= parseInt(req.body.level);
-	var beginTime=req.body.year==""||req.body.month==""||req.body.day==""||req.body.hour==""||req.body.minute==""?null:new Date(req.body.year+"-"+req.body.month+"-"+req.body.day+" "+req.body.hour+":"+req.body.minute+":"+"00");
-	console.log(beginTime);
-	var awardLimit= parseInt(req.body.awardLimit);
-	var awardMinimum= parseInt(req.body.awardMinimum);
-	var isLive=req.body.isLive =="1"?true:false;
 	var scoreA= parseInt(req.body.scoreA);
 	var scoreB= parseInt(req.body.scoreB);
 	
@@ -365,56 +333,35 @@ CompetitionController.CompetitionUpdate=function(req,res,next){
 					};
 					if(teamAId!=110&&teamBId!=110)							//若两支队伍都存在于这场赛事
 					{
-						var scoreQuery=new AV.Query(Score);
-						scoreQuery.get(scoreId,{
-							success:function(score)
-							{
-								score.set('scoreA',scoreA);
-								score.set('scoreB',scoreB);						//2015-09-13-20:22
-								score.save();
-								console.log('success save score');
-								var teamA=new Team();
-								var teamB=new Team();
-								teamA.id=teamAId;
-								teamB.id=teamBId;
+						
+						var teamA=new Team();
+						var teamB=new Team();
+						teamA.id=teamAId;
+						teamB.id=teamBId;
 
-								var competitionQuery=new AV.Query(Competition);
-								competitionQuery.get(competitionId,{
-									success:function(competitionData){
-										console.log('success to competition');
-										competitionData.set('teamAId',teamA);
-										competitionData.set('teamBId',teamB);
-										competitionData.set('level',level);
-										competitionData.set('beginTime',null);
-										competitionData.set('awardMinimum',awardMinimum);
-										competitionData.set('awardLimit',awardLimit);
-										competitionData.set('isLive',isLive);
-										competitionData.save(null,{
-											success:function(data){
-												res.redirect("/competitions/competitionDetail?competitionId="+competitionId);		
-											},
-											error:function(data,error){
-												console.log(error);
-											}
-										});
+						var competitionQuery=new AV.Query(Competition);
+						competitionQuery.get(competitionId,{
+							success:function(competitionData){
+								console.log('success to competition');
+								competitionData.set('teamAId',teamA);
+								competitionData.set('teamBId',teamB);
+								competitionData.set('level',level);
+								competitionData.set('scoreA',scoreA);
+								competitionData.set('scoreB',scoreB);
+								competitionData.save(null,{
+									success:function(data){
+										res.redirect("/competitions/competitionDetail?competitionId="+competitionId);		
 									},
-									error:function(error){
-										console.log('fail to get competition');
-										res.send(error);
+									error:function(data,error){
+										console.log(error);
 									}
 								});
-
-
-
-
 							},
 							error:function(error){
-								console.log('fail to get score update');
+								console.log('fail to get competition');
 								res.send(error);
 							}
-						});
-						
-						
+						});						
 						//res.send(teams);
 					}
 					else
@@ -440,8 +387,6 @@ CompetitionController.CompetitionDetail=function(req,res,next){
 	var query=new AV.Query(Competition);
 	query.include('teamBId');
 	query.include('teamAId');
-	query.include('reportId');
-	query.include('scoreId');
 	query.include('gameId');
 	query.get(competitionId,{
 		success:function(data)

@@ -121,20 +121,21 @@ html
 										th.text-center 简介
 										th.text-center 操作
 								tbody
-									-each val,key in teamList
-										tr(id="#{val.id}")
-											td.text-center
-												p #{key+1}
-											td.text-center
-												p #{val.get("name")}
-											td.text-center
-												img.team-img(src=val.get("logoUrl"))
-											td.text-center.col-xs-3
-												p #{val.get("info")}
-											td.text-center
-												div.dropdown
-													button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
-														span.caret
-													ul.dropdown-menu(role="menu",aria-labelledby="operation")
-														li.alert-info(role="presentation")
-															a(role="menuitem",tabindex="-1",href="#",onclick="modal('#{val.id}')") 编辑
+									-if(teamList&&teamList.length>0)
+										-each val,key in teamList
+											tr(id="#{val.id}")
+												td.text-center
+													p #{key+1}
+												td.text-center
+													p #{val.get("name")}
+												td.text-center
+													img.team-img(src=val.get("logoUrl"))
+												td.text-center.col-xs-3
+													p #{val.get("info")}
+												td.text-center
+													div.dropdown
+														button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
+															span.caret
+														ul.dropdown-menu(role="menu",aria-labelledby="operation")
+															li.alert-info(role="presentation")
+																a(role="menuitem",tabindex="-1",href="#",onclick="modal('#{val.id}')") 编辑

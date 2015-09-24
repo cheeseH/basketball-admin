@@ -34,14 +34,17 @@ html
 						teams[n++] = $("input").eq(i).attr("data-value");
 					}
 				}
-				$.ajax({
-					type:"POST",
-					url:"/teams/pick",
-					data:{gameId:"#{gameId}",teams:JSON.stringify(teams)},
-					success:function(data){
-						location.href="/teams?pos=game&gameId="+"#{gameId}"
-					}
-				})
+				if(teams.length>0)
+				{
+					$.ajax({
+						type:"POST",
+						url:"/teams/pick",
+						data:{gameId:"#{gameId}",teams:JSON.stringify(teams)},
+						success:function(data){
+							location.href="/teams?pos=game&gameId="+"#{gameId}"
+						}
+					})
+				}
 			}
 			function searchTeam(){
 				var team = $("#content").val();
@@ -127,16 +130,17 @@ html
 										th.text-center 队标
 										th.text-center 简介
 								tbody
-									-each val,key in teamList
-										tr
-											td.text-center
-												p
-													input(type="checkbox",onclick="pitchUp(this)",data-value='#{val.id}')
-											td.text-center
-												p #{val.get("name")}
-											td.text-center
-												img.team-img(src=val.get("logoUrl"))
-											td.text-center.col-xs-3
-												p #{val.get('info')}
+									-if(teamList&&teamList.length>0)
+										-each val,key in teamList
+											tr
+												td.text-center
+													p
+														input(type="checkbox",onclick="pitchUp(this)",data-value='#{val.id}')
+												td.text-center
+													p #{val.get("name")}
+												td.text-center
+													img.team-img(src=val.get("logoUrl"))
+												td.text-center.col-xs-3
+													p #{val.get('info')}
 					div.text-center
 						button.btn.btn-primary(onclick="send()") 确定
