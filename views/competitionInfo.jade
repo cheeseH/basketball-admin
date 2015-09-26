@@ -51,11 +51,11 @@ html
 								p.navbar-font 比赛信息
 						div.line
 						li
-							a.row(href="/competitions/report?competitionId=#{competitionId}&teamAName=#{competition.get('teamAId').get('name')}&teamBName=#{competition.get('teamBId').get('name')}&gameId=#{competition.get('gameId').id}")
+							a.row(href="/informations/report?pos=competition&competitionId=#{competitionId}&teamAName=#{competition.get('teamAId').get('name')}&teamBName=#{competition.get('teamBId').get('name')}&gameId=#{competition.get('gameId').id}")
 								p.navbar-font 添加战报
 						div.line
 						li
-							a.row(href="/competitions/statistics?competitionId=#{competitionId}&teamAName=#{competition.get('teamAId').get('name')}&teamBName=#{competition.get('teamBId').get('name')}&gameId=#{competition.get('gameId').id}")
+							a.row(href="/informations/statistics?competitionId=#{competitionId}&teamAName=#{competition.get('teamAId').get('name')}&teamBName=#{competition.get('teamBId').get('name')}&gameId=#{competition.get('gameId').id}")
 								p.navbar-font 添加统计
 						div.line
 						li

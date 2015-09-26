@@ -38,12 +38,12 @@ html
 								"</body>"+
 							"</html>";
 									
-				var url = "/editReport";
+				var url = "/editReport?pos=game";
 				$.ajax({
 						type:"POST",
 						url:url,
 						dataType:"json",
-						data:{competitionId:"#{competitionId}",content:HTML,title:$("#title").val(),author:$("#author").val(),coverUrl:coverUrl},
+						data:{gameId:"#{gameId}",content:HTML,title:$("#title").val(),author:$("#author").val(),coverUrl:coverUrl},
 						success:function(data){
 							if(data.msg=="ok"){
 								alert("插入成功");
@@ -55,24 +55,28 @@ html
 			};
 	body
 		include ./navbar.jade
-		div.container
+		div.container.text-center
 			div.row
 				div.col-xs-2
 					ul.nav.nav-pills.nav-stacked.text-center
 						li
-							a.row(href="/competitions/competitionDetail?competitionId=#{competitionId}")
-								p.navbar-font 比赛信息
-						div.line
-						li.active
-							a.row(href="/competitions/report?competitionId=#{competitionId}&teamAName=#{teamAName}&teamBName=#{teamBName}&gameId=#{'gameId'}")
-								p.navbar-font 添加战报
+							a.row(href="/games/gameDetail?gameId=#{gameId}")
+								p.navbar-font 赛事信息
 						div.line
 						li
-							a.row(href="/competitions/statistics?competitionId=#{competitionId}&teamAName=#{teamAName}&teamBName=#{teamBName}&gameId=#{'gameId'}")
-								p.navbar-font 添加统计
+							a.row(href="/teams?pos=game&gameId=#{gameId}")
+								p.navbar-font 赛事球队
 						div.line
 						li
 							a.row(href="/competitions/competitionList?gameId=#{gameId}")
+								p.navbar-font 赛事进程
+						div.line
+						li.active
+							a.row(href="/informations/report?pos=game&gameId=#{gameId}")
+								p.navbar-font 赛事报道
+						div.line
+						li
+							a.row(href="/games/gameList")
 								p.navbar-font 返回
 				div.col-xs-10
 					div.panel.panel-primary.panel-block

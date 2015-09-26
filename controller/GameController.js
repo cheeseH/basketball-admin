@@ -6,8 +6,9 @@ var Campus=AV.Object.extend("Campus");
 var Competition=AV.Object.extend("Competition");
 var Team=AV.Object.extend("Team");
 var Score=AV.Object.extend("Score");
-var Comment=AV.Object.extend("Comment");
+var Comment=AV.Object.extend("CompetitionComment");
 var Report=AV.Object.extend("Report");
+var ReportComment = AV.Object.extend("ReportComment");
 
 var imageUtil = require('../util/image');
 function GameController(){
@@ -206,21 +207,51 @@ GameController.gameDelete=function(req,res,next){
 				});
 
 
+				var reportLikeQuery = new Query(ReportLike);
+				var report = new Report();
+				report.id = CompetitionData[i].get('reportId').id
+				reportLikeQuery.equalTo("reportId",report);
+				reportLikeQuery.find({
+					success:function(reportLikes){
+						for(var i=0;i<reportLikes.length;i++){
+							reportLikes[i].destroy({
+								success:function(object){
 
-				/*删除所有比分与战报*/
+								},
+								error:function(object,error){
+									console.log(error);
+								}
+							})
+						}
+					},
+					error:function(object,error){
+						console.log(error);
+					}
+				})
+
+				/*删除所有战报*/
 				if(CompetitionData[i].get('reportId')!=null)
 				{
-					console.log(CompetitionData[i].get('reportId').id);
+					var reportComment = new ReportComment();
 					var report=new Report();
 					report.id=CompetitionData[i].get('reportId').id;
-					report.destroy({
+					reportComment.reportId = report;
+					reportComment.destroyAll({
 						success:function(results){
-							console.log('success to delete the report');
+							report.destroy({
+								success:function(results){
+									console.log('success to delete the report');
+								},
+								error:function(error){
+									console.log('fail to delete the report');
+								}
+							});
 						},
-						error:function(error){
-							console.log('fail to delete the report');
+						error:function(object,error){
+							consloe.log(error);
 						}
-					});
+					})
+					
 				}
 				
 				competition.destroy({
@@ -231,9 +262,48 @@ GameController.gameDelete=function(req,res,next){
 						console.log('fail to delete the competition');
 					}
 				});
-
-
 			}
+			var relation = game.get("reports");
+			relation.query().find({
+				success:function(list){
+					if(list.length>0){
+						for(var i=0;i<list.length;i++){
+							var reportLikeQuery = new Query(ReportLike);
+							var report = new Report();
+							report.id = list[i].id
+							reportLikeQuery.equalTo("reportId",report);
+							reportLikeQuery.find({
+								success:function(reportLikes){
+									for(var i=0;i<reportLikes.length;i++){
+										reportLikes[i].destroy({
+											success:function(object){
+
+											},
+											error:function(object,error){
+												console.log(error);
+											}
+										})
+									}
+								},
+								error:function(object,error){
+									console.log(error);
+								}
+							});
+							report.destroy({
+								success:function(result){
+
+								},
+								error:function(objcet,error){
+									console.log(error);
+								}
+							})
+						}
+					}
+				},
+				error:function(object,error){
+					console.log(error);
+				}
+			})
 			game.destroy({
 				success:function(results){
 					console.log('success to delete the game');
