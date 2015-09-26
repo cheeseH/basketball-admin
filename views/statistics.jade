@@ -118,7 +118,7 @@ html
 				for(var i = 1 ; i <= statisticsRow; i++){
 					statisticsArr[i-1] = new Array();
 					for(var j = 1 ; j <= statisticsCol; j++){
-						if(j==1){
+						if(i==1||j==1){
 							statisticsArr[i-1][j-1] = $(document.getElementById("statistics"+i+""+j)).text() == "" ? "-" : $(document.getElementById("statistics"+i+""+j)).text();
 						}else{
 							statisticsArr[i-1][j-1] = $(document.getElementById("statistics"+i+""+j)).children().val() == "" ? "-" : $(document.getElementById("statistics"+i+""+j)).children().val();
@@ -130,7 +130,7 @@ html
 				for(var i = 1 ; i <= playerARow; i++){
 					playerAArr[i-1] = new Array();
 					for(var j = 1 ; j <= playerACol ; j++){
-						if(i==1&&j==1){
+						if(i==1){
 							playerAArr[i-1][j-1] = $(document.getElementById("playerA"+i+""+j)).text() == "" ? "-" : $(document.getElementById("playerA"+i+""+j)).text();
 						}else{
 							playerAArr[i-1][j-1] = $(document.getElementById("playerA"+i+""+j)).children().val() == "" ? "-" : $(document.getElementById("playerA"+i+""+j)).children().val();
@@ -143,7 +143,7 @@ html
 				for(var i = 1 ; i <= playerBRow; i++){
 					playerBArr[i-1] = new Array();
 					for(var j = 1 ; j <= playerBCol ; j++){
-						if(i==1&&j==1){
+						if(i==1){
 							playerBArr[i-1][j-1] = $(document.getElementById("playerB"+i+""+j)).text() == "" ? "-" : $(document.getElementById("playerB"+i+""+j)).text();
 						}else{
 							playerBArr[i-1][j-1] = $(document.getElementById("playerB"+i+""+j)).children().val() == "" ? "-" : $(document.getElementById("playerB"+i+""+j)).children().val();
@@ -152,12 +152,12 @@ html
 					}
 				}
 				json.playerB = playerBArr;
-				var url = "/editStatistics";
+				var url = "/informations/editStatistics";
 				$.ajax({
 						type:"POST",
 						url:url,
 						dataType:"json",
-						data:{competitionId:"#{competitionId}",statistics:JOSN.stringify(json)},
+						data:{competitionId:"#{competitionId}",statistics:JSON.stringify(json)},
 						success:function(data){
 							if(data.msg=="ok"){
 								alert("插入成功");

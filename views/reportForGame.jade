@@ -38,7 +38,7 @@ html
 								"</body>"+
 							"</html>";
 									
-				var url = "/editReport?pos=game";
+				var url = "/informations/editReport?pos=game";
 				$.ajax({
 						type:"POST",
 						url:url,
@@ -55,7 +55,7 @@ html
 			};
 	body
 		include ./navbar.jade
-		div.container.text-center
+		div.container
 			div.row
 				div.col-xs-2
 					ul.nav.nav-pills.nav-stacked.text-center

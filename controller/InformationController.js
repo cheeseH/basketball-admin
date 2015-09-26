@@ -18,6 +18,7 @@ InformationController.statistics = function(req,res,next){
 InformationController.editStatistics = function(req,res,next){
 	var competitionId = req.body.competitionId;
 	var statistics = req.body.statistics;
+	console.log(statistics);
 	var query = new AV.Query(Competition);
 	query.equalTo("objectId",competitionId);
 	query.find({
@@ -60,6 +61,10 @@ InformationController.reportForCompetition = function(req,res,next){
 	var author = req.body.author;
 	var title = req.body.title;
 	var coverUrl = req.body.coverUrl;
+	console.log(coverUrl);
+	if(!coverUrl){
+		coverUrl = "";
+	}
 	var report = new Report();
 	report.set("title",title);
 	report.set("author",author);
@@ -67,13 +72,13 @@ InformationController.reportForCompetition = function(req,res,next){
 	report.set("coverUrl",coverUrl);
 	report.save(null,{
 		success:function(data){
-		
+			console.log(data);
 			var query = new AV.Query(Competition);
 			query.equalTo("objectId",competitionId);
 			query.find({
 				success:function(competition){
-					if(competition[i].get("reportId")!=null){
-						competition[i].get("reportId").destroy({
+					if(competition[0].get("reportId")!=null){
+						competition[0].get("reportId").destroy({
 							success:function(oldReport){
 
 							},
@@ -90,12 +95,14 @@ InformationController.reportForCompetition = function(req,res,next){
 							res.end();
 						},
 						error:function(object,error){
-							res.jspn({msg:error});
+							console.log(error);
+							res.json({msg:error});
 							res.end();
 						}
 					});
 				},
 				error:function(object,error){
+					console.log(error);
 					res.json({msg:"error"});
 					res.end();
 				}
@@ -109,11 +116,14 @@ InformationController.reportForCompetition = function(req,res,next){
 }
 
 InformationController.reportForGame = function(req,res,next){
-	var gameId = req.body.content;
+	var gameId = req.body.gameId;
 	var content = req.body.content;
 	var author = req.body.author;
 	var title = req.body.title;
 	var coverUrl = req.body.coverUrl;
+	if(!coverUrl){
+		coverUrl = "";
+	}
 	var report = new Report();
 	report.set("title",title);
 	report.set("author",author);
@@ -121,11 +131,11 @@ InformationController.reportForGame = function(req,res,next){
 	report.set("coverUrl",coverUrl);
 	report.save(null,{
 		success:function(data){
-			var gameQuery = new Query(Game);
+			var gameQuery = new AV.Query(Game);
 			gameQuery.equalTo("objectId",gameId);
 			gameQuery.find({
 				success:function(game){
-					var relation = game[0].get("reports");
+					var relation = game[0].relation("reports");
 					relation.add(data);
 					game[0].save(null,{
 						success:function(data){

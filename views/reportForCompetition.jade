@@ -10,6 +10,9 @@ html
 				var day = time.getDate();
 				var date = (month<10 ? "0"+month : month+"") + "-" + (day<10 ? "0"+day : day+"");
 				var coverUrl = $("img:first").attr("src");
+				if(coverUrl){
+					coverUrl = null;
+				}
 				$("img").removeAttr("width");
 				$("img").removeAttr("height");
 				$("img").removeAttr("data-image-size");
@@ -38,7 +41,7 @@ html
 								"</body>"+
 							"</html>";
 									
-				var url = "/editReport";
+				var url = "/informations/editReport?pos=competition";
 				$.ajax({
 						type:"POST",
 						url:url,

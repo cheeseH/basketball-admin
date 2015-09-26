@@ -3,7 +3,7 @@ var AV = require('avoscloud-sdk');
 var Competition=AV.Object.extend("Competition");
 var Game=AV.Object.extend("Game");
 var Team=AV.Object.extend("Team");
-
+var Report = AV.Object.extend("Report");
 
 function CompetitionController()
 {
@@ -242,7 +242,12 @@ CompetitionController.CompetitionDelete=function(req,res,next){
 	queryCompetition.get(competitionId,{
 		success:function(result){
 			var report = new Report();
-			report.id=result.get('reportId').id;
+			if(result.get("reportId")){
+				report.id=result.get('reportId').id;	
+			}else{
+				report = null;
+			}
+			
 			var competition=new Competition();
 			competition.id=competitionId;
 			competition.destroy({

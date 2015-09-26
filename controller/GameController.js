@@ -9,6 +9,7 @@ var Score=AV.Object.extend("Score");
 var Comment=AV.Object.extend("CompetitionComment");
 var Report=AV.Object.extend("Report");
 var ReportComment = AV.Object.extend("ReportComment");
+var ReportLike = AV.Object.extend("ReportLike");
 
 var imageUtil = require('../util/image');
 function GameController(){
@@ -110,7 +111,7 @@ GameController.gameImageUpdate=function(req,res,next){
 				if(url == null){
 					return res.redirect('/games/gameDetail?gameId='+gameId);
 				}
-				game.set('coverUrl',logoUrl);
+				game.set('coverUrl',url);
 				game.save(null,{
 					success:function(game){
 						res.redirect('/games/gameDetail?gameId='+gameId);
@@ -207,9 +208,9 @@ GameController.gameDelete=function(req,res,next){
 				});
 
 
-				var reportLikeQuery = new Query(ReportLike);
+				var reportLikeQuery = new AV.Query(ReportLike);
 				var report = new Report();
-				report.id = CompetitionData[i].get('reportId').id
+				report.id = CompetitionData[i].get('reportId')?CompetitionData[i].get('reportId').id:null;
 				reportLikeQuery.equalTo("reportId",report);
 				reportLikeQuery.find({
 					success:function(reportLikes){
@@ -264,46 +265,49 @@ GameController.gameDelete=function(req,res,next){
 				});
 			}
 			var relation = game.get("reports");
-			relation.query().find({
-				success:function(list){
-					if(list.length>0){
-						for(var i=0;i<list.length;i++){
-							var reportLikeQuery = new Query(ReportLike);
-							var report = new Report();
-							report.id = list[i].id
-							reportLikeQuery.equalTo("reportId",report);
-							reportLikeQuery.find({
-								success:function(reportLikes){
-									for(var i=0;i<reportLikes.length;i++){
-										reportLikes[i].destroy({
-											success:function(object){
+			if(relation){
+				relation.query().find({
+					success:function(list){
+						if(list.length>0){
+							for(var i=0;i<list.length;i++){
+								var reportLikeQuery = new Query(ReportLike);
+								var report = new Report();
+								report.id = list[i].id
+								reportLikeQuery.equalTo("reportId",report);
+								reportLikeQuery.find({
+									success:function(reportLikes){
+										for(var i=0;i<reportLikes.length;i++){
+											reportLikes[i].destroy({
+												success:function(object){
 
-											},
-											error:function(object,error){
-												console.log(error);
-											}
-										})
+												},
+												error:function(object,error){
+													console.log(error);
+												}
+											})
+										}
+									},
+									error:function(object,error){
+										console.log(error);
 									}
-								},
-								error:function(object,error){
-									console.log(error);
-								}
-							});
-							report.destroy({
-								success:function(result){
+								});
+								report.destroy({
+									success:function(result){
 
-								},
-								error:function(objcet,error){
-									console.log(error);
-								}
-							})
+									},
+									error:function(objcet,error){
+										console.log(error);
+									}
+								})
+							}
 						}
+					},
+					error:function(object,error){
+						console.log(error);
 					}
-				},
-				error:function(object,error){
-					console.log(error);
-				}
-			})
+				})
+			}
+			
 			game.destroy({
 				success:function(results){
 					console.log('success to delete the game');
