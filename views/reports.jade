@@ -1,0 +1,42 @@
+doctype html
+html
+	head
+		include ./head.jade
+	body
+		include ./navbar.jade
+		div.container
+			div.row
+				div.col-xs-2
+					ul.nav.nav-pills.nav-stacked.text-center
+						li.active
+							a.row(href="/informations/reportList?gameId=#{gameId}")
+								p.navbar-font 报道列表
+						div.line
+						li
+							a.row(href="/informations/report?pos=game&gameId=#{gameId}")
+								p.navbar-font 添加报道
+						div.line
+						li
+							a.row(href="/games/gameDetail?gameId=#{gameId}")
+								p.navbar-font 返回
+				div.col-xs-10.text-center
+					div.panel.panel-primary.panel-block
+						div.panel-heading
+							div.panel-title.title
+								p 报道列表
+						div.panel-body
+							table.table.table-hover.table-responsive.table-bordered
+								thead
+									tr
+										th.text-center 标题
+										th.text-center 作者
+										th.text-center 创建时间
+										th.text-center 修改
+								-each val,key in reports
+									tbody
+										tr
+											td.text-center #{val.get("title")}
+											td.text-cetner #{val.get("author")}
+											td.text-center #{val.createdAt}
+											td.text-center
+												a(href="") 修改

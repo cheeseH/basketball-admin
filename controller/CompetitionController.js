@@ -153,6 +153,9 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 	var teamBName= req.body.teamBName;
 	var gameId= req.body.gameId;
 	var level= parseInt(req.body.level);
+	if(req.body.level==null){
+		level = 0;
+	}
 	var gameType= req.body.type;
 
 	
@@ -389,6 +392,7 @@ CompetitionController.CompetitionUpdate=function(req,res,next){
 CompetitionController.CompetitionDetail=function(req,res,next){
 	//var competitionId=req.body.competitionId;
 	var competitionId= req.query.competitionId;
+	var gameId = req.query.gameId;
 	var query=new AV.Query(Competition);
 	query.include('teamBId');
 	query.include('teamAId');
@@ -396,7 +400,7 @@ CompetitionController.CompetitionDetail=function(req,res,next){
 	query.get(competitionId,{
 		success:function(data)
 		{
-			res.render('competitionInfo',{competition:data,competitionId:competitionId})
+			res.render('competitionInfo',{competition:data,competitionId:competitionId,gameId:gameId})
 		},
 		error:function(error)
 		{

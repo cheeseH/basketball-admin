@@ -47,19 +47,19 @@ html
 				div.col-xs-2
 					ul.nav.nav-pills.nav-stacked.text-center
 						li.active
-							a.row(href="/competitions/competitionDetail?competitionId=#{competitionId}")
+							a.row(href="/competitions/competitionDetail?competitionId=#{competitionId}&gameId=#{gameId}")
 								p.navbar-font 比赛信息
 						div.line
 						li
-							a.row(href="/informations/report?pos=competition&competitionId=#{competitionId}&teamAName=#{competition.get('teamAId').get('name')}&teamBName=#{competition.get('teamBId').get('name')}&gameId=#{competition.get('gameId').id}")
-								p.navbar-font 添加战报
+							a.row(href="/informations/report?pos=competition&competitionId=#{competitionId}&teamAName=#{competition.get('teamAId').get('name')}&teamBName=#{competition.get('teamBId').get('name')}&gameId=#{gameId}")
+								p.navbar-font 添加报道
 						div.line
 						li
-							a.row(href="/informations/statistics?competitionId=#{competitionId}&teamAName=#{competition.get('teamAId').get('name')}&teamBName=#{competition.get('teamBId').get('name')}&gameId=#{competition.get('gameId').id}")
+							a.row(href="/informations/statistics?competitionId=#{competitionId}&teamAName=#{competition.get('teamAId').get('name')}&teamBName=#{competition.get('teamBId').get('name')}&gameId=#{gameId}")
 								p.navbar-font 添加统计
 						div.line
 						li
-							a.row(href="/competitions/competitionList?gameId=#{competition.get('gameId').id}")
+							a.row(href="/competitions/competitionList?gameId=#{gameId}")
 								p.navbar-font 返回
 				div.col-xs-10.text-center
 					div.panel.panel-primary.panel-block

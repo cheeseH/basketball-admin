@@ -13,37 +13,12 @@ html
 				$("img").removeAttr("width");
 				$("img").removeAttr("height");
 				$("img").removeAttr("data-image-size");
-				var HTML = "<!DOCTYPE html>"+
-							"<html lang='zh-cn'>"+
-								"<head>"+
-									"<meta charset='UTF-8'/>"+
-									"<meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/>"+
-									"<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'/>"+
-									"<meta name='renderer' content='webkit'/>"+
-									"<meta name='author' content='WlliTeam'/>"+
-									"<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'/>"+
-									"<title>Hola体育</title>"+
-									"<link href='http://7ls0rp.com1.z0.glb.clouddn.com/style.css' rel='stylesheet'/>"+
-								"</head>"+
-								"<body>"+
-									"<div class='report'>"+
-										"<h1 class='title'>"+$("#title").val()+"</h1>"+
-										"<div class='info'><span class='time'></span><span class='span'>"+date+"</span><span class='author'></span><span class='span'>"+$("#author").val()+"</span>"+
-											"<hr/>"+
-										"</div>"+
-										"<div class='content'>"+
-											$(".simditor-body").html()+
-										"</div>"+
-									"</div>"+
-								"</body>"+
-							"</html>";
-									
 				var url = "/informations/editReport?pos=game";
 				$.ajax({
 						type:"POST",
 						url:url,
 						dataType:"json",
-						data:{gameId:"#{gameId}",content:HTML,title:$("#title").val(),author:$("#author").val(),coverUrl:coverUrl},
+						data:{gameId:"#{gameId}",content:$(".simditor-body").html(),title:$("#title").val(),author:$("#author").val(),coverUrl:coverUrl},
 						success:function(data){
 							if(data.msg=="ok"){
 								alert("插入成功");
@@ -60,23 +35,15 @@ html
 				div.col-xs-2
 					ul.nav.nav-pills.nav-stacked.text-center
 						li
-							a.row(href="/games/gameDetail?gameId=#{gameId}")
-								p.navbar-font 赛事信息
-						div.line
-						li
-							a.row(href="/teams?pos=game&gameId=#{gameId}")
-								p.navbar-font 赛事球队
-						div.line
-						li
-							a.row(href="/competitions/competitionList?gameId=#{gameId}")
-								p.navbar-font 赛事进程
+							a.row(href="/informations/reportList?gameId=#{gameId}")
+								p.navbar-font 报道列表
 						div.line
 						li.active
 							a.row(href="/informations/report?pos=game&gameId=#{gameId}")
-								p.navbar-font 赛事报道
+								p.navbar-font 添加报道
 						div.line
 						li
-							a.row(href="/games/gameList")
+							a.row(href="/games/gameDetail?gameId=#{gameId}")
 								p.navbar-font 返回
 				div.col-xs-10
 					div.panel.panel-primary.panel-block
@@ -103,7 +70,14 @@ html
 									script(type="text/javascript").
 										var editor = new Simditor({
 												textarea:$("#content"),
-												toolbar: ['title','bold','italic','underline','strikethrough','ol','ul','link','image','hr','indent','outdent','alignment']
+												toolbar: ['title','bold','italic','underline','strikethrough','color','ol','ul','link','image','hr','indent','outdent','alignment'],
+												upload : {
+													url : '/informations/imgUpload',
+													params: null,
+													fileKey: 'reportImg',
+													connectionCount: 3,
+													leaveConfirm: '正在上传文件'
+												}
 											});
 							div.row.form-group
 								div.text-center

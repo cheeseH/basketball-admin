@@ -148,6 +148,7 @@ GameController.gameAdd = function(req,res,next){
 			game.set('coverUrl',coverUrl);
 			game.set('campusId',campus);
 			game.set('stage',stage);
+			game.set('isFinished',false);
 			game.save(null,{
 				success:function(game){
 					//

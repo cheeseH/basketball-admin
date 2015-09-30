@@ -2,6 +2,7 @@ var AV = require('avoscloud-sdk');
 var Competition = AV.Object.extend("Competition");
 var Report = AV.Object.extend("Report");
 var Game = AV.Object.extend("Game");
+var imageUtil = require('../util/image');
 function InformationController(){
 
 }
@@ -52,7 +53,26 @@ InformationController.competitionReport = function(req,res,next){
 	var teamAName = req.query.teamAName;
 	var teamBName = req.query.teamBName;
 	var gameId = req.query.gameId;
-	res.render("reportForCompetition",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName,gameId:gameId});
+	var query = new AV.Query(Competition);
+	query.include("reportId")
+	query.equalTo("objectId",competitionId);
+	query.find({
+		success:function(competitions){
+			var title = "";
+			var author = "";
+			var content = "";
+			if(competitions[0].get("reportId")!=null&&competitions[0].get("reportId")){
+				title = competitions[0].get("reportId").get("title");
+				author = competitions[0].get("reportId").get("author");
+				content = competitions[0].get("reportId").get("content");
+			}
+			res.render("reportForCompetition",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName,gameId:gameId,title:title,author:author,content:content});
+		},
+		error:function(object,error){
+			console.log(error);
+		}
+	})
+	
 }
 
 InformationController.reportForCompetition = function(req,res,next){
@@ -147,6 +167,37 @@ InformationController.reportForGame = function(req,res,next){
 						}
 					})
 					
+				},
+				error:function(object,error){
+					console.log(error);
+				}
+			})
+		},
+		error:function(object,error){
+			console.log(error);
+		}
+	})
+}
+InformationController.reportList = function(req,res,next){
+	var gameId = req.query.gameId;
+	var query = new AV.Query(Game);
+	query.equalTo("objectId",gameId);
+	query.find({
+		success:function(games){
+			var relation = games[0].relation("reports");
+			var relationQuery = relation.query();
+			relationQuery.find({
+				success:function(reports){
+					for(var i=0;i<reports.length;i++){
+						var time = new Date(reports[i].createdAt);
+						var year = time.getFullYear();
+						var month = time.getMonth()+1;
+						var day = time.getDate();
+						month = month<10?"0"+month:month;
+						day = day<10?"0"+day:day;
+						reports[i].createdAt = year+"-"+month+"-"+day;
+					}
+					res.render("reports",{reports:reports,gameId:gameId});
 				},
 				error:function(object,error){
 					console.log(error);

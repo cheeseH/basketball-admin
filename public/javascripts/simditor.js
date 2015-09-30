@@ -3991,7 +3991,8 @@ ImageButton = (function(superClass) {
         return $input = $('<input/>', {
           type: 'file',
           title: _this._t('uploadImage'),
-          accept: 'image/*'
+          accept: 'image/*',
+          name: 'fileData'
         }).appendTo($uploadItem);
       };
     })(this);
@@ -4377,7 +4378,8 @@ ImagePopover = (function(superClass) {
         return _this.input = $('<input/>', {
           type: 'file',
           title: _this._t('uploadImage'),
-          accept: 'image/*'
+          accept: 'image/*',
+          name: 'fileData'
         }).appendTo($uploadBtn);
       };
     })(this);

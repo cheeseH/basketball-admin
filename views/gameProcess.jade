@@ -3,8 +3,6 @@ html
 	head
 		include ./head.jade
 		script(type="text/javascript").
-			var year = 0;
-			var month = 0;
 			function addCompetition(t,way){
 				$("#level").val($(t).attr("data-level"));
 				if(way=="old"){
@@ -45,7 +43,7 @@ html
 								label.col-xs-2.control-label(for='teamBName') 球队B
 								div.col-xs-6
 									input.form-control#teamBName(type='text',name="teamBName")
-							input.form-control.hidden#level(type='text',name="level")
+							input.form-control.hidden#level(type='text',name="level",value="#{competitionList.maxLevel}")
 							div.form-group.hidden
 								label.col-xs-2.control-label(for="type") 类型
 								div.col-xs-6
@@ -99,7 +97,7 @@ html
 																			span.caret
 																		ul.dropdown-menu(role="menu",aria-labelledby="operation")
 																			li.alert-info(role="presentation")
-																				a(role="menuitem",tabindex="-1",href="/competitions/competitionDetail?competitionId=#{val2.id}") 管理比赛
+																				a(role="menuitem",tabindex="-1",href="/competitions/competitionDetail?competitionId=#{val2.id}&gameId=#{gameId}") 管理比赛
 																			div.line
 																			li.alert-danger(role="presentation")
 																				a(role="menuitem",tabindex="-1",href="#",onclick="removeCompetition('#{val2.id}')") 删除

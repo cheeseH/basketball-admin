@@ -126,32 +126,40 @@ html
 					}
 				}
 				json.statistics = statisticsArr;
-				var playerAArr = new Array();
-				for(var i = 1 ; i <= playerARow; i++){
-					playerAArr[i-1] = new Array();
-					for(var j = 1 ; j <= playerACol ; j++){
-						if(i==1){
-							playerAArr[i-1][j-1] = $(document.getElementById("playerA"+i+""+j)).text() == "" ? "-" : $(document.getElementById("playerA"+i+""+j)).text();
-						}else{
-							playerAArr[i-1][j-1] = $(document.getElementById("playerA"+i+""+j)).children().val() == "" ? "-" : $(document.getElementById("playerA"+i+""+j)).children().val();
+				
+				if(playerACol>1){
+					var playerAArr = new Array();
+					for(var i = 1 ; i <= playerARow; i++){
+						playerAArr[i-1] = new Array();
+						for(var j = 1 ; j <= playerACol ; j++){
+							if(i==1){
+								playerAArr[i-1][j-1] = $(document.getElementById("playerA"+i+""+j)).text() == "" ? "-" : $(document.getElementById("playerA"+i+""+j)).text();
+							}else{
+								playerAArr[i-1][j-1] = $(document.getElementById("playerA"+i+""+j)).children().val() == "" ? "-" : $(document.getElementById("playerA"+i+""+j)).children().val();
+							}
+							
 						}
-						
 					}
+					json.playerA = playerAArr;
 				}
-				json.playerA = playerAArr;
-				var playerBArr = new Array();
-				for(var i = 1 ; i <= playerBRow; i++){
-					playerBArr[i-1] = new Array();
-					for(var j = 1 ; j <= playerBCol ; j++){
-						if(i==1){
-							playerBArr[i-1][j-1] = $(document.getElementById("playerB"+i+""+j)).text() == "" ? "-" : $(document.getElementById("playerB"+i+""+j)).text();
-						}else{
-							playerBArr[i-1][j-1] = $(document.getElementById("playerB"+i+""+j)).children().val() == "" ? "-" : $(document.getElementById("playerB"+i+""+j)).children().val();
+				
+				
+				if(playerBCol>1){
+					var playerBArr = new Array();
+					for(var i = 1 ; i <= playerBRow; i++){
+						playerBArr[i-1] = new Array();
+						for(var j = 1 ; j <= playerBCol ; j++){
+							if(i==1){
+								playerBArr[i-1][j-1] = $(document.getElementById("playerB"+i+""+j)).text() == "" ? "-" : $(document.getElementById("playerB"+i+""+j)).text();
+							}else{
+								playerBArr[i-1][j-1] = $(document.getElementById("playerB"+i+""+j)).children().val() == "" ? "-" : $(document.getElementById("playerB"+i+""+j)).children().val();
+							}
+							
 						}
-						
 					}
+					json.playerB = playerBArr;
 				}
-				json.playerB = playerBArr;
+				
 				var url = "/informations/editStatistics";
 				$.ajax({
 						type:"POST",
@@ -254,15 +262,15 @@ html
 				div.col-xs-2
 					ul.nav.nav-pills.nav-stacked
 						li
-							a.row(href="/competitions/competitionDetail?competitionId=#{competitionId}")
+							a.row(href="/competitions/competitionDetail?competitionId=#{competitionId}&gameId=#{gameId}")
 								p.navbar-font 比赛信息
 						div.line
 						li
-							a.row(href="/informations/report?pos=competition&competitionId=#{competitionId}&teamAName=#{teamAName}&teamBName=#{teamBName}&gameId=#{'gameId'}")
-								p.navbar-font 添加战报
+							a.row(href="/informations/report?pos=competition&competitionId=#{competitionId}&teamAName=#{teamAName}&teamBName=#{teamBName}&gameId=#{gameId}")
+								p.navbar-font 添加报道
 						div.line
 						li.active
-							a.row(href="/informations/statistics?competitionId=#{competitionId}&teamAName=#{teamAName}&teamBName=#{teamBName}&gameId=#{'gameId'}")
+							a.row(href="/informations/statistics?competitionId=#{competitionId}&teamAName=#{teamAName}&teamBName=#{teamBName}&gameId=#{gameId}")
 								p.navbar-font 添加统计
 						div.line
 						li
