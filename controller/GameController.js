@@ -82,9 +82,11 @@ GameController.gameBaseUpdate=function(req,res,next){
 			var name = req.body.name;
 			var college = req.body.college;
 			var stage = req.body.stage;
+			var time = req.body.time;
 			game.set('college',college);
 			game.set('name',name);
 			game.set('stage',stage);
+			game.set('time',time);
 			game.save(null,{
 				success:function(game){
 					//

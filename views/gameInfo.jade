@@ -8,6 +8,7 @@ html
 				$("#name").val($("tbody tr").children().eq(0).html());
 				$("#college").val($("tbody tr").children().eq(2).html());
 				$("#stage").val($("tbody tr").children().eq(3).html());
+				$("#time").val($("tbody tr").children().eq(4).html())
 				$("#updateInfo").modal();
 			}
 			function modalImg(){
@@ -30,6 +31,10 @@ html
 								label.col-xs-3.control-label(for='college') 学院
 								div.col-xs-5
 									input.form-control#college(type='text',name='college')
+							div.form-group
+								label.col-xs-3.control-label(for="time") 开始时间
+								div.col-xs-5
+									input.form-control#time(type='text',name='time')
 							div.form-group
 								label.col-xs-3.control-label(for="stage") 当前类型
 								div.col-xs-5
@@ -95,7 +100,7 @@ html
 										th.text-center 是否结束
 										th.text-center 学院
 										th.text-center 当前类型
-										th.text-center 关注人数
+										th.text-center 开始时间
 										th.text-center 浏览量
 										th.text-center 修改
 								tbody
@@ -107,7 +112,7 @@ html
 											td.text-center 否
 										td.text-center #{gameInfo.get("college")}
 										td.text-center #{gameInfo.get("stage")}
-										td.text-center #{gameInfo.get("follows")}
+										td.text-center #{gameInfo.get("time")}
 										td.text-center #{gameInfo.get("views")}
 										td.text-center
 											a(href="#",onclick="modal('#{gameId}')") 修改
