@@ -88,13 +88,12 @@ InformationController.competitionReport = function(req,res,next){
 }
 
 InformationController.reportForCompetition = function(req,res,next){
-	var competitionId = req.body.competitionId;
+	var competitionId = req.body.competitionId?req.body.competitionId:"";
 	var content = req.body.content;
 	var author = req.body.author;
 	var title = req.body.title;
 	var coverUrl = req.body.coverUrl;
 	var reportId = req.body.reportId;
-	console.log(reportId);
 	if(!coverUrl){
 		coverUrl = "";
 	}
@@ -108,30 +107,34 @@ InformationController.reportForCompetition = function(req,res,next){
 	}
 	report.save(null,{
 		success:function(data){
-			console.log(data.id);
-			var query = new AV.Query(Competition);
-			query.equalTo("objectId",competitionId);
-			query.find({
-				success:function(competition){
-					competition[0].set("reportId",data);
-					competition[0].save({
-						success:function(data){
-							res.json({msg:"ok"});
-							res.end();
-						},
-						error:function(object,error){
-							console.log(error);
-							res.json({msg:error});
-							res.end();
-						}
-					});
-				},
-				error:function(object,error){
-					console.log(error);
-					res.json({msg:"error"});
-					res.end();
-				}
-			});
+			if(competitionId!=""){
+				var query = new AV.Query(Competition);
+				query.equalTo("objectId",competitionId);
+				query.find({
+					success:function(competition){
+						competition[0].set("reportId",data);
+						competition[0].save({
+							success:function(data){
+								res.json({msg:"ok"});
+								res.end();
+							},
+							error:function(object,error){
+								console.log(error);
+								res.json({msg:error});
+								res.end();
+							}
+						});
+					},
+					error:function(object,error){
+						console.log(error);
+						res.json({msg:"error"});
+						res.end();
+					}
+				});
+			}else{
+				res.json({msg:"ok"});
+				res.end();
+			}
 		},
 		error:function(object,error){
 			res.json({msg:"error"});
@@ -155,12 +158,13 @@ InformationController.reportForGame = function(req,res,next){
 	report.set("author",author);
 	report.set("content",content);
 	report.set("coverUrl",coverUrl);
-	if(reportId!=""){
+	if(reportId&&reportId!=""){
 		report.set("objectId",reportId);
 	}
 	report.save(null,{
 		success:function(data){
-			if(reportId==""){
+			if(reportId==""||!reportId){
+				console.log(data);
 				var gameQuery = new AV.Query(Game);
 				gameQuery.equalTo("objectId",gameId);
 				gameQuery.find({
