@@ -10,6 +10,75 @@ html
 			var playerBCol = 1;
 			var playerBRow = 1;
 			var team;
+			window.onload = function(){
+				var oldStatistics = "#{statistics}";
+				$("#oldStatistics").html(oldStatistics);
+				oldStatistics = $("#oldStatistics").text();
+				if(oldStatistics!=""){
+					oldStatistics = JSON.parse(oldStatistics);
+					if(oldStatistics.statistics){
+						var statistics = oldStatistics.statistics;
+						for(var i=1;i<=statisticsRow;i++){
+							for(var j=1;j<statistics[0].length;j++){
+								if(i==1){
+									$(document.getElementById("statistics"+i+""+j)).after("<th class='text-center' id=statistics"+i+(j+1)+">"+statistics[i-1][j]+"</th>");
+								}else{
+									$(document.getElementById("statistics"+i+""+j)).after("<td id=statistics"+i+(j+1)+"><input class='text-center form-control' value="+statistics[i-1][j]+" type='text'/></td>");
+								}
+							}
+						}
+						statisticsCol = statistics[0].length;
+					}
+					if(oldStatistics.playerA){
+						var playerA = oldStatistics.playerA;
+						playerARow = playerA.length;
+						for(var i=1;i<=playerARow;i++){
+							for(var j=0;j<playerA[0].length;j++){
+								if(i==1){
+									if(j!=0){
+										$(document.getElementById("playerA"+i+""+j)).after("<th class='text-center' id=playerA"+i+(j+1)+">"+playerA[i-1][j]+"</th>");	
+									}
+								}else{
+									if(j==0){
+										$("#A").append("<tr><td id=playerA"+i+(j+1)+"><input class='text-center form-control' value="+playerA[i-1][j]+" type='text'/></td>");
+									}else if(j==playerA[0].length-1){
+										$(document.getElementById("playerA"+i+""+j)).after("<td id=playerA"+i+(j+1)+"><input class='text-center form-control' value="+playerA[i-1][j]+" type='text'/></td></tr>");
+									}else{
+										$(document.getElementById("playerA"+i+""+j)).after("<td id=playerA"+i+(j+1)+"><input class='text-center form-control' value="+playerA[i-1][j]+" type='text'/></td>");
+									}
+									
+								}
+							}
+						}
+						playerACol = playerA[0].length;
+					}
+					if(oldStatistics.playerB){
+						var playerB = oldStatistics.playerB;
+						playerBRow = playerB.length;
+						for(var i=1;i<=playerBRow;i++){
+							for(var j=0;j<playerB[0].length;j++){
+								if(i==1){
+									if(j!=0){
+										$(document.getElementById("playerB"+i+""+j)).after("<th class='text-center' id=playerB"+i+(j+1)+">"+playerB[i-1][j]+"</th>");	
+									}
+								}else{
+									if(j==0){
+										$("#B").append("<tr><td id=playerB"+i+(j+1)+"><input class='text-center form-control' value="+playerB[i-1][j]+" type='text'/></td>");
+									}else if(j==playerB[0].length-1){
+										$(document.getElementById("playerB"+i+""+j)).after("<td id=playerB"+i+(j+1)+"><input class='text-center form-control' value="+playerB[i-1][j]+" type='text'/></td></tr>");
+									}else{
+										$(document.getElementById("playerB"+i+""+j)).after("<td id=playerB"+i+(j+1)+"><input class='text-center form-control' value="+playerB[i-1][j]+" type='text'/></td>");
+									}
+									
+								}
+							}
+						}
+						playerBCol = playerB[0].length;
+					}
+				}
+				
+
+			}
 			function pitchon(t){
 				if($(t).attr("checked")){
 					$(t).prop("checked",false);
@@ -329,3 +398,4 @@ html
 							hr
 							div
 								button.btn.btn-primary(onclick="send()") 确定
+							div.hidden#oldStatistics

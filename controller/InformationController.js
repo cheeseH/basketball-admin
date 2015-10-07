@@ -13,7 +13,17 @@ InformationController.statistics = function(req,res,next){
 	var teamAName = req.query.teamAName;
 	var teamBName = req.query.teamBName;
 	var gameId = req.query.gameId;
-	res.render("statistics",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName,gameId:gameId});
+	var query = new AV.Query(Competition);
+	query.equalTo("objectId",competitionId);
+	query.find({
+		success:function(competitions){
+			console.log(competitions[0].get("statistics"));
+			res.render("statistics",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName,gameId:gameId,statistics:competitions[0].get("statistics")});		
+		},
+		error:function(object,error){
+			console.log(error);
+		}
+	})
 }
 
 InformationController.editStatistics = function(req,res,next){
@@ -203,6 +213,20 @@ InformationController.reportList = function(req,res,next){
 					console.log(error);
 				}
 			})
+		},
+		error:function(object,error){
+			console.log(error);
+		}
+	})
+}
+InformationController.reportUpdate = function(req,res,next){
+	var gameId = req.query.gameId;
+	var reportId = req.query.reportId;
+	var query = new AV.Query(Report);
+	query.equalTo("objectId",reportId);
+	query.find({
+		success:function(reports){
+			res.render("reportUpdate",{title:reports[0].get("title"),author:reports[0].get("author"),content:reports[0].get("content"),gameId:gameId})
 		},
 		error:function(object,error){
 			console.log(error);

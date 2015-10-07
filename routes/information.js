@@ -34,15 +34,21 @@ router.post("/imgUpload",multipartMiddleware,function(req,res,next){
 			console.log(err);
 		}
 		else{
-			var msg = "{success:true,file_path:"+url+"}";
+			var msg = {};
+			msg.success = true;
+			msg.file_path=url;
+			msg = JSON.stringify(msg);
 			console.log(msg);
-			res.json({msg:msg});
-			res.end();
+			res.send(msg);
 		}
 	});
 });
 router.get('/reportList',util.checkLogin);
 router.get("/reportList",function(req,res,next){
 	InformationController.reportList(req,res,next);
+})
+router.get('/reportUpdate',util.checkLogin);
+router.get('/reportUpdate',function(req,res,next){
+	InformationController.reportUpdate(req,res,next);
 })
 module.exports = router;
