@@ -27,7 +27,7 @@ html
 						type:"POST",
 						url:url,
 						dataType:"json",
-						data:{competitionId:"#{competitionId}",content:$(".simditor-body").html(),title:$("#title").val(),author:$("#author").val(),coverUrl:coverUrl},
+						data:{competitionId:"#{competitionId}",content:$(".simditor-body").html(),title:$("#title").val(),author:$("#author").val(),coverUrl:coverUrl,reportId:"#{reportId}"},
 						success:function(data){
 							if(data.msg=="ok"){
 								alert("修改成功");

@@ -71,12 +71,14 @@ InformationController.competitionReport = function(req,res,next){
 			var title = "";
 			var author = "";
 			var content = "";
+			var reportId = "";
 			if(competitions[0].get("reportId")!=null&&competitions[0].get("reportId")){
 				title = competitions[0].get("reportId").get("title");
 				author = competitions[0].get("reportId").get("author");
 				content = competitions[0].get("reportId").get("content");
+				reportId = competitions[0].get("reportId").id;
 			}
-			res.render("reportForCompetition",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName,gameId:gameId,title:title,author:author,content:content});
+			res.render("reportForCompetition",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName,gameId:gameId,title:title,author:author,content:content,reportId:reportId});
 		},
 		error:function(object,error){
 			console.log(error);
@@ -91,7 +93,8 @@ InformationController.reportForCompetition = function(req,res,next){
 	var author = req.body.author;
 	var title = req.body.title;
 	var coverUrl = req.body.coverUrl;
-	console.log(coverUrl);
+	var reportId = req.body.reportId;
+	console.log(reportId);
 	if(!coverUrl){
 		coverUrl = "";
 	}
@@ -100,24 +103,16 @@ InformationController.reportForCompetition = function(req,res,next){
 	report.set("author",author);
 	report.set("content",content);
 	report.set("coverUrl",coverUrl);
+	if(reportId!=""){
+		report.set("objectId",reportId);
+	}
 	report.save(null,{
 		success:function(data){
-			console.log(data);
+			console.log(data.id);
 			var query = new AV.Query(Competition);
 			query.equalTo("objectId",competitionId);
 			query.find({
 				success:function(competition){
-					if(competition[0].get("reportId")!=null){
-						competition[0].get("reportId").destroy({
-							success:function(oldReport){
-
-							},
-							error:function(object,error){
-								console.log(error);
-							}
-						})
-
-					}
 					competition[0].set("reportId",data);
 					competition[0].save({
 						success:function(data){
@@ -151,6 +146,7 @@ InformationController.reportForGame = function(req,res,next){
 	var author = req.body.author;
 	var title = req.body.title;
 	var coverUrl = req.body.coverUrl;
+	var reportId = req.body.reportId;
 	if(!coverUrl){
 		coverUrl = "";
 	}
@@ -159,29 +155,36 @@ InformationController.reportForGame = function(req,res,next){
 	report.set("author",author);
 	report.set("content",content);
 	report.set("coverUrl",coverUrl);
+	if(reportId!=""){
+		report.set("objectId",reportId);
+	}
 	report.save(null,{
 		success:function(data){
-			var gameQuery = new AV.Query(Game);
-			gameQuery.equalTo("objectId",gameId);
-			gameQuery.find({
-				success:function(game){
-					var relation = game[0].relation("reports");
-					relation.add(data);
-					game[0].save(null,{
-						success:function(data){
-							res.json({msg:"ok"});
-							res.end();
-						},
-						error:function(object,error){
-							console.log(error);
-						}
-					})
-					
-				},
-				error:function(object,error){
-					console.log(error);
-				}
-			})
+			if(reportId==""){
+				var gameQuery = new AV.Query(Game);
+				gameQuery.equalTo("objectId",gameId);
+				gameQuery.find({
+					success:function(game){
+						var relation = game[0].relation("reports");
+						relation.add(data);
+						game[0].save(null,{
+							success:function(data){
+								res.json({msg:"ok"});
+								res.end();
+							},
+							error:function(object,error){
+								console.log(error);
+							}
+						})
+						
+					},
+					error:function(object,error){
+						console.log(error);
+					}
+				})
+			}else{
+				res.json({msg:"ok"});
+			}
 		},
 		error:function(object,error){
 			console.log(error);
@@ -226,7 +229,7 @@ InformationController.reportUpdate = function(req,res,next){
 	query.equalTo("objectId",reportId);
 	query.find({
 		success:function(reports){
-			res.render("reportUpdate",{title:reports[0].get("title"),author:reports[0].get("author"),content:reports[0].get("content"),gameId:gameId})
+			res.render("reportUpdate",{title:reports[0].get("title"),author:reports[0].get("author"),content:reports[0].get("content"),gameId:gameId,reportId:reportId})
 		},
 		error:function(object,error){
 			console.log(error);
