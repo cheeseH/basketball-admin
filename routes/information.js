@@ -32,6 +32,10 @@ router.post("/imgUpload",multipartMiddleware,function(req,res,next){
 	imageUtil.upLoad(req,res,'fileData',function(err,url){
 		if(err){
 			console.log(err);
+			var msg = {};
+			msg.success = false;
+			msg = JSON.stringify(msg);
+			res.send(msg);
 		}
 		else{
 			var msg = {};
