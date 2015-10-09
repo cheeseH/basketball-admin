@@ -55,4 +55,9 @@ router.get('/reportUpdate',util.checkLogin);
 router.get('/reportUpdate',function(req,res,next){
 	InformationController.reportUpdate(req,res,next);
 })
+
+router.get('/reportDelete',util.checkLogin);
+router.get('/reportDelete',function(req,res,next){
+	InformationController.reportDelete(req,res,next);
+})
 module.exports = router;

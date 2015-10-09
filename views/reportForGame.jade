@@ -13,11 +13,9 @@ html
 				$("img").removeAttr("height");
 				$("img").removeAttr("data-image-size");
 				var coverUrl = $("img:first").attr("src");
-				alert(coverUrl);
 				if(!coverUrl){
 					coverUrl = null;
 				}
-				alert(coverUrl);
 				var url = "/informations/editReport?pos=game";
 				$.ajax({
 						type:"POST",

@@ -2,6 +2,8 @@ var AV = require('avoscloud-sdk');
 var Competition = AV.Object.extend("Competition");
 var Report = AV.Object.extend("Report");
 var Game = AV.Object.extend("Game");
+var ReportComment = AV.Object.extend("ReportComment");
+var ReportLike = AV.Object.extend("ReportLike");
 var imageUtil = require('../util/image');
 function InformationController(){
 
@@ -17,7 +19,6 @@ InformationController.statistics = function(req,res,next){
 	query.equalTo("objectId",competitionId);
 	query.find({
 		success:function(competitions){
-			console.log(competitions[0].get("statistics"));
 			res.render("statistics",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName,gameId:gameId,statistics:competitions[0].get("statistics")});		
 		},
 		error:function(object,error){
@@ -29,7 +30,6 @@ InformationController.statistics = function(req,res,next){
 InformationController.editStatistics = function(req,res,next){
 	var competitionId = req.body.competitionId;
 	var statistics = req.body.statistics;
-	console.log(statistics);
 	var query = new AV.Query(Competition);
 	query.equalTo("objectId",competitionId);
 	query.find({
@@ -164,7 +164,6 @@ InformationController.reportForGame = function(req,res,next){
 	report.save(null,{
 		success:function(data){
 			if(reportId==""||!reportId){
-				console.log(data);
 				var gameQuery = new AV.Query(Game);
 				gameQuery.equalTo("objectId",gameId);
 				gameQuery.find({
@@ -239,4 +238,39 @@ InformationController.reportUpdate = function(req,res,next){
 			console.log(error);
 		}
 	})
+}
+InformationController.reportDelete = function(req,res,next){
+	var reportId = req.query.reportId;
+	var query = new AV.Query(Report);
+	query.equalTo("objectId",reportId);
+	query.find({
+		success:function(reports){
+			query = new AV.Query(ReportComment);
+			query.equalTo("reportId",reports[0]);
+			query.find({
+				success:function(reportComments){
+					AV.Object.destroyAll(reportComments);
+				},
+				error:function(object,error){
+					console.log(error);
+				}
+			});
+			query = new AV.Query(ReportLike);
+			query.equalTo("reportId",reports[0]);
+			query.find({
+				success:function(reportLikes){
+					AV.Object.destroyAll(reportLikes);
+				},
+				error:function(object,error){
+					console.log(error);
+				}
+			})
+			AV.Object.destroyAll(reports);
+		},
+		error:function(object,error){
+			console.log(error);
+		}
+	})
+	res.json({});
+	res.end();
 }

@@ -2,6 +2,19 @@ doctype html
 html
 	head
 		include ./head.jade
+		script(type="text/javascript").
+			function deleteReport(id){
+				var url = "/informations/reportDelete?reportId="+id;
+				$.ajax({
+					type:"GET",
+					url:url,
+					dataType:"json",
+					success:function(data){
+						$("#"+id).remove();
+					}	
+				});
+				return false;
+			}
 	body
 		include ./navbar.jade
 		div.container
@@ -34,9 +47,17 @@ html
 										th.text-center 修改
 								-each val,key in reports
 									tbody
-										tr
+										tr(id="#{val.id}")
 											td.text-center #{val.get("title")}
 											td.text-cetner #{val.get("author")}
 											td.text-center #{val.createdAt}
 											td.text-center
-												a(href="/informations/reportUpdate?reportId=#{val.id}&gameId=#{gameId}") 修改
+												div.dropdown
+													button.btn.btn-info.dropdown-toggle#operation(data-toggle='dropdown') 操作
+														span.caret
+													ul.dropdown-menu(role="menu",aria-labelledby="operation")
+														li.alert-info(role="presentation")
+															a(role="menuitem",tabindex="-1",href="/informations/reportUpdate?reportId=#{val.id}&gameId=#{gameId}") 修改
+														div.line
+														li.alert-danger(role="presentation")
+															a(role="menuitem",tabindex="-1",href="#",onclick="return deleteReport('#{val.id}')") 删除
