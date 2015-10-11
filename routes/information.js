@@ -29,7 +29,8 @@ router.post("/editReport",function(req,res,next){
 	
 });
 router.post("/imgUpload",multipartMiddleware,function(req,res,next){
-	imageUtil.upLoad(req,res,'fileData',function(err,url){
+	var type = "report";
+	imageUtil.upLoad(req,res,'fileData',type,function(err,url){
 		if(err){
 			console.log(err);
 			var msg = {};
@@ -44,6 +45,22 @@ router.post("/imgUpload",multipartMiddleware,function(req,res,next){
 			msg = JSON.stringify(msg);
 			console.log(msg);
 			res.send(msg);
+		}
+	});
+});
+router.post("/coverUpload",multipartMiddleware,function(req,res,next){
+	var type = "report";
+	imageUtil.cover(req,res,"cover",type,function(err,url){
+		if(err){
+			console.log(err);
+			var msg = {};
+			msg.success = false;
+			msg = JSON.stringify(msg);
+			res.json(msg);
+		}
+		else{
+			var reportId = req.query.reportId;
+			InformationController.uploadCover(req,res,next);
 		}
 	});
 });

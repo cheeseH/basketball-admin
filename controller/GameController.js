@@ -106,10 +106,11 @@ GameController.gameBaseUpdate=function(req,res,next){
 
 GameController.gameImageUpdate=function(req,res,next){
 	var gameId = req.query.gameId;
+	var type = "game";
 	var query = new AV.Query('Game');
 	query.get(gameId,{
 		success:function(game){
-			imageUtil.upLoad(req,res,'coverUrl',function(err,url){
+			imageUtil.upLoad(req,res,'coverUrl',type,function(err,url){
 				if(url == null){
 					return res.redirect('/games/gameDetail?gameId='+gameId);
 				}
@@ -134,11 +135,12 @@ GameController.gameAdd = function(req,res,next){
 	var college = req.body.college;
 	var name = req.body.name;
 	var stage = req.body.stage
+	var type = "game";
 	var coverUrl ;
 	var campusId = req.session.user.campusId;
 	var campus = new Campus();
 	campus.id = campusId;
-	imageUtil.upLoad(req,res,'coverUrl',function(err,url){
+	imageUtil.upLoad(req,res,'coverUrl',type,function(err,url){
 		if(err){
 
 		}

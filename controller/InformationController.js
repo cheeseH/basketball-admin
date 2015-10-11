@@ -72,13 +72,20 @@ InformationController.competitionReport = function(req,res,next){
 			var author = "";
 			var content = "";
 			var reportId = "";
+			var year = "";
+			var month = "";
+			var day = "";
 			if(competitions[0].get("reportId")!=null&&competitions[0].get("reportId")){
 				title = competitions[0].get("reportId").get("title");
 				author = competitions[0].get("reportId").get("author");
 				content = competitions[0].get("reportId").get("content");
 				reportId = competitions[0].get("reportId").id;
+				var time = new Date(competitions[0].get("reportId").get("time"));
+				year = time.getFullYear();
+				month = time.getMonth()+1;
+				day = time.getDate();
 			}
-			res.render("reportForCompetition",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName,gameId:gameId,title:title,author:author,content:content,reportId:reportId});
+			res.render("reportForCompetition",{competitionId:competitionId,teamAName:teamAName,teamBName:teamBName,gameId:gameId,title:title,author:author,content:content,reportId:reportId,year:year,month:month,day:day});
 		},
 		error:function(object,error){
 			console.log(error);
@@ -94,6 +101,16 @@ InformationController.reportForCompetition = function(req,res,next){
 	var title = req.body.title;
 	var coverUrl = req.body.coverUrl;
 	var reportId = req.body.reportId;
+	var year = req.body.year;
+	var month =req.body.month;
+	var day = req.body.day;
+	year = year.split(" ")[0];
+	month = month.split(" ")[0];
+	month = month<10?"0"+month:month;
+	day = day.split(" ")[0];
+	day = day<10?"0"+day:day;
+	var time = year+"/"+month+"/"+day;
+	time = new Date(time);
 	if(!coverUrl){
 		coverUrl = "";
 	}
@@ -102,6 +119,7 @@ InformationController.reportForCompetition = function(req,res,next){
 	report.set("author",author);
 	report.set("content",content);
 	report.set("coverUrl",coverUrl);
+	report.set("time",time);
 	if(reportId!=""){
 		report.set("objectId",reportId);
 	}
@@ -150,6 +168,16 @@ InformationController.reportForGame = function(req,res,next){
 	var title = req.body.title;
 	var coverUrl = req.body.coverUrl;
 	var reportId = req.body.reportId;
+	var year = req.body.year;
+	var month =req.body.month;
+	var day = req.body.day;
+	year = year.split(" ")[0];
+	month = month.split(" ")[0];
+	month = month<10?"0"+month:month;
+	day = day.split(" ")[0];
+	day = day<10?"0"+day:day;
+	var time = year+"/"+month+"/"+day;
+	time = new Date(time);
 	if(!coverUrl){
 		coverUrl = "";
 	}
@@ -158,6 +186,7 @@ InformationController.reportForGame = function(req,res,next){
 	report.set("author",author);
 	report.set("content",content);
 	report.set("coverUrl",coverUrl);
+	report.set("time",time);
 	if(reportId&&reportId!=""){
 		report.set("objectId",reportId);
 	}
@@ -171,8 +200,8 @@ InformationController.reportForGame = function(req,res,next){
 						var relation = game[0].relation("reports");
 						relation.add(data);
 						game[0].save(null,{
-							success:function(data){
-								res.json({msg:"ok"});
+							success:function(game){
+								res.json({msg:"ok",reportId:data.id});
 								res.end();
 							},
 							error:function(object,error){
@@ -205,7 +234,7 @@ InformationController.reportList = function(req,res,next){
 			relationQuery.find({
 				success:function(reports){
 					for(var i=0;i<reports.length;i++){
-						var time = new Date(reports[i].createdAt);
+						var time = new Date(reports[i].get("time"));
 						var year = time.getFullYear();
 						var month = time.getMonth()+1;
 						var day = time.getDate();
@@ -232,7 +261,11 @@ InformationController.reportUpdate = function(req,res,next){
 	query.equalTo("objectId",reportId);
 	query.find({
 		success:function(reports){
-			res.render("reportUpdate",{title:reports[0].get("title"),author:reports[0].get("author"),content:reports[0].get("content"),gameId:gameId,reportId:reportId})
+			var time = new Date(reports[0].get("time"));
+			var year = time.getFullYear();
+			var month = time.getMonth()+1;
+			var day = time.getDate();
+			res.render("reportUpdate",{title:reports[0].get("title"),author:reports[0].get("author"),content:reports[0].get("content"),gameId:gameId,reportId:reportId,year:year,month:month,day:day})
 		},
 		error:function(object,error){
 			console.log(error);

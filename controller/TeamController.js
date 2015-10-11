@@ -113,11 +113,12 @@ TeamController.AddInCampus = function(req,res,next){
 	var name = req.body.name;
 	var info = req.body.info;
 	var campusId = req.session.user.campusId;
+	var type = "team";
 	var campus = new Campus();
 	campus.id = campusId;
 
 	var logoUrl;
-	imageUtil.upLoad(req,res,'logoUrl',function(err,url){
+	imageUtil.upLoad(req,res,'logoUrl',type,function(err,url){
 		if(err){
 
 		}
@@ -147,10 +148,11 @@ TeamController.AddInGame = function(req,res,next){
 	var info = req.body.info;
 	var campusId = req.session.user.campusId;
 	var gameId = req.body.gameId;
+	var type = "team";
 	var campus = new Campus();
 	campus.id = campusId;
 	var logoUrl;
-	imageUtil.upLoad(req,res,'logoUrl',function(err,url){
+	imageUtil.upLoad(req,res,'logoUrl',type,function(err,url){
 		if(err){
 
 		}else{
@@ -210,6 +212,7 @@ TeamController.TeamInfo = function(req,res,next){
 
 TeamController.Update = function(req,res,next){
 	var teamId = req.body.teamId;
+	var type = "team";
 	var query = new AV.Query('Team');
 	query.get(teamId,{
 		success:function(team){
@@ -217,7 +220,7 @@ TeamController.Update = function(req,res,next){
 			var name = req.body.name;
 			var info = req.body.info;
 			var logoUrl;
-			imageUtil.upLoad(req,res,'logoUrl',function(err,url){
+			imageUtil.upLoad(req,res,'logoUrl',type,function(err,url){
 				if(err){
 
 				}

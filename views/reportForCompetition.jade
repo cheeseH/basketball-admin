@@ -8,13 +8,15 @@ html
 				var content = $(".simditor-body").html("#{content}").text();
 				$(".simditor-body").text("");
 				$(".simditor-body").append(content);
+				$("#title").val("#{title}");
+				$("#author").val("#{author}");
+				getTime();
 
 			}
 			function send(){
-				var time = new Date();
-				var month = time.getMonth()+1;
-				var day = time.getDate();
-				var date = (month<10 ? "0"+month : month+"") + "-" + (day<10 ? "0"+day : day+"");
+				var year = $("#year").val();
+				var month = $("#month").val();
+				var day = $("#day").val();
 				var coverUrl = $("img:first").attr("src");
 
 				if(!coverUrl){
@@ -28,16 +30,53 @@ html
 						type:"POST",
 						url:url,
 						dataType:"json",
-						data:{competitionId:"#{competitionId}",content:$(".simditor-body").html(),title:$("#title").val(),author:$("#author").val(),coverUrl:coverUrl,reportId:"#{reportId}"},
+						data:{competitionId:"#{competitionId}",content:$(".simditor-body").html(),title:$("#title").val(),author:$("#author").val(),coverUrl:coverUrl,year:year,month:month,day:day,reportId:"#{reportId}"},
 						success:function(data){
 							if(data.msg=="ok"){
 								alert("插入成功");
+								$("#uploadCover").attr("action","/informations/coverUpload?reportId="+data.reportId);
 							}else{
 								alert("插入失败");
 							}
 						}
 					});
 			};
+			function getTime(){
+				$("#day").empty();
+				var bigMonth = [1,3,5,7,8,10,12];
+				var year = $("#year").val();
+				year = year.split(" ")[0];
+				year = parseInt(year);
+				var month = $("#month").val();
+				month = month.split(" ")[0];
+				month = parseInt(month);
+				if(month==2){
+					if((year%4==0&&year%100!=0)||(year%400==0)){
+						//闰月
+						for(var i=1;i<=29;i++){
+							$("#day").append("<option>"+i+" 日</option>");
+						}
+					}else{
+						for(var i=1;i<=28;i++){
+							$("#day").append("<option>"+i+" 日</option>");
+						}
+					}
+				}else{
+					if($.inArray(month,bigMonth)>=0){
+						for(var i=1;i<=31;i++){
+							$("#day").append("<option>"+i+" 日</option>");
+						}
+					}else{
+						for(var i=1;i<=30;i++){
+							$("#day").append("<option>"+i+" 日</option>");
+						}
+					}
+				}
+				var day = "#{day}";
+				if(day!=""){
+					$("#day option").eq(parseInt(day)-1).attr("selected",true);
+				}
+			}
 	body
 		include ./navbar.jade
 		div.container
@@ -59,40 +98,71 @@ html
 						li
 							a.row(href="/competitions/competitionList?gameId=#{gameId}")
 								p.navbar-font 返回
-				div.col-xs-10
-					div.panel.panel-primary.panel-block
-						div.panel-heading
-							div.panel-title.title.text-center
-								p 添加战报
-						div.panel-body
-							div.row.form-group.text-center
-								label.control-label.col-xs-1(for="title") 标题
-								div.col-xs-10
-									input#title.form-control(type="text",value="#{title}")
-							div.row.form-group.text-center
-								label.control-label.col-xs-1(for="author") 作者
-								div.col-xs-10
-									input#author.form-control(type="text",value="#{author}")
-							div.row.form-group
-								div.col-xs-1
-								div.col-xs-10
-									textarea.form-control#content
-									script(type="text/javascript",src='/javascripts/module.js')
-									script(type="text/javascript",src='/javascripts/hotkeys.js')
-									script(type="text/javascript",src="/javascripts/uploader.js")
-									script(type="text/javascript",src='/javascripts/simditor.js')
-									script(type="text/javascript").
-										var editor = new Simditor({
-												textarea:$("#content"),
-												toolbar:['title','bold','italic','underline','strikethrough','color','ol','ul','link','image','hr','indent','outdent','alignment'],
-												upload:{
-													url : '/informations/imgUpload',
-													params: null,
-													fileKey: 'reportImg',
-													connectionCount: 3,
-													leaveConfirm: '正在上传文件'
-												}
-											});
-							div.row.form-group
-								div.text-center
-									button.btn.btn-primary(onclick="send()") 确定
+				div.col-xs-9.col-xs-offset-1
+					div.row.form-group.text-center
+						label.control-label.col-xs-1(for="title") 标题
+						div.col-xs-11
+							input#title.form-control(type="text")
+					div.row.form-group.text-center
+						label.control-label.col-xs-1(for="author") 作者
+						div.col-xs-11
+							input#author.form-control(type="text")
+					div.row.form-group
+						label.control-label.col-xs-1.text-center(for="time") 时间
+						div.col-xs-3.text-left
+							select#year.form-control
+								- if(year!="")
+									option #{year-4} 年
+									option #{year-3} 年
+									option #{year-2} 年
+									option #{year-1} 年
+									option(selected) #{year} 年
+									option #{year+1} 年
+								-else
+									- var time = new Date()
+									- var y = time.getFullYear()
+									option #{y-4} 年
+									option #{y-3} 年
+									option #{y-2} 年
+									option #{y-1} 年
+									option(selected) #{y} 年
+									option #{y+1} 年
+						div.col-xs-3.col-xs-offset-1.text-left
+							select#month.form-control(onchange="getTime()")
+								-for(var i=1;i<=12;i++)
+									-if(month==i)
+										option(selected) #{i} 月
+									-else
+										option #{i} 月
+						div.col-xs-3.col-xs-offset-1.text-left
+							select#day.form-control
+					form#uploadCover(enctype="multipart/form-data",method="POST",action="/informations/coverUpload?reportId=#{reportId}",target="frameFile")
+						div.row.form-group.text-center
+							label.control-label.col-xs-1(for="cover") 封面
+							div.col-xs-9
+								input.form-control#cover(type='file',accept='image/png,image/jpeg,image/jpg',onchange="coverUpload()",name="fileData")
+							div.col-xs-2
+								input.form-control.alert-info(type='submit',value="上传封面")
+					div.row.form-group
+						div.col-xs-1
+						div.col-xs-11
+							textarea.form-control#content
+							script(type="text/javascript",src='/javascripts/module.js')
+							script(type="text/javascript",src='/javascripts/hotkeys.js')
+							script(type="text/javascript",src="/javascripts/uploader.js")
+							script(type="text/javascript",src='/javascripts/simditor.js')
+							script(type="text/javascript").
+								var editor = new Simditor({
+										textarea:$("#content"),
+										toolbar: ['title','bold','italic','underline','strikethrough','color','ol','ul','link','image','hr','indent','outdent','alignment'],
+										upload : {
+											url : '/informations/imgUpload',
+											params: null,
+											fileKey: 'reportImg',
+											connectionCount: 3,
+											leaveConfirm: '正在上传文件'
+										}
+									});
+					div.row.form-group
+						div.text-center
+							button.btn.btn-primary(onclick="send()") 确定
