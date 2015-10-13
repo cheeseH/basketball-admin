@@ -111,11 +111,11 @@ html
 									option #{i} 月
 						div.col-xs-3.col-xs-offset-1.text-left
 							select#day.form-control
-					form#uploadCover(enctype="multipart/form-data",method="POST",action="/informations/coverUpload?reportId=#{reportId}",target="frameFile")
+					form#uploadCover(enctype="multipart/form-data",method="POST",action="#",target="frameFile")
 						div.row.form-group.text-center
 							label.control-label.col-xs-1(for="cover") 封面
 							div.col-xs-9
-								input.form-control#cover(type='file',accept='image/png,image/jpeg,image/jpg',onchange="coverUpload()",name="fileData")
+								input.form-control#cover(type='file',accept='image/png,image/jpeg,image/jpg',onchange="coverUpload()",name="cover")
 							div.col-xs-2
 								input.form-control.alert-info(type='submit',value="上传封面")
 					div.row.form-group
@@ -141,3 +141,4 @@ html
 					div.row.form-group
 						div.text-center
 							button.btn.btn-primary(onclick="send()") 确定
+					iframe#frameFile(name='frameFile',style='display: none;')

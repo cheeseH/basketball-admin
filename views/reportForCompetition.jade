@@ -140,7 +140,7 @@ html
 						div.row.form-group.text-center
 							label.control-label.col-xs-1(for="cover") 封面
 							div.col-xs-9
-								input.form-control#cover(type='file',accept='image/png,image/jpeg,image/jpg',onchange="coverUpload()",name="fileData")
+								input.form-control#cover(type='file',accept='image/png,image/jpeg,image/jpg',onchange="coverUpload()",name="cover")
 							div.col-xs-2
 								input.form-control.alert-info(type='submit',value="上传封面")
 					div.row.form-group
@@ -166,3 +166,4 @@ html
 					div.row.form-group
 						div.text-center
 							button.btn.btn-primary(onclick="send()") 确定
+					iframe#frameFile(name='frameFile',style='display: none;')

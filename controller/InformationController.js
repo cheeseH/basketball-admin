@@ -133,7 +133,7 @@ InformationController.reportForCompetition = function(req,res,next){
 						competition[0].set("reportId",data);
 						competition[0].save({
 							success:function(data){
-								res.json({msg:"ok"});
+								res.json({msg:"ok",reportId:data.id});
 								res.end();
 							},
 							error:function(object,error){
@@ -306,4 +306,26 @@ InformationController.reportDelete = function(req,res,next){
 	})
 	res.json({});
 	res.end();
+}
+InformationController.uploadCover = function(req,res,url,next){
+	var reportId = req.query.reportId;
+	var query = new AV.Query(Report);
+	query.equalTo("objectId",reportId);
+	query.find({
+		success:function(reports){
+			reports[0].set("coverUrl",url);
+			reports[0].save(null,{
+				success:function(report){
+					console.log("coverUrl finish");
+					res.end();
+				},
+				error:function(object,error){
+					console.log(error);
+				}
+			})
+		},
+		error:function(object,error){
+			console.log(error);
+		}
+	})
 }
