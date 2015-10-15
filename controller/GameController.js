@@ -134,7 +134,8 @@ GameController.gameImageUpdate=function(req,res,next){
 GameController.gameAdd = function(req,res,next){
 	var college = req.body.college;
 	var name = req.body.name;
-	var stage = req.body.stage
+	var stage = req.body.stage;
+	var time = req.body.time;
 	var type = "game";
 	var coverUrl ;
 	var campusId = req.session.user.campusId;
@@ -153,6 +154,7 @@ GameController.gameAdd = function(req,res,next){
 			game.set('campusId',campus);
 			game.set('stage',stage);
 			game.set('isFinished',false);
+			game.set("time",time);
 			game.save(null,{
 				success:function(game){
 					//

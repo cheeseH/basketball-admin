@@ -55,6 +55,7 @@ html
 										th.text-center 序号
 										th.text-center 名称
 										th.text-center 是否结束
+										th.text-center 开始时间
 										th.text-center 学院
 										th.text.center 当前状态
 										th.text-center 操作
@@ -68,6 +69,7 @@ html
 													td.text-center 是
 												-else
 													td.text-center 否
+												td.text-center #{val.get("time")}
 												td.text-center #{val.get("college")}
 												td.text-center #{val.get("stage")}
 												td.text-center
