@@ -99,7 +99,6 @@ InformationController.reportForCompetition = function(req,res,next){
 	var content = req.body.content;
 	var author = req.body.author;
 	var title = req.body.title;
-	var coverUrl = req.body.coverUrl;
 	var reportId = req.body.reportId;
 	var year = req.body.year;
 	var month =req.body.month;
@@ -118,7 +117,6 @@ InformationController.reportForCompetition = function(req,res,next){
 	report.set("title",title);
 	report.set("author",author);
 	report.set("content",content);
-	report.set("coverUrl",coverUrl);
 	report.set("time",time);
 	if(reportId!=""){
 		report.set("objectId",reportId);
@@ -166,7 +164,6 @@ InformationController.reportForGame = function(req,res,next){
 	var content = req.body.content;
 	var author = req.body.author;
 	var title = req.body.title;
-	var coverUrl = req.body.coverUrl;
 	var reportId = req.body.reportId;
 	var year = req.body.year;
 	var month =req.body.month;
@@ -185,7 +182,6 @@ InformationController.reportForGame = function(req,res,next){
 	report.set("title",title);
 	report.set("author",author);
 	report.set("content",content);
-	report.set("coverUrl",coverUrl);
 	report.set("time",time);
 	if(reportId&&reportId!=""){
 		report.set("objectId",reportId);

@@ -17,11 +17,6 @@ html
 				var year = $("#year").val();
 				var month = $("#month").val();
 				var day = $("#day").val();
-				var coverUrl = $("img:first").attr("src");
-
-				if(!coverUrl){
-					coverUrl = null;
-				}
 				$("img").removeAttr("width");
 				$("img").removeAttr("height");
 				$("img").removeAttr("data-image-size");
@@ -30,7 +25,7 @@ html
 						type:"POST",
 						url:url,
 						dataType:"json",
-						data:{competitionId:"#{competitionId}",content:$(".simditor-body").html(),title:$("#title").val(),author:$("#author").val(),coverUrl:coverUrl,year:year,month:month,day:day,reportId:"#{reportId}"},
+						data:{competitionId:"#{competitionId}",content:$(".simditor-body").html(),title:$("#title").val(),author:$("#author").val(),year:year,month:month,day:day,reportId:"#{reportId}"},
 						success:function(data){
 							if(data.msg=="ok"){
 								alert("插入成功");
