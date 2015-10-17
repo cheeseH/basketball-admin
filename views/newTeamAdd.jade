@@ -2,6 +2,10 @@ doctype html
 html
 	head
 		include ./head.jade
+		script(type="text/javascript").
+			function toDisable(t){
+				$(t).addClass("disabled");
+			}
 	body
 		include ./navbar.jade
 		div.container.text-center
@@ -48,4 +52,4 @@ html
 								hr
 								div.form-group
 									div.text-center
-										button.btn.btn-primary(type='submit') 确定
+										button.btn.btn-primary(type='submit',onclick="toDisable(this)") 确定
