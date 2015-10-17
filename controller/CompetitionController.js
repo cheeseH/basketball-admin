@@ -32,6 +32,7 @@ CompetitionController.competitionList=function(req,res,next){
 			console.log('success to get competitionList');
 
 			var typeArray=new Array();
+			var typeNameArray = new Array();
 			var competitions=new Array();
 			var ifHave=0;
 			var i=0;var j=0;
@@ -49,6 +50,7 @@ CompetitionController.competitionList=function(req,res,next){
 				if(i==0&&j==0)
 				{
 					typeArray[j]=result[i].get('type');
+					typeNameArray[j] = result[i].get('typeName');
 					allLevel[kindsOfLevel]=result[i].get('level');
 					competitions[j]=new Array();
 					j++;
@@ -59,9 +61,9 @@ CompetitionController.competitionList=function(req,res,next){
 				{
 					ifHave=0;
 					ifHaveLevel=0;
-					for(var k=0;k<typeArray.length;k++)
+					for(var k=0;k<typeNameArray.length;k++)
 					{
-						if(typeArray[k]==result[i].get('type'))
+						if(typeNameArray[k]==result[i].get('typeName'))
 							ifHave=1;
 					}
 					for(var k=0;k<allLevel.length;k++)
@@ -71,7 +73,7 @@ CompetitionController.competitionList=function(req,res,next){
 					}
 					if(ifHave!=1)
 					{
-						typeArray[j]=result[i].get('type');
+						typeNameArray[j]=result[i].get('typeName');
 						competitions[j]=new Array();
 						j++;
 					}
@@ -90,9 +92,9 @@ CompetitionController.competitionList=function(req,res,next){
 			}
 			for(i=0;i<result.length;i++)
 			{
-				for(j=0;j<typeArray.length;j++)
+				for(j=0;j<typeNameArray.length;j++)
 				{
-					if(result[i].get('type')==typeArray[j])
+					if(result[i].get('typeName')==typeNameArray[j])
 					{
 						competitions[j][lenOfcompetition[j]]=result[i];
 						lenOfcompetition[j]++;
@@ -109,6 +111,7 @@ CompetitionController.competitionList=function(req,res,next){
 					{
 						returnData[allLevel[levLen]][i]={
 							type:competitions[i][0].get('type'),
+							typeName:competitions[i][0].get('typeName'),
 							competitions:competitions[i],
 							number:competitions[i].length
 							//levelKinds:allLevel.length
@@ -157,8 +160,7 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 		level = 0;
 	}
 	var gameType= req.body.type;
-
-	
+	var typeName = req.body.typeName;
 	var gameQuery=new AV.Query(Game);
 	gameQuery.get(gameId,{
 		success:function(gameData){
@@ -169,6 +171,7 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 					var teamAId=110;
 					var teamBId=110;
 					for (var i = teams.length - 1; i >= 0; i--) {
+						console.log(teams[i].get('name'));
 						if(teams[i].get('name')==teamAName)				//此处应用teamName代替
 						{
 							teamAId=teams[i].id;
@@ -177,7 +180,7 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 						{
 							teamBId=teams[i].id;
 						}
-					};
+					}
 					if(teamAId!=110&&teamBId!=110)							//若两支队伍都存在于这场赛事
 					{
 						var teamA=new Team();
@@ -196,6 +199,7 @@ CompetitionController.CompetitionAdd=function(req,res,next){
 						newCompetition.set('gameId',thisGame);
 						newCompetition.set("scoreA",0);
 						newCompetition.set("scoreB",0);
+						newCompetition.set("typeName",typeName);
 						newCompetition.save(null,{
 							success:function(result)
 							{

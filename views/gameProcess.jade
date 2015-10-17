@@ -6,12 +6,15 @@ html
 			function addCompetition(t,way){
 				$("#level").val($(t).attr("data-level"));
 				if(way=="old"){
+					$("#typeName").parent().parent().addClass("hidden");
 					$("#type").parent().parent().addClass("hidden");
 					$("#type").val($(t).attr("data-type"));
+					$("#typeName").val($(t).attr("data-typeName"));
 				}else{
 					$("#type").parent().parent().removeClass("hidden");
-					$("#type").val("");
+					$("#typeName").parent().parent().removeClass("hidden");
 				}
+				$("#level").val($(t).attr("data-level"));
 				$("#myModal").modal();
 			}
 			function removeCompetition(competitionId){
@@ -43,11 +46,19 @@ html
 								label.col-xs-2.control-label(for='teamBName') 球队B
 								div.col-xs-6
 									input.form-control#teamBName(type='text',name="teamBName")
-							input.form-control.hidden#level(type='text',name="level",value="#{competitionList.maxLevel}")
-							div.form-group.hidden
-								label.col-xs-2.control-label(for="type") 类型
+							input.form-control.hidden#level(type='text',name="level")
+							div.form-group
+								label.control-label.col-xs-2(for="type") 类型
 								div.col-xs-6
-									input.form-control#type(type='text',name="type")
+									select#type.form-control(name="type")
+										option 小组赛
+										option 淘汰赛
+										option 半决赛
+										option 总决赛
+							div.form-group.hidden
+								label.col-xs-2.control-label(for="typeName") 类型名称
+								div.col-xs-6
+									input.form-control#typeName(type='text',name="typeName")
 							input.form-control.hidden#gameId(type='text',value="#{gameId}",name="gameId")
 						div.modal-footer
 							button.btn.btn-defautl(type="button",data-dismiss="modal") 关闭
@@ -81,7 +92,7 @@ html
 											div.col-sm-6
 												div.panel.panel-primary.block
 													div.panel-heading
-														p.panel-title.title #{val1.type}
+														p.panel-title.title #{val1.type} - #{val1.typeName}
 													table.table.table-hover
 														tr
 															th.text-center 队伍A
@@ -103,7 +114,7 @@ html
 																				a(role="menuitem",tabindex="-1",href="#",onclick="removeCompetition('#{val2.id}')") 删除
 														tr
 															td.text-center(colspan='3')
-																a(href="#",onclick="addCompetition(this,'old')",data-level=key,data-type=val1.type) 添加比赛
+																a(href="#",onclick="addCompetition(this,'old')",data-level=key,data-type=val1.type,data-typeName=val1.typeName) 添加比赛
 										div.col-sm-6
 											div.block.empty(onclick="addCompetition(this,'new')",data-level=key)
 												p +

@@ -29,7 +29,7 @@ exports.upLoad = function(req,res,filename,type,callback){
         console.log( "file is exists ? " + fs.existsSync(target_path));
         fs.readFile(target_path, function(err, data){
             console.log("data length is " + data.length);
-            qiniu.io.put(uptoken, 'image_'+type+"_"+time, data, extra, function(err, ret) {
+            qiniu.io.put(uptoken, 'image_'+type+"_"+time+".jpg", data, extra, function(err, ret) {
                 fs.unlinkSync(target_path);
                 console.log(ret);
                 var url = 'http://7xnd0a.com1.z0.glb.clouddn.com/'+ret.key;

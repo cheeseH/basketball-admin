@@ -36,9 +36,17 @@ html
 										input.form-control#teamBName(type='text',name="teamBName")
 								input.form-control.hidden#level(type='text',name="level",value="#{level}")
 								div.form-group
-									label.col-xs-3.control-label(for="type") 类型
+									label.control-label.col-xs-3(for="type") 类型
 									div.col-xs-6
-										input.form-control#type(type='text',name="type")
+										select#type.form-control(name="type")
+											option 小组赛
+											option 淘汰赛
+											option 半决赛
+											option 总决赛
+								div.form-group
+									label.col-xs-3.control-label(for="typeName") 类型名称
+									div.col-xs-6
+										input.form-control#typeName(type='text',name="typeName")
 								input.form-control.hidden#gameId(type='text',value="#{gameId}",name="gameId")
 								div.form-group
 									div.text-center
