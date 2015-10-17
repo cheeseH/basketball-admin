@@ -3,7 +3,6 @@ var Team = AV.Object.extend("Team");
 var Game = AV.Object.extend("Game");
 var Campus = AV.Object.extend('Campus');
 var imageUtil = require('../util/image');
-var 
 function TeamController(){
 }
 
