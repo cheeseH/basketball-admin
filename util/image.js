@@ -24,14 +24,7 @@ exports.upLoad = function(req,res,filename,type,callback){
         qiniu.conf.ACCESS_KEY = 'v_d4R_-nzDOrMJUnB5tynyL5IRfTtM9clDKj8Gtr';//qiniu_config是我的配置文件
         qiniu.conf.SECRET_KEY = 's0LCB1kKbYBfKOIQqiNKstpjwAdhH31pzmzO-vfN';
         var uptoken = new qiniu.rs.PutPolicy('dunk-webpage').token()
-        var time = new Date();
-        var year = time.getFullYear()+"";
-        year = year.substring(2,3);
-        var month = time.getMonth()+1;
-        month = month<10?"0"+month:month+"";
-        var day = time.getDate();
-        day = day<10?"0"+day:day+"";
-        time = year+month+day;
+        var time = (new Date()).valueOf();
         var extra = new qiniu.io.PutExtra();
         console.log( "file is exists ? " + fs.existsSync(target_path));
         fs.readFile(target_path, function(err, data){
