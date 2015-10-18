@@ -110,9 +110,6 @@ InformationController.reportForCompetition = function(req,res,next){
 	day = day<10?"0"+day:day;
 	var time = year+"/"+month+"/"+day;
 	time = new Date(time);
-	if(!coverUrl){
-		coverUrl = "";
-	}
 	var report = new Report();
 	report.set("title",title);
 	report.set("author",author);
@@ -175,9 +172,6 @@ InformationController.reportForGame = function(req,res,next){
 	day = day<10?"0"+day:day;
 	var time = year+"/"+month+"/"+day;
 	time = new Date(time);
-	if(!coverUrl){
-		coverUrl = "";
-	}
 	var report = new Report();
 	report.set("title",title);
 	report.set("author",author);
