@@ -1,4 +1,5 @@
 var AV = require('avoscloud-sdk');
+AV.initialize('rERfeCb5UDfcONYQykxCIkKM', 'hyG3cmbmPhAhOcQ1fwVWSyk0');
 var Competition = AV.Object.extend("Competition");
 var Report = AV.Object.extend("Report");
 var Game = AV.Object.extend("Game");
@@ -113,13 +114,18 @@ InformationController.reportForCompetition = function(req,res,next){
 	var report = new Report();
 	report.set("title",title);
 	report.set("author",author);
+	console.log(content);
+	console.log(time);
+
 	report.set("content",content);
 	report.set("time",time);
 	if(reportId!=""){
+		console.log(reportId);
 		report.set("objectId",reportId);
 	}
 	report.save(null,{
 		success:function(data){
+			console.log(data);
 			if(competitionId!=""){
 				var query = new AV.Query(Competition);
 				query.equalTo("objectId",competitionId);
@@ -132,6 +138,7 @@ InformationController.reportForCompetition = function(req,res,next){
 								res.end();
 							},
 							error:function(object,error){
+								console.log(1);
 								console.log(error);
 								res.json({msg:error});
 								res.end();
@@ -139,17 +146,20 @@ InformationController.reportForCompetition = function(req,res,next){
 						});
 					},
 					error:function(object,error){
+						console.log(2);
 						console.log(error);
 						res.json({msg:"error"});
 						res.end();
 					}
 				});
 			}else{
+				console.log(3);
 				res.json({msg:"ok"});
 				res.end();
 			}
 		},
 		error:function(object,error){
+			console.log(error);
 			res.json({msg:"error"});
 			res.end();
 		}
